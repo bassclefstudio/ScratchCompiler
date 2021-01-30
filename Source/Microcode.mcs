@@ -1,0 +1,26 @@
+LoadA: Loads the arg1 address of memory into the A register.
+Prog>Addr
+MemGet
+// Address loaded into Val register, and the A register is going to be overwritten in this command.
+Val>A
+A>Addr
+MemGet
+// Now set the value into the A register.
+Val>A
+
+SetA: Sets the value of the A register to arg1.
+Prog>Addr
+MemGet
+// Value loaded into Val register.
+Val>A
+
+AddA: Adds the arg1 address of memory into the A register, overwriting the B register in the process.
+Prog>Addr
+MemGet
+// Address loaded into Val register, and the B register is going to be overwritten in this command.
+Val>B
+B>Addr
+MemGet
+// Now set the value into the B register.
+Val>B
+Sum
