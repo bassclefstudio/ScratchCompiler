@@ -1,6 +1,8 @@
-# Processor v0.1
+# Compiler/Processor for Scratch v0.1
+This is the companion repository for [this](Add-Scratch-Link) Scratch project, which is a basic 'computer' built in Scratch. It's inspired by [Ben Eater's hardware projects](https://eater.net/8bit) and is essentially a way for assembly-language-like code to be executed in the context of a Scratch project. **TL;DR**: This is all basically a side project, with no practical benefits whatsoever, but I'll be using it to learn a little more about designing my own low-level programs.
+
 ## Architecture
-The processor v0.1 consists of three main components - **Processor**, **Memory**, and **Disk**. Each has a specific function and manages a certain set of data.
+The processor v0.1 consists of three main sprites - **Processor**, **Memory**, and **Disk**. Each has a specific function and manages a certain set of data.
 ### Processor
 The core component. This is responsible for managing the registers (named, stored data variables) and executing [commands](#commands) by providing the correct [calls](#calls).
 
@@ -32,7 +34,7 @@ This is the planned memory map for v0.1 of the processor, in ASCII art form. `k`
 ````
 +--------------------------+----+--------+---------------------+  +---------->
 |===========   8k    ======| 2k |   4k   |=======  10k   ======|  |   Disk   >
-|=========== Program ======|File|Display/|======= System ======|  |  Memory  >
+|=========== Program ======|File|Display/|======= System ======|->|  Memory  >
 |===========  Space  ======| IO |Keyboard|=======  Data  ======|  |    ??    >
 +--------------------------+----+--------+---------------------+  +---------->
 ````
@@ -40,6 +42,9 @@ This is the planned memory map for v0.1 of the processor, in ASCII art form. `k`
  - **2k file I/O**: Files streamed from disk can be buffered for up to 2k of space in this region.
  - **4k display/keyboard**: The current keyboard/peripheral IO memory is stored here, as well as the memory used by the display adapter to send queries to the output display terminal or (possibly?) graphics system.
  - **10k system data**: OS/standard libraries are cached here, as well as the current state of the system and the stack. Certain areas of memory are reserved for the program running with root access (the OS or bootloader).
+
+### Disk
+This is not currently implemented, but will provide methods for streaming named pieces of data into memory for programs to use. It will have its own set of [system calls](#calls), and likely require interrupt handling in order to stream larger chunks of data at a slower speed to [memory](#memory).
 
 ## Calls
 Calls are individual broadcasts sent to a specific part of the processor to tell it to perform a given action. They store no state and do not involve multiple components of the project. Each one is called by a broadcast of type `call_{CallName}`, where the `CallName` is the specific name for that action. The beginning `call_` is ommitted from the following documentation, as it is added by the command processor at runtime.
@@ -67,13 +72,29 @@ Calls are individual broadcasts sent to a specific part of the processor to tell
 |`Div`|Processor|Divides the values of the `A` and `B` registers from each other, and saves the result into the `A` register.|
 |`Cmd`|Processor|Sets the value in `MemoryValue` as the current command in the processor. This call is used only in the [FETCH cycle](#fetch-cycle), which determines the next command that should be run.|
 
-## Commands
-Commands are provided with the syntax: `List|Of|Many|Calls`, where the [calls](#calls) are broadcasts that are sent in order of execution. A list of commands, a brief description, and their enclosing calls are included below.
+## Microcode
+Compiled microcode is written in the syntax: `CommandName:Desc:List|Of|Many|Calls:`, where each **command** is made up of a name, documentation snippet, and a list of [calls](#calls)/broadcasts that make up the command. A list of commands included by default on the system, along with their documentation, is included [below](#list-of-commands).
 
-Running commands consists of the `Prog` register, which keeps track of the current memory address of the command pointer. As each command is run, the `Prog` counter is (usually) incremented to move to the next command.
+Running microcode involves the `Prog` register, which keeps track of the current memory address executing code. As each command is run, the `Prog` counter is (usually) incremented by 1 to move to the next command.
+
+### Syntax
+The C# console application `ScratchCompiler` provides a way to 'compile' the `.mcs` microcode files into a Scratch-readable form. The syntax is as follows:
+
+**MyCommand.mcs**
+````C#
+CommandName: Description
+Call1
+Call2
+// Comments are not included at compile-time
+Call3
+...
+````
+The result after compilation would look like this: `CommandName:Description:Call1|Call2|Call3:`. Overall this isn't a huge change, but it does allow for comments in the source code and readable line breaks (which Scratch wouldn't understand).
 
 ### FETCH Cycle
-These calls are stored in an environment constant and run by the Scratch processor every time a new command is requested. The processor then runs whatever command that has been set using the `Cmd` call. 
+This microcode is stored in an environment constant and run by the Scratch processor every time a new command is requested. The processor then runs whatever command that has been set using the `Cmd` call.
+
+**FETCH.mcs**
 ````C#
 // Called from Scratch when a new command can be run...
 Prog>Addr
@@ -84,36 +105,13 @@ IncProg
 // Run some calls dependent on the command name...
 ````
 
-In the chart, `arg` lists will also be provided. These would be specified as the next value(s) in memory after the command.  
+### List of Commands
+Each one of these commands has been defined in the system microcode, whose source can be found in `/Source/Microcode.mcs` of this repo. It has been compiled and then included in the Scratch project without you needing to add it yourself. Arguments (denoted `arg*`) are adjancent memory spaces used in a program as inputs to some commands. This is explained more fully in the [Writing Programs](#writing-programs) section.
 
-### `LoadA`
-Loads the `arg1` address of memory into the `A` register.
-````C#
-Prog>Addr
-MemGet
-// Address loaded into Val register, and the A register is going to be overwritten in this command.
-Val>A
-A>Addr
-MemGet
-// Now set the value into the A.
-Val>A
-````
+|Command|Args|Description|
+|---|---|---|
+|`LoadA`|address `arg1`|Loads the `arg1` address of memory into the `A` register.|
+|`SetA`|value `arg1`|Sets the value of the `A` register to `arg1`.|
+|`AddA`|address `arg1`|Adds the `arg1` address of memory into the `A` register, overwriting the `B` register in the process.|
 
-### `SetA`
-Sets the value of the `A` register to `arg1`.
-````C#
-Prog>Addr
-MemGet
-// Value loaded into Val register.
-Val>A
-````
-
-### `AddA`
-Adds the `arg1` address of memory into the `A` register, overwriting the `B` register in the process.
-````C#
-Prog>Addr
-MemGet
-// Address loaded into Val register
-Val>B
-Sum
-````
+## Writing Programs
