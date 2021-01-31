@@ -6,14 +6,14 @@ Cmd
 // At this point, we have set the command we want to execute.
 // The Prog register has already been incremented, so arguments can simply call Prog>Addr and then Prog+ after retrieving input.
 
-Jump: Sets the next line of code to execute to an address in memory.
+Jump (Prog): Sets the next line of code to execute to an address in memory.
 Prog>Addr
 IncReg
 MemGet
 // This is the address to save to Prog.
 Val>Prog
 
-JumpEq: Sets the next line of code to execute to an address in memory if the Eq flag is set.
+JumpEq (Prog): Sets the next line of code to execute to an address in memory if the Eq flag is set.
 Prog>Addr
 IncReg
 MemGet
@@ -23,7 +23,7 @@ Val?Prog
 Halt: Stops program execution.
 HLT
 
-LoadA: Loads an address of memory into the A register.
+LoadA$ (A): Loads an address of memory into the A register.
 Prog>Addr
 IncReg
 MemGet
@@ -33,7 +33,7 @@ MemGet
 // Now set the value into the A register.
 Val>A
 
-SetA: Sets the value of the A register to a value.
+LoadA# (A): Sets the value of the A register to a value.
 Prog>Addr
 IncReg
 MemGet
@@ -49,10 +49,10 @@ Val>Addr
 A>Val
 MemSet
 
-IncA: Increments the A register by 1.
+IncA (A): Increments the A register by 1.
 A+
 
-LoadB: Loads an address of memory into the B register.
+LoadB$ (B): Loads an address of memory into the B register.
 Prog>Addr
 IncReg
 MemGet
@@ -62,7 +62,7 @@ MemGet
 // Now set the value into the B register.
 Val>B
 
-SetB: Sets the value of the B register to a value.
+LoadB# (B): Sets the value of the B register to a value.
 Prog>Addr
 IncReg
 MemGet
@@ -78,10 +78,10 @@ Val>Addr
 B>Val
 MemSet
 
-IncB: Increments the B register by 1.
+IncB (B): Increments the B register by 1.
 B+
 
-AddA: Adds an address of memory into the A register from the B register.
+AddA (A,B): Adds an address of memory into the A register from the B register.
 Prog>Addr
 IncReg
 MemGet
@@ -92,7 +92,7 @@ MemGet
 Val>B
 Sum
 
-AddB: Adds an address of memory into the B register from the A register.
+AddB (A,B): Adds an address of memory into the B register from the A register.
 Prog>Addr
 IncReg
 MemGet

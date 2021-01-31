@@ -23,5 +23,13 @@ namespace BassClefStudio.ScratchCompiler.Compilers
         /// <param name="inputFile">A human-readable <see cref="FileInfo"/> file containing the source code.</param>
         /// <param name="outputDirectory">The <see cref="DirectoryInfo"/> in which to save output files.</param>
         Task CompileAsync(FileInfo inputFile, DirectoryInfo outputDirectory);
+
+        /// <summary>
+        /// Compiles and produces code output for the given input file and documentation.
+        /// </summary>
+        /// <param name="inputFile">A human-readable <see cref="FileInfo"/> file containing the source code.</param>
+        /// <param name="documentationFiles">A collection of .mcd/.ccd files found in the source directory, which can be used for advanced parsing.</param>
+        /// <param name="outputDirectory">The <see cref="DirectoryInfo"/> in which to save output files.</param>
+        Task CompileAsync(FileInfo inputFile, FileInfo[] documentationFiles, DirectoryInfo outputDirectory);
     }
 }

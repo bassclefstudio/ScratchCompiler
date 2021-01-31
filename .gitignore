@@ -6,6 +6,7 @@
 #ADDED: .mcs and .ccs output files.
 *.mco
 *.cco 
+*.mcd 
 
 # User-specific files
 *.rsuser

@@ -72,16 +72,8 @@ Signals are individual broadcasts sent to a specific part of the processor to te
 |---|---|---|
 |`MemGet`|Memory|Sets `MemoryValue` to the value stored in memory address `MemoryAddress`.|
 |`MemSet`|Memory|Sets the value stored in memory address `MemoryAddress` to `MemoryValue`.|
-|`RfA`|Processor|Sets the 'from' register.|
-|`RfB`|Processor|Sets the 'from' register.|
-|`RfProg`|Processor|Sets the 'from' register.|
-|`RfVal`|Processor|Sets the 'from' register.|
-|`RfAddr`|Processor|Sets the 'from' register.|
-|`RtA`|Processor|Sets the 'to' register.|
-|`RtB`|Processor|Sets the 'to' register.|
-|`RtProg`|Processor|Sets the 'to' register.|
-|`RtVal`|Processor|Sets the 'to' register.|
-|`RtAddr`|Processor|Sets the 'to' register.|
+|`Rf*`|Processor|Sets the 'from' register to `*` (`A`,`B`,`Prog`, etc.).|
+|`Rt*`|Processor|Sets the 'to' register to `*` (`A`,`B`,`Prog`, etc.).|
 |`TReg`|Processor|Transfers data from the 'from' register into the 'to' register (`Rf*`>`Rt*`).|
 |`IncReg`|Processor|Increments the value of the 'from' register (`Rf*`).|
 |`Sum`|Processor|Adds the values of the `A` and `B` registers together, and saves the result into the `A` register.|
@@ -101,7 +93,7 @@ The C# console application `ScratchCompiler` provides a way to 'compile' these `
 
 **MyCommand.mcs**
 ````
-CommandName: Description
+CommandName: Affected,Registers: Description
 Signal1
 Signal2
 // Comments are omitted at compile-time
@@ -109,12 +101,15 @@ Signal3
 ...
 ````
 The result after compilation would look like this:
+**MyCommand.mco**
 ```JSON
-[{"Name":"CommandName","Help":"Description","Signals":"Signal1|Signal2|Signal3"}]
+[{"Name":"CommandName","Signals":"Signal1|Signal2|Signal3"}]
 ```
 Overall, this isn't a huge change, but it does allow for comments in the source code and readable line breaks (which Scratch wouldn't understand).
 
 Additionally, the compiler supports the following shorthand for register transfers: `A>B`, `A?B`, and `A+`. These are the equivalent of writing `RfA|RtB|TReg`, `RfA|RtB|TEqReg`, and `RfA|IncReg`. They save time when transferring data between registers - however, if you're transferring data to or from the same register multiple times, there *is* a small performance overhead.
+
+Compilation also generates a `.mcd` file, which contains all of the documentation pieces that are omitted from the final result. This is used by the program compiler in the `ScratchCompiler` project to provide certain features (such as automatic input-mode switching) and run syntax checks on the resulting code.
 
 ### FETCH Cycle
 This command is run by the Scratch processor every time a new command is requested. The processor then runs whatever command that has been set using the `Cmd` call. Any custom microcode that is added to the system *must* include a definition for the `FETCH` command. 
@@ -134,19 +129,55 @@ Each one of these commands has been defined in the system microcode, whose sourc
 
 > Some **commands** will have the same, or similar, names and functionality to specific **control signals**. This allows for a program written in memory to trigger the functionality of that signal through a dedicated command.
 
-|Command|Args|Description|
+|Command|Supports Input Modes|Description|
 |---|---|---|
 |`FETCH`||See [FETCH Cycle](#fetch-cycle) documentation.|
-|`Jump`|address `arg1`|Sets the next line of code to execute (the `Prog` register value) to the `arg1` address in memory.|
-|`LoadA`|address `arg1`|Loads the `arg1` address of memory into the `A` register.|
-|`SetA`|value `arg1`|Sets the value of the `A` register to `arg1`.|
-|`AddA`|address `arg1`|Adds the `arg1` address of memory into the `A` register, overwriting the `B` register in the process.|
+|`Jump`||Sets the next line of code to execute (the `Prog` register value) to the `arg1` address in memory.|
+|`JumpEq`||Sets the next line of code to execute (the `Prog` register value) to the `arg1` address in memory if the `Eq` flag is set.|
+|`LoadA`|`true`|Loads `arg1` into the `A` register.|
+|`StoreA`||Stores the `A` register into `arg1` in memory.|
+|`SumA`|`true`|Adds `arg1` to the value of the `A` register (sets register `B`'s value).|
+|`LoadB`|`true`|Loads `arg1` into the `B` register.|
+|`StoreB`||Stores the `B` register into `arg1` in memory.|
+
+Note that in many cases, just like the control signals, these commands are named in predictable ways - making compilation much easier. If a command supports input modes, this means that *two* commands exist - one with a suffix `$`, and one with a suffix `#`. These correspond to whether the inputs to that command should be treated as a memory address (`$`) or an immediate value (`#`). In the `.mcs` code, this is written out manually (at least for now).
 
 ## Writing Programs
 Writing programs for this system is the process of defining commands and parameters in [memory](#memory) that will execute some desired action when run. Memory locations that have a command name (e.g. `LoadA`) in them will make that command execute when the `FETCH` cycle reads that memory location. Around and between these command names can be arguments. Many commands will pull a value or memory address from the next location in memory (using the `Prog` register) and use that as an input to the command. In the documentation for those commands, these are denoted as `arg*`, where the `*` indicates the offset of the input memory location from the command name memory location.
 
 ### Aren't Control Signals 'Programs' too?
-The control signals might be written out in `.mcs` code, but they're the equivalent of the EEPROM or combinational logic in hardware - they store no state, and aren't editable. Sure, you could use them to write code, but you could also use Scratch itself to write code - the point is that the design is for them to be static definitions of machine code functions. Thus commands are the *real* programming language, each command triggering the set of signals necessary for the computer to work, but the lists of commands and values in memory the 'programs' for this Turing-complete computer.
+The control signals might be written out in `.mcs` code, but they're the equivalent of the EEPROM or combinational logic in hardware - they store no state, and aren't editable after the system starts. Sure, you *could* use them to write code, but you could also use Scratch itself to write code - the point is that the design is for them to be static definitions of machine code functions. Thus commands are the *real* programming language for this Turing-complete 'processor'.
 
 ### How do I write a program to memory?
 Writing programs directly to the memory list is possible, but it's tricky and very time-consuming. That's why the `ScratchCompiler` project and CLI interface provides a compiler for the `.ccs` code files, which will generate a memory map from more human-readable 'assembly language.'
+
+### Compiling .ccs
+Again, the `ScratchCompiler` will compile .ccs files into a JSON blob that the processor can use to directly set memory values. The syntax below explains some of the ways in which writing programs are made easier:
+
+#### **`#` and `$` Inputs**
+`#` and `$` can be used as prefixes to input values, and the compiler will select for you the correct command. The `$` indicates the value is a location in memory, and thus a memory command (such as `LoadA`) should be programmed. Using the `#` prefix indicates that the value is a literal, and will call the immediate-mode command (such as `SetA`) instead.
+````
+LoadA $14
+LoadA #14
+````
+The first call would have a command name `LoadA$` and the `LoadA` command would expect the following `14` in memory to correspond to memory location. The second call would have a command name of `LoadA#` and would simply load the value `14` into the `A` register.
+
+> Using the `$` or `#` inputs to help you out when writing code - even if the command you're looking at *doesn't support multiple input modes* - is supported by the `ScratchCompiler` project.
+
+#### **Input Syntax**
+Note that inputs can be written directly after the command being called, for example `LoadA $12` will put the `LoadA` command in the first memory address, and then `12` in the following address. Easy as pie!
+
+#### **`.` Directives**
+Using a `.` allows you to define named spots in memory. As your program changes in size, these values will be updated accordingly.
+
+**Example:**
+````
+.MyLoop
+...
+(Run Some Code)
+...
+Jump .MyLoop
+````
+In this example, the loop will function as intended regardless of whether the code (and memory addresses) of the commands change as you work. In addition, the `.` prefix of the input to the `Jump` command will make sure that address-mode commands are used (similar for `$` - this applies only to commands that support multiple input modes).
+
+You can also specify the location of a named directive by adding an address after the declaration: `.MyVariable 14` will make sure that the `MyVariable` variable is stored in memory address 14. Note that specifying an address may cause the memory locations in the `.ccs` file to not be in order, so for something like the `.MyLoop` example it's much better to allow the compiler to allocate the memory automatically.
