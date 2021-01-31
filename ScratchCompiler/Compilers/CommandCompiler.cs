@@ -13,7 +13,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers
     public class CommandCompiler : ICompiler
     {
         /// <inheritdoc/>
-        public CompileType CompileType { get; } = CompileType.Microcode;
+        public CompileType CompileType { get; } = CompileType.Commands;
 
         /// <inheritdoc/>
         public async Task CompileAsync(FileInfo inputFile, DirectoryInfo outputDirectory)

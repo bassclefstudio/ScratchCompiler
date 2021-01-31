@@ -3,6 +3,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+#ADDED: .mcs and .ccs output files.
+*.mco
+*.cco 
+
 # User-specific files
 *.rsuser
 *.suo
