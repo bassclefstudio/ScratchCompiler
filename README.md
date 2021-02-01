@@ -173,7 +173,7 @@ Again, the `ScratchCompiler` will compile .ccs files into a JSON blob that the p
 LoadA $14
 LoadA #14
 ````
-The first call would have a command name `LoadA$` and the `LoadA` command would expect the following `14` in memory to correspond to memory location. The second call would have a command name of `LoadA#` and would simply load the value `14` into the `A` register.
+The first call would have a command name `LoadA$` and the `LoadA` command would expect the following `(0x)14` (`20` in decimal) in memory to correspond to memory location. The second call would have a command name of `LoadA#` and would simply load the value `14` (as decimal) into the `A` register.
 
 > Using the `$` or `#` inputs to help you out when writing code - even if the command you're looking at *doesn't support multiple input modes* - is supported by the `ScratchCompiler` project.
 
