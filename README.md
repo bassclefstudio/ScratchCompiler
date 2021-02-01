@@ -193,4 +193,24 @@ Jump .MyLoop
 ````
 In this example, the loop will function as intended regardless of whether the code (and memory addresses) of the commands change as you work. In addition, the `.` prefix of the input to the `Jump` command will make sure that address-mode commands are used (this is identical to the `$` input-mode, as the `.` directives will be replaced by `$` addresses at compile-time).
 
-Using the `Var` compiler command instead of the `Define` command will allocate that space in memory as empty, allowing you to store and get values from that space. `Define` allows the first line of code that follows the declaration to be stored in the now-named section of memory, which is useful for creating loops and using `Jump` commands, etc.
+> Using the `Var` compiler command instead of the `Define` command will allocate that space in memory as empty, allowing you to store and get values from that space. `Define` allows the first line of code that follows the declaration to be stored in the now-named section of memory, which is useful for creating loops and using `Jump` commands, etc.
+
+## Running the ScratchCompiler CLI
+The `ScratchCompiler` project contains a .NET 5 CLI project that supports help and parameter descriptions. The most basic command, which would be to compile a folder of `.mcs` and `.ccs` files to some output directory, is as follows.
+
+````
+dotnet ./ScratchCompiler/bin/{Debug/Release}/net5.0/ScratchCompiler.dll --input-dir ./Source --output-dir ./Source/build
+````
+This will first compile all `.mcs` microcode files, and place the `*.mco` and `*.mcd` files in the `./Source/build` directory. Then, it will build any `.ccs` scripts using the definitions and documentation from the `*.mcd` files that are present in the input or output folder, and create a `*.cco` output file. The output should appear as follows for a folder with one `.mcs` and one `.ccs` file:
+
+````
+Found 1 .mcs source file(s).
+Compiling Microcode.mcs...
+Compilation complete!
+Found 1 .ccs source file(s).
+Found 1 .mcd documentation file(s).
+Compiling Sample.ccs...
+Compilation complete!
+Compilation complete: 2 out of 2 succeeded.
+````
+The system's `.mcs` file can be found in the `./Source` directory of this repository, for you to use to build your own `.ccs` scripts.
