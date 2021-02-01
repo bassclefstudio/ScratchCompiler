@@ -41,7 +41,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
         readonly Parser<char, CommandCall> CallCommand;
         readonly Parser<char, CommandCall> CompilerCommand;
         readonly Parser<char, CommandCall> Command;
-        readonly Parser<char, IEnumerable<CommandCall>> Code;
+        readonly Parser<char, IEnumerable<CommandCall?>> Code;
 
         readonly Parser<char, string> TrueString;
         readonly Parser<char, string> FalseString;
@@ -78,7 +78,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
                 "Var"
             };
 
-            NumLiteral = LiteralMarker.Then(HexNum.Select(h => new ValueToken() { Value = h.ToString(), Type = ValueType.Immediate }));
+            NumLiteral = LiteralMarker.Then(Num.Select(h => new ValueToken() { Value = h.ToString(), Type = ValueType.Immediate }));
             CharLiteral = Any.Between(CharMarker).Select(c => new ValueToken() { Value = c.ToString(), Type = ValueType.Immediate });
             BoolLiteral = OneOf(Try(TrueString), FalseString).Select(t => new ValueToken() { Value = t, Type = ValueType.Immediate });
             NullLiteral = NullString.Select(t => new ValueToken() { Value = string.Empty, Type = ValueType.Immediate });
@@ -107,8 +107,8 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
 
             Command = OneOf(Try(CompilerCommand).Labelled("compiler call"), CallCommand.Labelled("command call"));
             Code = OneOf(
-                    Try(CommentHead.Then(ExceptEndLine.SkipMany())).ThenReturn(new CommandCall()).Labelled("comment"), 
-                    Command)
+                    Try(CommentHead.Then(ExceptEndLine.SkipMany())).ThenReturn<CommandCall?>(null).Labelled("comment"), 
+                    Command.Select<CommandCall?>(c => c))
                 .SeparatedAndOptionallyTerminatedAtLeastOnce(SkipWhitespaces);
         }
 
@@ -141,7 +141,8 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
             var result = Code.Parse(inputCode);
             if (result.Success)
             {
-                CommandCall[] initialCommands = result.Value.ToArray();
+                //// Remove empty (null) commands (these are created by comments).
+                CommandCall[] initialCommands = result.Value.Where(c => c.HasValue).Select(c => c.Value).ToArray();
                 Dictionary<string, int> directivePositions = new Dictionary<string, int>();
 
                 int currentMemoryPosition = 0;

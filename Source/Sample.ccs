@@ -1,10 +1,13 @@
 Position $0
+// Create variable that goes from 0 to 16.
 Var .MyVariable
 LoadA #0
-LoadB #10
+// Load 16 into B register in order to compare.
+LoadB #16
 Define .Loop
 IncA
 StoreA .MyVariable
+// End program if A register = 16.
 JumpEq .SkipLoop
 Jump .Loop
 Define .SkipLoop
