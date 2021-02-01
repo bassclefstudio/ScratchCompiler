@@ -1,107 +1,158 @@
 Fetch: Retrieves the next command from memory.
-Prog>Addr
-IncReg
-MemGet
-Cmd
-// At this point, we have set the command we want to execute.
-// The Prog register has already been incremented, so arguments can simply call Prog>Addr and then Prog+ after retrieving input.
+    Prog>Addr
+    IncReg
+    MemGet
+    Cmd
+    // At this point, we have set the command we want to execute.
+    // The Prog register has already been incremented, so arguments can simply call Prog>Addr and then Prog+ after retrieving input.
 
-Jump (Prog): Sets the next line of code to execute to an address in memory.
-Prog>Addr
-IncReg
-MemGet
-// This is the address to save to Prog.
-Val>Prog
+Jump$ (Prog): Sets the next line of code to execute to an address in memory.
+    Prog>Addr
+    IncReg
+    MemGet
+    // This is the address to save to Prog.
+    Val>Prog
 
-JumpEq (Prog): Sets the next line of code to execute to an address in memory if the Eq flag is set.
-Prog>Addr
-IncReg
-MemGet
-// This is the address to save to Prog if Eq is set.
-Val?Prog
+JumpEq$ (Prog): Sets the next line of code to execute to an address in memory if the Eq flag is set.
+    Prog>Addr
+    IncReg
+    MemGet
+    // Val is the address to save to Prog if Eq is set.
+    Val?=Prog
 
-Halt: Stops program execution.
-HLT
+JumpGThan$ (Prog): Sets the next line of code to execute to an address in memory if the GThan flag is set.
+    Prog>Addr
+    IncReg
+    MemGet
+    // Val is the address to save to Prog if GThan is set.
+    Val?>Prog
+
+JumpLThan$ (Prog): Sets the next line of code to execute to an address in memory if the GThan flag is set.
+    Prog>Addr
+    IncReg
+    MemGet
+    // Val is the address to save to Prog if GThan is set.
+    Val?<Prog
+
+JumpNotEq$ (Prog): Sets the next line of code to execute to an address in memory if the Eq flag is not set.
+    Prog>Addr
+    IncReg
+    MemGet
+    // Val is the address to save to Prog if Eq is not set.
+    Prog?=Val
+    // If Eq was set, Prog>Val>Prog doesn't change the value of the Prog register.
+    Val>Prog
+
+Halt: Halts program execution.
+    HLT
 
 LoadA$ (A): Loads an address of memory into the A register.
-Prog>Addr
-IncReg
-MemGet
-// Address loaded into Val register.
-Val>Addr
-MemGet
-// Now set the value into the A register.
-Val>A
+    Prog>Addr
+    IncReg
+    MemGet
+    // Address loaded into Val register.
+    Val>Addr
+    MemGet
+    // Now set the value into the A register.
+    Val>A
 
 LoadA# (A): Sets the value of the A register to a value.
-Prog>Addr
-IncReg
-MemGet
-// Value loaded into Val register.
-Val>A
+    Prog>Addr
+    IncReg
+    MemGet
+    // Value loaded into Val register.
+    Val>A
 
-StoreA: Stores the value of the A register into an address of memory.
-Prog>Addr
-IncReg
-MemGet
-// Address loaded into Val register.
-Val>Addr
-A>Val
-MemSet
+StoreA$: Stores the value of the A register into an address of memory.
+    Prog>Addr
+    IncReg
+    MemGet
+    // Address loaded into Val register.
+    Val>Addr
+    A>Val
+    MemSet
 
 IncA (A): Increments the A register by 1.
-A+
+    A+
+
+DecA (A): Decrements the A register by 1.
+    A-
 
 LoadB$ (B): Loads an address of memory into the B register.
-Prog>Addr
-IncReg
-MemGet
-// Address loaded into Val register.
-Val>Addr
-MemGet
-// Now set the value into the B register.
-Val>B
+    Prog>Addr
+    IncReg
+    MemGet
+    // Address loaded into Val register.
+    Val>Addr
+    MemGet
+    // Now set the value into the B register.
+    Val>B
 
 LoadB# (B): Sets the value of the B register to a value.
-Prog>Addr
-IncReg
-MemGet
-// Value loaded into Val register.
-Val>B
+    Prog>Addr
+    IncReg
+    MemGet
+    // Value loaded into Val register.
+    Val>B
 
-StoreB: Stores the value of the B register into an address of memory.
-Prog>Addr
-IncReg
-MemGet
-// Address loaded into Val register.
-Val>Addr
-B>Val
-MemSet
+StoreB$: Stores the value of the B register into an address of memory.
+    Prog>Addr
+    IncReg
+    MemGet
+    // Address loaded into Val register.
+    Val>Addr
+    B>Val
+    MemSet
 
 IncB (B): Increments the B register by 1.
-B+
+    B+
 
-AddA (A,B): Adds an address of memory into the A register from the B register.
-Prog>Addr
-IncReg
-MemGet
-// Address loaded into Val register.
-Val>Addr
-MemGet
-// Now set the value into the B register.
-Val>B
-Sum
+DecB (B): Decrements the B register by 1.
+    B-
 
-AddB (A,B): Adds an address of memory into the B register from the A register.
-Prog>Addr
-IncReg
-MemGet
-// Address loaded into Val register.
-Val>Addr
-MemGet
-// Now set the value into the A register.
-Val>A
-Sum
-// Swap values around to store sum in B instead of A.
-A>B
-Val>A
+AddA$ (A,B): Adds a value to the value of the A register from the B register.
+    Prog>Addr
+    IncReg
+    MemGet
+    // Address loaded into Val register.
+    Val>Addr
+    MemGet
+    // Now set the value into the B register.
+    Val>B
+    Sum
+
+AddA# (A,B): Adds a value to the value of the A register from the B register.
+    Prog>Addr
+    IncReg
+    MemGet
+    // Now set the value into the B register.
+    Val>B
+    Sum
+
+AddB$ (A,B): Adds a value to the value of the B register from the A register.
+    Prog>Addr
+    IncReg
+    MemGet
+    // Address loaded into Val register.
+    Val>Addr
+    MemGet
+    // Now set the value into the A register.
+    Val>A
+    Sum
+    // Swap values around to store sum in B instead of A.
+    A>B
+    Val>A
+
+AddB# (A,B): Adds a value to the value of the B register from the A register.
+    Prog>Addr
+    IncReg
+    MemGet
+    // Now set the value into the A register.
+    Val>A
+    Sum
+    // Swap values around to store sum in B instead of A.
+    A>B
+    Val>A
+
+SendDisplay: Sends the command in memory addresses 8000-8010 to the display.
+    DispCmd

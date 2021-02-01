@@ -29,7 +29,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
         public JObject GetJson()
         {
             return new JObject(
-                new JProperty("Name", $"{Documentation.CommandName}{Documentation.InputMode}"),
+                new JProperty("Name", Documentation.GetFullName()),
                 new JProperty("Signals", string.Join("|", Calls.SelectMany(c => c.CallNames).Where(c => !string.IsNullOrEmpty(c)))));
         }
     }

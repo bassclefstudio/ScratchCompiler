@@ -7,7 +7,8 @@ The processor v0.1 consists of the following components:
  - [**Memory**](#memory)
  - [**Disk**](#disk)
  - [**Flags**](#flags)
- - [**Compiler**](#compiler)
+ - [**Display**](#display)
+ - [**Parser**](#parser)
 
 Each has a specific function and manages a certain set of data.
 ### Processor
@@ -37,19 +38,14 @@ Each list item can store any Scratch value, but the reccomended values for the p
 While strings *are* supported, dealing with strings in a non-character-based way can lead to issues and inability to search through the string (at least in version v0.1).
 
 #### Memory Map
-This is the planned memory map for v0.1 of the processor, in ASCII art form. `k` refers to 1,024 items, and the units for memory are the cells which contain Scratch values.
+This is the planned memory map for v0.1 of the processor. `k` refers to 1,000 items, and the each 'item' contains a single Scratch value.
 
-````
-+--------------------------+----+--------+---------------------+  +---------->
-|===========   8k    ======| 2k |   4k   |=======  10k   ======|  |   Disk   >
-|=========== Program ======|File|Display/|======= System ======|->|  Memory  >
-|===========  Space  ======| IO |Keyboard|=======  Data  ======|  |    ??    >
-+--------------------------+----+--------+---------------------+  +---------->
-````
- - **8k program space**: free for any program to use, no persistent data should be stored here.
- - **2k file I/O**: Files streamed from disk can be buffered for up to 2k of space in this region.
- - **4k display/keyboard**: The current keyboard/peripheral IO memory is stored here, as well as the memory used by the display adapter to send queries to the output display terminal or (possibly?) graphics system.
- - **10k system data**: OS/standard libraries are cached here, as well as the current state of the system and the stack. Certain areas of memory are reserved for the program running with root access (the OS or bootloader).
+|Start Address|End Address|Description|
+|---|---|---|
+|`0000`|`7999`|Free for any program to use, general-purpose memory.|
+|`8000`|`8009`|Display memory: `X1`,`Y1`,`X2`,`Y2`,`R`,`G`,`B`,`S`,`Scale`,`Cmd`. See [Display](#display) for more information.|
+|`8010`|`9009`|Files streamed from disk can be buffered for up to 1k of space in this region.|
+|`9010`|`9999`|OS/standard libraries are cached here, as well as the current state of the system and the stack. Certain areas of memory are reserved for the program running with root access (the OS or bootloader).|
 
 ### Disk
 This is not currently implemented, but will provide methods for streaming named pieces of data into memory for programs to use. It will have its own set of [control signals](#signals), and likely require interrupt handling in order to stream larger chunks of data at a slower speed to [memory](#memory).
@@ -66,6 +62,18 @@ This sprite is called during initialization and is in charge of loading in the s
 |1|`HLT`|If this flag is ever set, the processor will halt and no longer execute commands.|
 |2|`Eq`|Indicates whether the value in the `A` and `B` registers are the same (equal).|
 
+### Display
+The display controls a vector-based pen graphics driver, which can draw shapes and lines on the screen. It uses the memory range from `$8000` to `$8010` to store the following information:
+
+ - `X1` and `Y1`: The first point storage. Point co-ordinates can be negative.
+ - `X2` and `Y2`: The second point storage. Point co-ordinates can be negative.
+ - `R`,`G`,`B`: The color of the pen for this command. Values can range from 0 to 255.
+ - `S`: The size of the pen stroke.
+ - `Scale`: The current scale factor for pen/screen co-ordinates.
+ - `Cmd`: The ID of the command that is being sent to the display.
+
+These values can be loaded into memory, and then will be loaded when a command calls the control signal `DispRef`, which tells the display to execute the command in memory.
+
 ## Signals
 Signals are individual broadcasts sent to a specific part of the processor to tell it to perform a given action. They store no state and do not involve multiple components of the project. Each one is called by a broadcast of type `call_{SignalName}`, where the `SignalName` is the specific name for that action. The beginning `call_` is ommitted from the following documentation, as it is added by the command processor at runtime.
 |Signal Name|Component|Action|
@@ -76,12 +84,14 @@ Signals are individual broadcasts sent to a specific part of the processor to te
 |`Rt*`|Processor|Sets the 'to' register to `*` (`A`,`B`,`Prog`, etc.).|
 |`TReg`|Processor|Transfers data from the 'from' register into the 'to' register (`Rf*`>`Rt*`).|
 |`IncReg`|Processor|Increments the value of the 'from' register (`Rf*`).|
+|`DecReg`|Processor|Decrements the value of the 'from' register (`Rf*`).|
 |`Sum`|Processor|Adds the values of the `A` and `B` registers together, and saves the result into the `A` register.|
 |`Sub`|Processor|Subtracts the values of the `A` and `B` registers from each other, and saves the result into the `A` register.|
 |`Prod`|Processor|Multiples the values of the `A` and `B` registers together, and saves the result into the `A` register.|
 |`Div`|Processor|Divides the values of the `A` and `B` registers from each other, and saves the result into the `A` register.|
 |`Cmd`|Processor|Sets the value in `MemoryValue` as the current command in the processor. This call is used in the [FETCH cycle](#fetch-cycle), or any other command that determines the next command that should be run.|
 |`HLT`|Processor|Halts the execution of code and stops all processing.|
+|`DispRef`|Display|Tells the [display](#display) module to execute the command in memory.|
 
 ## Microcode
 Compiled microcode is written in JSON, where each **command** is made up of a name (`"Name"`), documentation snippet (`"Help"`), and a list of [signals](#signals)/broadcasts that make up the command (`"Signals"`). A list of commands included by default on the system, along with their documentation, is included [below](#list-of-commands). Defining commands allows you to write programs to memory (see [Writing Programs](#writing-programs)) rather than having to hard-code some collection of control signals, and thus the microcode on the system essentially defines the machine-code-esque language that you'll use to write more complex programs. 
@@ -124,7 +134,7 @@ Compilation also generates a `.mcd` file, which contains all of the documentatio
 ```
 (The `InvolvedRegisters` property is an enum with flags - see [Processor](#processor) for a list of registers and corresponding bits). 
 
-### FETCH Cycle
+### Fetch Cycle
 This command is run by the Scratch processor every time a new command is requested. The processor then runs whatever command that has been set using the `Cmd` call. Any custom microcode that is added to the system *must* include a definition for the `FETCH` command. 
 
 **Fetch.mcs**
@@ -144,16 +154,24 @@ Each one of these commands has been defined in the system microcode, whose sourc
 
 |Command|Supports Input Modes|Description|
 |---|---|---|
-|`FETCH`||See [FETCH Cycle](#fetch-cycle) documentation.|
-|`Jump`||Sets the next line of code to execute (the `Prog` register value) to the `arg1` address in memory.|
-|`JumpEq`||Sets the next line of code to execute (the `Prog` register value) to the `arg1` address in memory if the `Eq` flag is set.|
-|`LoadA`|`true`|Loads `arg1` into the `A` register.|
-|`StoreA`||Stores the `A` register into `arg1` in memory.|
-|`SumA`|`true`|Adds `arg1` to the value of the `A` register (sets register `B`'s value).|
-|`LoadB`|`true`|Loads `arg1` into the `B` register.|
-|`StoreB`||Stores the `B` register into `arg1` in memory.|
+|`Fetch`||See [Fetch Cycle](#fetch-cycle) documentation.|
+|`Jump`|`$`|Sets the next line of code to execute (the `Prog` register value) to the `arg` address in memory.|
+|`JumpEq`|`$`|Sets the next line of code to execute (the `Prog` register value) to the `arg` address in memory if the `Eq` flag is set.|
+|`JumpNotEq`|`$`|Sets the next line of code to execute (the `Prog` register value) to the `arg` address in memory if the `Eq` flag is not set.|
+|`Halt`||Halts program execution.|
+|`LoadA`|`$`,`#`|Loads `arg` into the `A` register.|
+|`StoreA`|`$`|Stores the `A` register into `arg` in memory.|
+|`IncA`||Increments the `A` register by 1.|
+|`DecA`||Decrements the `A` register by 1.|
+|`SumA`|`$`,`#`|Adds `arg` to the value of the `A` register (sets register `B`'s value).|
+|`LoadB`|`$`,`#`|Loads `arg` into the `B` register.|
+|`StoreB`|`$`|Stores the `B` register into `arg` in memory.|
+|`IncB`||Increments the `B` register by 1.|
+|`DecB`||Decrements the `B` register by 1.|
+|`SumB`|`$`,`#`|Adds `arg` to the value of the `B` register (sets register `A`'s value).|
+|`SendDisplay`||Sends the command in memory addresses `$8000-8010` to the display.|
 
-Note that in many cases, just like the control signals, these commands are named in predictable ways - making compilation much easier. If a command supports input modes, this means that *two* commands exist - one with a suffix `$`, and one with a suffix `#`. These correspond to whether the inputs to that command should be treated as a memory address (`$`) or an immediate value (`#`). In the `.mcs` code, this is written out manually (at least for now).
+Note that in many cases, just like the control signals, these commands are named in predictable ways - making compilation much easier. If a command supports input modes, this means that commands with suffixes exist - one with a suffix `$`, and/or one with a suffix `#`. These correspond to whether the inputs to that command should be treated as a memory address (`$`) or an immediate value (`#`). In the `.mcs` code, these commands are defined separately (at least for now).
 
 ## Writing Programs
 Writing programs for this system is the process of defining commands and parameters in [memory](#memory) that will execute some desired action when run. Memory locations that have a command name (e.g. `LoadA`) in them will make that command execute when the `FETCH` cycle reads that memory location. Around and between these command names can be arguments. Many commands will pull a value or memory address from the next location in memory (using the `Prog` register) and use that as an input to the command. In the documentation for those commands, these are denoted as `arg*`, where the `*` indicates the offset of the input memory location from the command name memory location.
@@ -173,7 +191,7 @@ Again, the `ScratchCompiler` will compile .ccs files into a JSON blob that the p
 LoadA $14
 LoadA #14
 ````
-The first call would have a command name `LoadA$` and the `LoadA` command would expect the following `(0x)14` (`20` in decimal) in memory to correspond to memory location. The second call would have a command name of `LoadA#` and would simply load the value `14` (as decimal) into the `A` register.
+The first call would have a command name `LoadA$` and the `LoadA` command would expect the address `14` in memory to correspond to memory location. The second call would have a command name of `LoadA#` and would simply load the value `14` (as decimal) into the `A` register.
 
 > Using the `$` or `#` inputs to help you out when writing code - even if the command you're looking at *doesn't support multiple input modes* - is supported by the `ScratchCompiler` project.
 
@@ -193,7 +211,13 @@ Jump .MyLoop
 ````
 In this example, the loop will function as intended regardless of whether the code (and memory addresses) of the commands change as you work. In addition, the `.` prefix of the input to the `Jump` command will make sure that address-mode commands are used (this is identical to the `$` input-mode, as the `.` directives will be replaced by `$` addresses at compile-time).
 
-> Using the `Var` compiler command instead of the `Define` command will allocate that space in memory as empty, allowing you to store and get values from that space. `Define` allows the first line of code that follows the declaration to be stored in the now-named section of memory, which is useful for creating loops and using `Jump` commands, etc.
+These are the compiler directives at this time:
+ - `Define` - names the location in memory, does not move forward address for next line of code.
+ - `Var` - names the location in memory, sets it to empty, and moves the memory address forward.
+ - `Position` - sets the current memory address in the `.ccs` code to the defined location.
+ - `Constant` - writes the immediate value at the current location in memory and moves the memory address forward.
+
+> Using the `Var` compiler command instead of the `Define` command will allocate that space in memory as empty, allowing you to store and get values from that space. `Define` allows the first line of code that follows the declaration to be stored in the now-named section of memory, which is useful for creating loops, setting constants with the `Constant` command, etc.
 
 ## Running the ScratchCompiler CLI
 The `ScratchCompiler` project contains a .NET 5 CLI project that supports help and parameter descriptions. The most basic command, which would be to compile a folder of `.mcs` and `.ccs` files to some output directory, is as follows.

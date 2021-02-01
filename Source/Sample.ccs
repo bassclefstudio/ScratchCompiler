@@ -1,14 +1,103 @@
+Position $8000
+    Var .DispX1
+    Var .DispY1
+    Var .DispX2
+    Var .DispY2
+
+    Define .DispR
+    Constant #255
+
+    Define .DispG
+    Constant #255
+
+    Define .DispB
+    Constant #255
+
+    Define .DispS
+    Constant #1
+
+    Define .DispArg
+    Constant #7.5
+
+    Var .DispCmd
+
 Position $0
-// Create variable that goes from 0 to 16.
-Var .MyVariable
-LoadA #0
-// Load 16 into B register in order to compare.
-LoadB #16
+    // Player positions.
+    Define .XPos1
+    Constant #-30
+    Define .YPos1
+    Constant #-24
+    Define .YDir1
+    Constant #1
+    Define .XPos2
+    Constant #30
+    Define .YPos2
+    Constant #24
+    Define .YDir2
+    Constant #-1
+
+    Define .MinY
+    Constant #-20
+    Define .MaxY
+    Constant #20
+
+    // Clear the display.
+    LoadA #0
+    StoreA .DispCmd
+    SendDisplay
+
 Define .Loop
-IncA
-StoreA .MyVariable
-// End program if A register = 16.
-JumpEq .SkipLoop
+    LoadA .XPos1
+    StoreA .DispX1
+    StoreA .DispX2
+
+    LoadA .YPos1
+    AddA #4
+    StoreA .DispY1
+
+    LoadA .YPos1
+    AddA #-4
+    StoreA .DispY2
+
+    LoadA #0
+    StoreA .DispArg
+    LoadA #1
+    StoreA .DispCmd
+    SendDisplay
+
+    LoadA .XPos2
+    StoreA .DispX1
+    StoreA .DispX2
+
+    LoadA .YPos2
+    AddA #4
+    StoreA .DispY1
+
+    LoadA .YPos2
+    AddA #-4
+    StoreA .DispY2
+
+    LoadA #1
+    StoreA .DispArg
+    LoadA #1
+    StoreA .DispCmd
+    SendDisplay
+
+    LoadA .YPos1
+    LoadB .MaxY
+    JumpGThan .GoDown
+    LoadB .MinY
+    JumpLThan .GoUp
+    Define .AfterTurnAround 
+    AddA .YDir1
+    StoreA .YPos1
 Jump .Loop
-Define .SkipLoop
-Halt
+
+Define .GoDown
+    LoadB #-1
+    StoreB .YDir1
+    Jump .AfterTurnAround
+Define .GoUp
+    LoadB #1
+    StoreB .YDir1
+    Jump .AfterTurnAround

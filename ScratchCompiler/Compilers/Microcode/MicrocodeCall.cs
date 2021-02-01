@@ -48,7 +48,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
         /// <summary>
         /// The operator character - i.e. '>' or '|', etc.
         /// </summary>
-        public char Operator { get; set; }
+        public string Operator { get; set; }
 
         /// <summary>
         /// The name of the signal that the <see cref="MicrocodeOperator"/> will apply to the set 'from' and 'to' registers, ommiting the "Reg" at the end.

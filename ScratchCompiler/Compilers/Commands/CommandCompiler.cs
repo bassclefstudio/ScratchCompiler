@@ -75,14 +75,15 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
             {
                 "Define",
                 "Position",
-                "Var"
+                "Var",
+                "Constant"
             };
 
-            NumLiteral = LiteralMarker.Then(Num.Select(h => new ValueToken() { Value = h.ToString(), Type = ValueType.Immediate }));
+            NumLiteral = LiteralMarker.Then(Digit.Or(Char('.')).Or(Char('-')).ManyString().Select(h => new ValueToken() { Value = h, Type = ValueType.Immediate }));
             CharLiteral = Any.Between(CharMarker).Select(c => new ValueToken() { Value = c.ToString(), Type = ValueType.Immediate });
             BoolLiteral = OneOf(Try(TrueString), FalseString).Select(t => new ValueToken() { Value = t, Type = ValueType.Immediate });
             NullLiteral = NullString.Select(t => new ValueToken() { Value = string.Empty, Type = ValueType.Immediate });
-            Address = AddressMarker.Then(HexNum.Select(h => new ValueToken() { Value = h.ToString(), Type = ValueType.Address }));
+            Address = AddressMarker.Then(Num.Select(h => new ValueToken() { Value = h.ToString(), Type = ValueType.Address }));
             Directive = DirectiveMarker.Then(LetterOrDigit.ManyString().Select(s => new ValueToken() { Value = s, Type = ValueType.Directive }));
 
             Value = OneOf(
@@ -228,7 +229,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
                             {
                                 if (currentCommand.Input?.Type == ValueType.Address)
                                 {
-                                    currentMemoryPosition = int.Parse(currentCommand.Input?.Value) + 1;
+                                    currentMemoryPosition = int.Parse(currentCommand.Input?.Value);
                                 }
                                 else
                                 {
@@ -238,6 +239,18 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
                             else
                             {
                                 throw new CompilationException("\'Position\' compiler call requires an address input.");
+                            }
+                        }
+                        else if (currentCommand.Name == "Constant")
+                        {
+                            if (currentCommand.Input.HasValue)
+                            {
+                                memoryMap.Memory.Add(currentMemoryPosition, currentCommand.Input.Value);
+                                currentMemoryPosition++;
+                            }
+                            else
+                            {
+                                throw new CompilationException("\'Constant\' compiler call requires an input.");
                             }
                         }
                     }
