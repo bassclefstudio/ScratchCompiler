@@ -14,14 +14,14 @@ Each has a specific function and manages a certain set of data.
 The core component. This is responsible for managing the registers (named, stored data variables) and executing [commands](#commands) by providing the correct [signals](#signals).
 
 The available registers in v0.1 are as follows:
-|Name|Description|
-|---|---|
-|**A**|General-purpose register.|
-|**B**|General-purpose register.|
-|**X**|Temporary cache register, designed for temporary use.|
-|**Prog**|Designed for the current program address position.|
-|**MemoryAddress** (**Addr**)|The current address in memory - shared with the [Memory](#memory) component via a global variable.|
-|**MemoryValue** (**Val**)|The current value to/from memory - shared with the [Memory](#memory) component via a global variable.|
+|Name|Description|Flag|
+|---|---|---|
+|**A**|General-purpose register.|`0001`|
+|**B**|General-purpose register.|`0010`|
+|**X**|Temporary cache register, designed for temporary use.|`1000`|
+|**Prog**|Designed for the current program address position.|`0100`|
+|**MemoryAddress** (**Addr**)|The current address in memory - shared with the [Memory](#memory) component via a global variable.|*N/A*|
+|**MemoryValue** (**Val**)|The current value to/from memory - shared with the [Memory](#memory) component via a global variable.|*N/A*|
 
 ### Memory
 Allocates, reads, and writes to and from the `Memory` list - a fixed-size list of data values identifiable by their key/index in the list. Performant and suited for program variables and data.
@@ -54,7 +54,7 @@ This is the planned memory map for v0.1 of the processor, in ASCII art form. `k`
 ### Disk
 This is not currently implemented, but will provide methods for streaming named pieces of data into memory for programs to use. It will have its own set of [control signals](#signals), and likely require interrupt handling in order to stream larger chunks of data at a slower speed to [memory](#memory).
 
-### Compiler
+### Parser
 This sprite is called during initialization and is in charge of loading in the system [microcode](#microcode) as well as whatever programs are being initialized in memory. It has no control signals and does not participate in computations.
 
 ### Flags
@@ -103,13 +103,26 @@ Signal3
 The result after compilation would look like this:
 **MyCommand.mco**
 ```JSON
-[{"Name":"CommandName","Signals":"Signal1|Signal2|Signal3"}]
+[{"Name":"MyNewCommand","Signals":"Signal1|Signal2|Signal3"}]
 ```
 Overall, this isn't a huge change, but it does allow for comments in the source code and readable line breaks (which Scratch wouldn't understand).
 
 Additionally, the compiler supports the following shorthand for register transfers: `A>B`, `A?B`, and `A+`. These are the equivalent of writing `RfA|RtB|TReg`, `RfA|RtB|TEqReg`, and `RfA|IncReg`. They save time when transferring data between registers - however, if you're transferring data to or from the same register multiple times, there *is* a small performance overhead.
 
 Compilation also generates a `.mcd` file, which contains all of the documentation pieces that are omitted from the final result. This is used by the program compiler in the `ScratchCompiler` project to provide certain features (such as automatic input-mode switching) and run syntax checks on the resulting code.
+
+**MyCommand.mcd**
+```JSON
+[
+    {
+    "CommandName": "MyNewCommand",
+    "InputMode": null,
+    "Description": "Does some stuff I made up!",
+    "InvolvedRegisters": 2
+    }
+]
+```
+(The `InvolvedRegisters` property is an enum with flags - see [Processor](#processor) for a list of registers and corresponding bits). 
 
 ### FETCH Cycle
 This command is run by the Scratch processor every time a new command is requested. The processor then runs whatever command that has been set using the `Cmd` call. Any custom microcode that is added to the system *must* include a definition for the `FETCH` command. 
@@ -172,12 +185,12 @@ Using a `.` allows you to define named spots in memory. As your program changes 
 
 **Example:**
 ````
-.MyLoop
+Define .MyLoop
 ...
 (Run Some Code)
 ...
 Jump .MyLoop
 ````
-In this example, the loop will function as intended regardless of whether the code (and memory addresses) of the commands change as you work. In addition, the `.` prefix of the input to the `Jump` command will make sure that address-mode commands are used (similar for `$` - this applies only to commands that support multiple input modes).
+In this example, the loop will function as intended regardless of whether the code (and memory addresses) of the commands change as you work. In addition, the `.` prefix of the input to the `Jump` command will make sure that address-mode commands are used (this is identical to the `$` input-mode, as the `.` directives will be replaced by `$` addresses at compile-time).
 
-You can also specify the location of a named directive by adding an address after the declaration: `.MyVariable 14` will make sure that the `MyVariable` variable is stored in memory address 14. Note that specifying an address may cause the memory locations in the `.ccs` file to not be in order, so for something like the `.MyLoop` example it's much better to allow the compiler to allocate the memory automatically.
+Using the `Var` compiler command instead of the `Define` command will allocate that space in memory as empty, allowing you to store and get values from that space. `Define` allows the first line of code that follows the declaration to be stored in the now-named section of memory, which is useful for creating loops and using `Jump` commands, etc.

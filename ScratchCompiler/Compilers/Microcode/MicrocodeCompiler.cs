@@ -34,7 +34,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
         public CompileType CompileType { get; } = CompileType.Microcode;
 
         /// <summary>
-        /// Creates a new <see cref="MicrocodeCompiler"/> and initializes all parsing systems.
+        /// Creates and initializes a new <see cref="MicrocodeCompiler"/>.
         /// </summary>
         public MicrocodeCompiler()
         {
@@ -51,23 +51,22 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
             Operator = OneOf(Operators.Select(o => Char(o.Operator).ThenReturn(o.OperationSignal)));
             ExceptEndLine = AnyCharExcept('\r', '\n');
 
-            Comment = CommentHead.Then(ExceptEndLine.SkipMany());
+            Comment = CommentHead.Then(ExceptEndLine.SkipMany()).Labelled("comment");
             Documentation =
-                from name in LetterOrDigit.AtLeastOnceString()
-                from input in OneOf(KnownInputModes).Optional()
-                from regs in Letter.ManyString().Where(r => Enum.IsDefined(typeof(Registers), r)).Separated(Char(',').Before(SkipWhitespaces)).Between(Char('('), Char(')')).Between(SkipWhitespaces).Optional()
+                from name in LetterOrDigit.AtLeastOnceString().Labelled("name")
+                from input in OneOf(KnownInputModes).Optional().Labelled("input-mode")
+                from regs in Letter.ManyString().Where(r => Enum.IsDefined(typeof(Registers), r)).Labelled("register").Separated(Char(',').Before(SkipWhitespaces)).Between(Char('('), Char(')')).Between(SkipWhitespaces).Optional()
                 from colon in Char(':').Before(SkipWhitespaces)
-                from desc in ExceptEndLine.ManyString().Before(EndOfLine)
+                from desc in ExceptEndLine.ManyString().Labelled("description").Before(EndOfLine)
                 select new MicrocodeDoc() 
                 {
                     CommandName = name, 
-                    InputMode = input.Match<char?>(i => i, () => null),
+                    InputMode = input.Match<ValueType?>(i => i.GetValueType(), () => null),
                     InvolvedRegisters = regs.Match(
-                        rs => rs.Aggregate<string, Registers>(Registers.None, (current, r) => current | Enum.Parse<Registers>(r)), 
+                        rs => rs.Aggregate(Registers.None, (current, r) => current | Enum.Parse<Registers>(r)), 
                         () => Registers.None), 
                     Description = desc 
                 };
-
 
             SignalCall = OneOf(
                 Try(Map((r1, t, r2) => new MicrocodeCall($"Rf{r1}", $"Rt{r2}", $"{t}Reg"), Letter.AtLeastOnceString(), Operator, Letter.AtLeastOnceString())),

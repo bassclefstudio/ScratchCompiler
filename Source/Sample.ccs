@@ -1,0 +1,11 @@
+Position $0
+Var .MyVariable
+LoadA #0
+LoadB #10
+Define .Loop
+IncA
+StoreA .MyVariable
+JumpEq .SkipLoop
+Jump .Loop
+Define .SkipLoop
+Halt
