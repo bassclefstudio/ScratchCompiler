@@ -13,6 +13,26 @@ Jump$ (Prog): Sets the next line of code to execute to an address in memory.
     // This is the address to save to Prog.
     Val>Prog
 
+Sub$ (Prog,Stack): Jumps into a subroutine at the given address and sets the return address to the stack.
+    // Store the address we're leaving on the stack.
+    Stack>Addr
+    IncReg
+    Prog>Val
+    Val+
+    MemSet
+    Prog>Addr
+    IncReg
+    MemGet
+    // This is the address to jump to.
+    Val>Prog
+
+EndSub (Prog,Stack): Exits and returns from the most recently entered subroutine.
+    Stack-
+    Stack>Addr
+    MemGet
+    // This is the address from the stack to return to.
+    Val>Prog
+
 JumpEq$ (Prog): Sets the next line of code to execute to an address in memory if the Eq flag is set.
     Prog>Addr
     IncReg
@@ -62,6 +82,18 @@ LoadA# (A): Sets the value of the A register to a value.
     MemGet
     // Value loaded into Val register.
     Val>A
+
+LoadAStack (A,Stack): Loads the top value of the stack into the A register.
+    Stack-
+    Stack>Addr
+    MemGet
+    Val>A
+
+StoreAStack (A,Stack): Stores the value of A into the top of the stack.
+    Stack>Addr
+    IncReg
+    A>Val
+    MemSet
 
 StoreA$: Stores the value of the A register into an address of memory.
     Prog>Addr
@@ -154,5 +186,52 @@ AddB# (A,B): Adds a value to the value of the B register from the A register.
     A>B
     Val>A
 
+MultiplyA$ (A,B): Multiplies a value to the value of the A register from the B register.
+    Prog>Addr
+    IncReg
+    MemGet
+    // Address loaded into Val register.
+    Val>Addr
+    MemGet
+    // Now set the value into the B register.
+    Val>B
+    Prod
+
+MultiplyA# (A,B): Multiplies a value to the value of the A register from the B register.
+    Prog>Addr
+    IncReg
+    MemGet
+    // Now set the value into the B register.
+    Val>B
+    Prod
+
+MultiplyB$ (A,B): Multiplies a value to the value of the B register from the A register.
+    Prog>Addr
+    IncReg
+    MemGet
+    // Address loaded into Val register.
+    Val>Addr
+    MemGet
+    // Now set the value into the A register.
+    Val>A
+    Prod
+    // Swap values around to store sum in B instead of A.
+    A>B
+    Val>A
+
+MultiplyB# (A,B): Multiplies a value to the value of the B register from the A register.
+    Prog>Addr
+    IncReg
+    MemGet
+    // Now set the value into the A register.
+    Val>A
+    Prod
+    // Swap values around to store sum in B instead of A.
+    A>B
+    Val>A
+
 SendDisplay: Sends the command in memory addresses 8000-8010 to the display.
     DispCmd
+
+RefreshKeys: Refreshes the keyboard's currently pressed key (address 8010).
+    KeyRef

@@ -91,6 +91,10 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
         /// <summary>
         /// The 'X' temporary cache register.
         /// </summary>
-        X = 1 << 3
+        X = 1 << 3,
+        /// <summary>
+        /// The register designed for the current stack position.
+        /// </summary>
+        Stack = 1 << 4
     }
 }

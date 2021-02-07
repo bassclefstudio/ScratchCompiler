@@ -8,6 +8,7 @@ The processor v0.1 consists of the following components:
  - [**Disk**](#disk)
  - [**Flags**](#flags)
  - [**Display**](#display)
+ - [**Keyboard**](#keyboard)
  - [**Parser**](#parser)
 
 Each has a specific function and manages a certain set of data.
@@ -34,6 +35,7 @@ Each list item can store any Scratch value, but the reccomended values for the p
  - `true` or `false` bool values.
  - The null object `" "` (this memory cell is considered 'empty').
  - Command names (such as `LoadA`) - these are *not* strings, and cannot be treated as strings.
+ - Some enum values (such as [keyboard](#keyboard)'s `{Up}`, `{Down}`, etc.) which cannot be turned into or parsed as strings, but remain 
 
 While strings *are* supported, dealing with strings in a non-character-based way can lead to issues and inability to search through the string (at least in version v0.1).
 
@@ -44,8 +46,9 @@ This is the planned memory map for v0.1 of the processor. `k` refers to 1,000 it
 |---|---|---|
 |`0000`|`7999`|Free for any program to use, general-purpose memory.|
 |`8000`|`8009`|Display memory: `X1`,`Y1`,`X2`,`Y2`,`R`,`G`,`B`,`S`,`Scale`,`Cmd`. See [Display](#display) for more information.|
-|`8010`|`9009`|Files streamed from disk can be buffered for up to 1k of space in this region.|
-|`9010`|`9999`|OS/standard libraries are cached here, as well as the current state of the system and the stack. Certain areas of memory are reserved for the program running with root access (the OS or bootloader).|
+|`8010`|`8010`|Keyboard memory: `Key` and `IsPressed`. See [Keyboard](#keyboard) for more information.|
+|`8011`|`9009`|Files streamed from disk can be buffered for up to 1k of space in this region.|
+|`9500`|`9999`|The state of the system and the stack. Certain areas of memory are reserved for the program running with root access (the OS or bootloader).|
 
 ### Disk
 This is not currently implemented, but will provide methods for streaming named pieces of data into memory for programs to use. It will have its own set of [control signals](#signals), and likely require interrupt handling in order to stream larger chunks of data at a slower speed to [memory](#memory).
@@ -63,7 +66,7 @@ This sprite is called during initialization and is in charge of loading in the s
 |2|`Eq`|Indicates whether the value in the `A` and `B` registers are the same (equal).|
 
 ### Display
-The display controls a vector-based pen graphics driver, which can draw shapes and lines on the screen. It uses the memory range from `$8000` to `$8010` to store the following information:
+The display controls a vector-based pen graphics driver, which can draw shapes and lines on the screen. It uses the memory range from `$8000` to `$8009` to store the following information:
 
  - `X1` and `Y1`: The first point storage. Point co-ordinates can be negative.
  - `X2` and `Y2`: The second point storage. Point co-ordinates can be negative.
@@ -73,6 +76,14 @@ The display controls a vector-based pen graphics driver, which can draw shapes a
  - `Cmd`: The ID of the command that is being sent to the display.
 
 These values can be loaded into memory, and then will be loaded when a command calls the control signal `DispRef`, which tells the display to execute the command in memory.
+
+### Keyboard
+The keyboard allows requests to be made to check if a user has a certain key pressed. It uses the memory locations `$8010` and `$8011` to function:
+
+ - `$8010` may contain a `char` or one of the keyboard enum values - `{Up}`, `{Down}`,`{Left}`, or `{Right}` - for the arrow keys.
+ - `$8011` will contain a `bool` value indicating whether the key in `$8010` is currently pressed.
+  
+ Updating the keyboard `$8011` memory value is done using the `KeyRef` control signal. 
 
 ## Signals
 Signals are individual broadcasts sent to a specific part of the processor to tell it to perform a given action. They store no state and do not involve multiple components of the project. Each one is called by a broadcast of type `call_{SignalName}`, where the `SignalName` is the specific name for that action. The beginning `call_` is ommitted from the following documentation, as it is added by the command processor at runtime.
@@ -91,7 +102,8 @@ Signals are individual broadcasts sent to a specific part of the processor to te
 |`Div`|Processor|Divides the values of the `A` and `B` registers from each other, and saves the result into the `A` register.|
 |`Cmd`|Processor|Sets the value in `MemoryValue` as the current command in the processor. This call is used in the [FETCH cycle](#fetch-cycle), or any other command that determines the next command that should be run.|
 |`HLT`|Processor|Halts the execution of code and stops all processing.|
-|`DispRef`|Display|Tells the [display](#display) module to execute the command in memory.|
+|`DispCmd`|Display|Tells the [display](#display) module to execute the command in memory.|
+|`KeyRef`|Keyboard|Tells the [keyboard](#keyboard) module to refresh whether the given key is pressed.|
 
 ## Microcode
 Compiled microcode is written in JSON, where each **command** is made up of a name (`"Name"`), documentation snippet (`"Help"`), and a list of [signals](#signals)/broadcasts that make up the command (`"Signals"`). A list of commands included by default on the system, along with their documentation, is included [below](#list-of-commands). Defining commands allows you to write programs to memory (see [Writing Programs](#writing-programs)) rather than having to hard-code some collection of control signals, and thus the microcode on the system essentially defines the machine-code-esque language that you'll use to write more complex programs. 
@@ -169,7 +181,8 @@ Each one of these commands has been defined in the system microcode, whose sourc
 |`IncB`||Increments the `B` register by 1.|
 |`DecB`||Decrements the `B` register by 1.|
 |`SumB`|`$`,`#`|Adds `arg` to the value of the `B` register (sets register `A`'s value).|
-|`SendDisplay`||Sends the command in memory addresses `$8000-8010` to the display.|
+|`SendDisplay`||Sends the command in memory addresses `$8000-8009` to the display.|
+|`RefreshKeys`||Refreshes the keyboard's currently pressed key (address `$8010`).|
 
 Note that in many cases, just like the control signals, these commands are named in predictable ways - making compilation much easier. If a command supports input modes, this means that commands with suffixes exist - one with a suffix `$`, and/or one with a suffix `#`. These correspond to whether the inputs to that command should be treated as a memory address (`$`) or an immediate value (`#`). In the `.mcs` code, these commands are defined separately (at least for now).
 
@@ -194,6 +207,11 @@ LoadA #14
 The first call would have a command name `LoadA$` and the `LoadA` command would expect the address `14` in memory to correspond to memory location. The second call would have a command name of `LoadA#` and would simply load the value `14` (as decimal) into the `A` register.
 
 > Using the `$` or `#` inputs to help you out when writing code - even if the command you're looking at *doesn't support multiple input modes* - is supported by the `ScratchCompiler` project.
+
+Note also that the following syntax applies for values of certain types:
+ - **Characters** (`char` values) should be enclosed inside of single quotes (`'`).
+ - **Enum** values should be enclosed in braces (`{ }`).
+Both `char` and `enum` types are values the same way the `#NUM` construct is.
 
 #### **Input Syntax**
 Note that inputs can be written directly after the command being called, for example `LoadA $12` will put the `LoadA` command in the first memory address, and then `12` in the following address. Easy as pie!

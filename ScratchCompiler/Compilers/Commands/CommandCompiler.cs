@@ -25,6 +25,8 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
 
         readonly Parser<char, char> LiteralMarker;
         readonly Parser<char, char> CharMarker;
+        readonly Parser<char, char> EnumStart;
+        readonly Parser<char, char> EnumEnd;
         readonly Parser<char, char> AddressMarker;
         readonly Parser<char, char> DirectiveMarker;
         readonly Parser<char, string> CommentHead;
@@ -33,6 +35,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
         readonly Parser<char, ValueToken> NumLiteral;
         readonly Parser<char, ValueToken> CharLiteral;
         readonly Parser<char, ValueToken> BoolLiteral;
+        readonly Parser<char, ValueToken> EnumLiteral;
         readonly Parser<char, ValueToken> NullLiteral;
         readonly Parser<char, ValueToken> Address;
         readonly Parser<char, ValueToken> Directive;
@@ -65,6 +68,8 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
             CharMarker = Char('\'');
             AddressMarker = Char('$');
             DirectiveMarker = Char('.');
+            EnumStart = Char('{');
+            EnumEnd = Char('}');
             ExceptEndLine = AnyCharExcept('\r', '\n');
 
             TrueString = String("true");
@@ -82,6 +87,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
             NumLiteral = LiteralMarker.Then(Digit.Or(Char('.')).Or(Char('-')).ManyString().Select(h => new ValueToken() { Value = h, Type = ValueType.Immediate }));
             CharLiteral = Any.Between(CharMarker).Select(c => new ValueToken() { Value = c.ToString(), Type = ValueType.Immediate });
             BoolLiteral = OneOf(Try(TrueString), FalseString).Select(t => new ValueToken() { Value = t, Type = ValueType.Immediate });
+            EnumLiteral = Letter.ManyString().Between(EnumStart, EnumEnd).Select(e => new ValueToken() { Value = e, Type = ValueType.Immediate });
             NullLiteral = NullString.Select(t => new ValueToken() { Value = string.Empty, Type = ValueType.Immediate });
             Address = AddressMarker.Then(Num.Select(h => new ValueToken() { Value = h.ToString(), Type = ValueType.Address }));
             Directive = DirectiveMarker.Then(LetterOrDigit.ManyString().Select(s => new ValueToken() { Value = s, Type = ValueType.Directive }));
@@ -89,6 +95,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
             Value = OneOf(
                 NumLiteral.Labelled("number"),
                 CharLiteral.Labelled("char"),
+                EnumLiteral.Labelled("enum"),
                 Try(BoolLiteral).Labelled("bool"),
                 Try(NullLiteral).Labelled("null"),
                 Address.Labelled("address"),
