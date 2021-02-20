@@ -15,7 +15,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
         /// <summary>
         /// The <see cref="string"/> text of the calls, in .mcs format.
         /// </summary>
-        public IEnumerable<string> CallNames 
+        public IEnumerable<string> CallNames
         { 
             get => callNames ?? Array.Empty<string>();
             set => callNames = value;
@@ -51,8 +51,13 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
         public string Operator { get; set; }
 
         /// <summary>
-        /// The name of the signal that the <see cref="MicrocodeOperator"/> will apply to the set 'from' and 'to' registers, ommiting the "Reg" at the end.
+        /// The name of the signal that the <see cref="MicrocodeOperator"/> will apply to the set 'from' and 'to' registers, before the "Reg" unit.
         /// </summary>
-        public string OperationSignal { get; set; }
+        public string OperationPrefix { get; set; }
+
+        /// <summary>
+        /// The name of the signal that the <see cref="MicrocodeOperator"/> will apply to the set 'from' and 'to' registers, after the "Reg" unit.
+        /// </summary>
+        public string OperationSuffix { get; set; }
     }
 }

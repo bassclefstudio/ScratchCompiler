@@ -30,7 +30,54 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
         {
             return new JObject(
                 new JProperty("Name", Documentation.GetFullName()),
-                new JProperty("Signals", string.Join("|", Calls.SelectMany(c => c.CallNames).Where(c => !string.IsNullOrEmpty(c)))));
+                new JProperty("Signals", string.Join("|", TrimCalls())));
+        }
+
+        /// <summary>
+        /// Trims (using various defined optimizations) the <see cref="Calls"/> collection for this <see cref="MicrocodeCommand"/>.
+        /// </summary>
+        /// <returns>The trimmed, optimized <see cref="IEnumerable{T}"/> of <see cref="string"/> control signals.</returns>
+        public IEnumerable<string> TrimCalls()
+        {
+            List<string> signals = new List<string>();
+            string regF = null;
+            string regT = null;
+            IEnumerable<string> calls = Calls.SelectMany(c => c.CallNames);
+            foreach (var call in calls)
+            {
+                if (string.IsNullOrEmpty(call))
+                {
+                    // Ignore empty control signals.
+                }
+                else
+                {
+                    // Register access optimization.
+                    if (call.StartsWith("Rf"))
+                    {
+                        string reg = call[2..];
+                        if (reg != regF)
+                        {
+                            regF = reg;
+                            signals.Add(call);
+                        }
+                    }
+                    else if (call.StartsWith("Rt"))
+                    {
+                        string reg = call[2..];
+                        if (reg != regT)
+                        {
+                            regT = reg;
+                            signals.Add(call);
+                        }
+                    }
+                    else
+                    {
+                        signals.Add(call);
+                    }
+                }
+            }
+
+            return signals;
         }
     }
 }

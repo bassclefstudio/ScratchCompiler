@@ -22,7 +22,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
 
         readonly Parser<char, string> CommentHead;
         readonly Parser<char, char> ExceptEndLine;
-        readonly Parser<char, string> Operator;
+        readonly Parser<char, MicrocodeOperator> Operator;
 
         readonly Parser<char, MicrocodeDoc> Documentation;
         readonly Parser<char, Unit> Comment;
@@ -40,18 +40,18 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
         {
             Operators = new MicrocodeOperator[]
             {
-                new MicrocodeOperator(){ Operator = ">", OperationSignal = "T" },
-                new MicrocodeOperator(){ Operator = "+", OperationSignal = "Inc" },
-                new MicrocodeOperator(){ Operator = "-", OperationSignal = "Dec" },
-                new MicrocodeOperator(){ Operator = "?=", OperationSignal = "TEq" },
-                new MicrocodeOperator(){ Operator = "?>", OperationSignal = "TGThan" },
-                new MicrocodeOperator(){ Operator = "?<", OperationSignal = "TLThan" }
+                new MicrocodeOperator(){ Operator = ">", OperationPrefix = "T" },
+                new MicrocodeOperator(){ Operator = "+", OperationPrefix = "Inc" },
+                new MicrocodeOperator(){ Operator = "-", OperationPrefix = "Dec" },
+                new MicrocodeOperator(){ Operator = "?=", OperationPrefix = "T", OperationSuffix = "Eq" },
+                new MicrocodeOperator(){ Operator = "?>", OperationPrefix = "T", OperationSuffix = "GThan" },
+                new MicrocodeOperator(){ Operator = "?<", OperationPrefix = "T", OperationSuffix = "LThan" }
             };
 
             KnownInputModes = new char[] { '$', '#' };
 
             CommentHead = String("//");
-            Operator = OneOf(Operators.Select(o => Try(String(o.Operator)).ThenReturn(o.OperationSignal)));
+            Operator = OneOf(Operators.Select(o => Try(String(o.Operator)).ThenReturn(o)));
             ExceptEndLine = AnyCharExcept('\r', '\n');
 
             Comment = CommentHead.Then(ExceptEndLine.SkipMany()).Labelled("comment");
@@ -72,8 +72,8 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
                 };
 
             SignalCall = OneOf(
-                Try(Map((r1, t, r2) => new MicrocodeCall($"Rf{r1}", $"Rt{r2}", $"{t}Reg"), Letter.AtLeastOnceString(), Operator, Letter.AtLeastOnceString())).Labelled("binary operation"),
-                Try(Map((r1, t) => new MicrocodeCall($"Rf{r1}", $"{t}Reg"), Letter.AtLeastOnceString(), Operator)).Labelled("unary operation"),
+                Try(Map((r1, t, r2) => new MicrocodeCall($"Rf{r1}", $"Rt{r2}", $"{t.OperationPrefix}Reg{t.OperationSuffix}"), Letter.AtLeastOnceString(), Operator, Letter.AtLeastOnceString())).Labelled("binary operation"),
+                Try(Map((r1, t) => new MicrocodeCall($"Rf{r1}", $"{t.OperationPrefix}Reg{t.OperationSuffix}"), Letter.AtLeastOnceString(), Operator)).Labelled("unary operation"),
                 Letter.AtLeastOnceString().Select(s => new MicrocodeCall(s))).Labelled("control signal");
 
             Command =
