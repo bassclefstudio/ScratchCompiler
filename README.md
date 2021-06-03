@@ -1,4 +1,4 @@
-# Compiler/Processor for Scratch v0.1
+# Compiler/Processor for Scratch v0.2
 This is the companion repository for [this](Add-Scratch-Link) Scratch project, which is a basic 'computer' built in Scratch. It's inspired by [Ben Eater's hardware projects](https://eater.net/8bit) and is essentially a way for assembly-language-like code to be executed in the context of a Scratch project. **TL;DR**: This is all basically a side project, with no practical benefits whatsoever, but here's the documentation for it anyway.
 
 ## Architecture
