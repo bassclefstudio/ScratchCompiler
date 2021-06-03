@@ -79,7 +79,6 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
             ReservedCommandNames = new string[]
             {
                 "Define",
-                "Position",
                 "Var",
                 "Constant"
             };
@@ -104,14 +103,14 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
             CompilerCommand =
                 from c in LetterOrDigit.AtLeastOnceString().Where(n => ReservedCommandNames.Contains(n)).Labelled("reserved command")
                 from ws in SkipWhitespaces
-                from v in Value.Optional()
-                select new CommandCall() { Name = c, Input = v.Match<ValueToken?>(v => v, () => null), Type = CallType.Compiler };
+                from v in Value.Separated(SkipWhitespaces)
+                select new CommandCall() { Name = c, Inputs = v.ToArray(), Type = CallType.Compiler };
 
             CallCommand =
                 from c in LetterOrDigit.AtLeastOnceString().Where(n => KnownCommandNames.Contains(n)).Labelled("known command")
                 from ws in SkipWhitespaces
                 from v in Value.Optional()
-                select new CommandCall() { Name = c, Input = v.Match<ValueToken?>(v => v, () => null), Type = CallType.Command };
+                select new CommandCall() { Name = c, Inputs = v.Match(v => new ValueToken[] { v }, () => Array.Empty<ValueToken>()), Type = CallType.Command };
 
             Command = OneOf(Try(CompilerCommand).Labelled("compiler call"), CallCommand.Labelled("command call"));
             Code = OneOf(
@@ -160,15 +159,15 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
                     if (currentCommand.Type == CallType.Command)
                     {
                         MicrocodeDoc? commandDoc = null;
-                        if (currentCommand.Input.HasValue)
+                        if (currentCommand.Inputs.Length == 1)
                         {
-                            ValueType reqValType = currentCommand.Input.Value.Type == ValueType.Directive ? ValueType.Address : currentCommand.Input.Value.Type;
+                            ValueType reqValType = currentCommand.Inputs[0].Type == ValueType.Directive ? ValueType.Address : currentCommand.Inputs[0].Type;
                             commandDoc = documentation.GetDoc(currentCommand.Name, reqValType);
                             if (commandDoc.HasValue)
                             {
                                 memoryMap.Memory.Add(currentMemoryPosition, commandDoc.Value.GetFullName());
                                 currentMemoryPosition++;
-                                memoryMap.Memory.Add(currentMemoryPosition, currentCommand.Input.Value);
+                                memoryMap.Memory.Add(currentMemoryPosition, currentCommand.Inputs[0]);
                                 currentMemoryPosition++;
                             }
                             else
@@ -176,7 +175,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
                                 throw new CompilationException($"Could not find an override of {currentCommand.Name} that supports input type {reqValType}.");
                             }
                         }
-                        else
+                        else if(currentCommand.Inputs.Length == 0)
                         {
                             commandDoc = documentation.GetDoc(currentCommand.Name, null);
                             if (commandDoc.HasValue)
@@ -189,75 +188,52 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
                                 throw new CompilationException($"Could not find an override of {currentCommand.Name} that supports no input.");
                             }
                         }
+                        else
+                        {
+                            throw new CompilationException($"Could not find an override of {currentCommand.Name} that supports {currentCommand.Inputs.Length} inputs.");
+                        }
                     }
-                    else
+                    else if(currentCommand.Type == CallType.Compiler)
                     {
                         if(currentCommand.Name == "Define")
                         {
-                            if (currentCommand.Input.HasValue)
+                            if (currentCommand.Inputs.Length == 2)
                             {
-                                if (currentCommand.Input?.Type == ValueType.Directive)
+                                if (currentCommand.Inputs[0].Type == ValueType.Directive && currentCommand.Inputs[1].Type == ValueType.Address)
                                 {
-                                    directivePositions.Add(currentCommand.Input?.Value, currentMemoryPosition);
+                                    directivePositions.Add(currentCommand.Inputs[0].Value, int.Parse(currentCommand.Inputs[1].Value));
                                 }
                                 else
                                 {
-                                    throw new CompilationException($"Cannot call Define with {currentCommand.Input} - expected directive.");
+                                    throw new CompilationException($"Cannot call Define with {currentCommand.Inputs[0]},{currentCommand.Inputs[2]} - expected directive and address.");
+                                }
+                            }
+                            else if(currentCommand.Inputs.Length == 1)
+                            {
+                                if (currentCommand.Inputs[0].Type == ValueType.Directive)
+                                {
+                                    directivePositions.Add(currentCommand.Inputs[0].Value, currentMemoryPosition);
+                                }
+                                else
+                                {
+                                    throw new CompilationException($"Cannot call Define with {currentCommand.Inputs[0]} - expected directive.");
                                 }
                             }
                             else
                             {
-                                throw new CompilationException("\'Define\' compiler call requires a directive input.");
-                            }
-                        }
-                        else if (currentCommand.Name == "Var")
-                        {
-                            if (currentCommand.Input.HasValue)
-                            {
-                                if (currentCommand.Input?.Type == ValueType.Directive)
-                                {
-                                    directivePositions.Add(currentCommand.Input?.Value, currentMemoryPosition);
-                                    memoryMap.Memory.Add(currentMemoryPosition, string.Empty);
-                                    currentMemoryPosition++;
-                                }
-                                else
-                                {
-                                    throw new CompilationException($"Cannot call Var with {currentCommand.Input} - expected directive.");
-                                }
-                            }
-                            else
-                            {
-                                throw new CompilationException("\'Var\' compiler call requires a directive input.");
-                            }
-                        }
-                        else if(currentCommand.Name == "Position")
-                        {
-                            if (currentCommand.Input.HasValue)
-                            {
-                                if (currentCommand.Input?.Type == ValueType.Address)
-                                {
-                                    currentMemoryPosition = int.Parse(currentCommand.Input?.Value);
-                                }
-                                else
-                                {
-                                    throw new CompilationException($"Cannot call Define with {currentCommand.Input} - expected address.");
-                                }
-                            }
-                            else
-                            {
-                                throw new CompilationException("\'Position\' compiler call requires an address input.");
+                                throw new CompilationException("\'Define\' compiler call requires 1 or 2 inputs.");
                             }
                         }
                         else if (currentCommand.Name == "Constant")
                         {
-                            if (currentCommand.Input.HasValue)
+                            if (currentCommand.Inputs.Length == 1)
                             {
-                                memoryMap.Memory.Add(currentMemoryPosition, currentCommand.Input.Value);
+                                memoryMap.Memory.Add(currentMemoryPosition, currentCommand.Inputs[0]);
                                 currentMemoryPosition++;
                             }
                             else
                             {
-                                throw new CompilationException("\'Constant\' compiler call requires an input.");
+                                throw new CompilationException("\'Constant\' compiler call requires a single input.");
                             }
                         }
                     }

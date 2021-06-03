@@ -19,7 +19,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
         /// <summary>
         /// The input value to the given <see cref="CommandCall"/>.
         /// </summary>
-        public ValueToken? Input { get; set; }
+        public ValueToken[] Inputs { get; set; }
 
         /// <summary>
         /// The <see cref="CallType"/> type of call this <see cref="CommandCall"/> is.

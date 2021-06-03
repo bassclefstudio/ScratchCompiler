@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,22 +32,12 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
         /// <returns>A <see cref="JToken"/> containing compressed key/value pairs.</returns>
         public JToken GetJson()
         {
-            List<Tuple<int, List<object>>> memory = new List<Tuple<int, List<object>>>();
-            int address = Memory.First().Key;
-            memory.Add(new Tuple<int, List<object>>(address, new List<object>()));
-            foreach (var item in Memory)
+            List<string> map = new List<string>();
+            for (int i = 0; i < Memory.Keys.Max(); i++)
             {
-                if(item.Key != address)
-                {
-                    address = item.Key;
-                    memory.Add(new Tuple<int, List<object>>(address, new List<object>()));
-                }
-                memory.Last().Item2.Add(item.Value);
-                address++;
+                map.Add(Memory.GetValueOrDefault(i, string.Empty).ToString());
             }
-
-            return new JObject(
-                memory.Select(m => new JProperty(m.Item1.ToString(), m.Item2.Select(i => i.ToString()))));
+            return new JArray(map);
         }
     }
 }
