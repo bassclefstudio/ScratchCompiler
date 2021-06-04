@@ -1,5 +1,8 @@
-# Compiler/Processor for Scratch v0.1
-This is the companion repository for [this](Add-Scratch-Link) Scratch project, which is a basic 'computer' built in Scratch. It's inspired by [Ben Eater's hardware projects](https://eater.net/8bit) and is essentially a way for assembly-language-like code to be executed in the context of a Scratch project. **TL;DR**: This is all basically a side project, with no practical benefits whatsoever, but here's the documentation for it anyway.
+# Compiler/Processor for Scratch v0.3
+
+> ***IMPORTANT: This branch contains the code and documentation for the legacy v0.3 version of the processor, which is located at [this separate Scratch link](https://scratch.mit.edu/projects/480876805/). It will not be updated in the future.***
+
+This is the companion repository for [this](https://scratch.mit.edu/projects/480876805/) Scratch project, which is a basic 'computer' built in Scratch. It's inspired by [Ben Eater's hardware projects](https://eater.net/8bit) and is essentially a way for assembly-language-like code to be executed in the context of a Scratch project. **TL;DR**: This is all basically a side project, with no practical benefits whatsoever, but here's the documentation for it anyway.
 
 ## Architecture
 The processor v0.1 consists of the following components:
