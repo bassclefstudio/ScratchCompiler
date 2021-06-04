@@ -28,11 +28,6 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
         public string Description { get; set; }
 
         /// <summary>
-        /// Flags of the <see cref="Registers"/> whose values this command changes.
-        /// </summary>
-        public Registers InvolvedRegisters { get; set; }
-
-        /// <summary>
         /// Gets the full name (including input-mode) of the command defined by this <see cref="MicrocodeDoc"/>.
         /// </summary>
         public string GetFullName()
@@ -64,37 +59,5 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
                 return null;
             }
         }
-    }
-
-    /// <summary>
-    /// An enum defining the different registers that the processor has - used for identifying which commands will (significantly) alter register values.
-    /// </summary>
-    [Flags]
-    public enum Registers
-    {
-        /// <summary>
-        /// No registers were involved.
-        /// </summary>
-        None = 0,
-        /// <summary>
-        /// The 'A' general-purpose register.
-        /// </summary>
-        A = 1 << 0,
-        /// <summary>
-        /// The 'B' general-purpose register.
-        /// </summary>
-        B = 1 << 1,
-        /// <summary>
-        /// The register designed for the current program address position. This <see cref="Registers"/> flag is only set if this register is not incremented as normal.
-        /// </summary>
-        Prog = 1 << 2,
-        /// <summary>
-        /// The 'X' temporary cache register.
-        /// </summary>
-        X = 1 << 3,
-        /// <summary>
-        /// The register designed for the current stack position.
-        /// </summary>
-        Stack = 1 << 4
     }
 }

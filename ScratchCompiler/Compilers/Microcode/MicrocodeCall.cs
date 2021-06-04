@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
 {
     /// <summary>
-    /// Represents a single signal or condensed set of control signals (i.e. from an <see cref="MicrocodeOperator"/>), as parsed from .mcs microcode.
+    /// Represents a single signal or condensed set of control signals (i.e. from an <see cref="MicrocodeAlias"/>), as parsed from .mcs microcode.
     /// </summary>
     public struct MicrocodeCall
     {
@@ -41,23 +41,18 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
     }
 
     /// <summary>
-    /// Represents a character operator that, when found in .mcs signals, can be used to apply an action to one or two registers (requires the system-defined Rf* and Rt* control signals).
+    /// Represents a shortcut or alias for a control signal in microcode.
     /// </summary>
-    public struct MicrocodeOperator
+    public struct MicrocodeAlias
     {
         /// <summary>
         /// The operator character - i.e. '>' or '|', etc.
         /// </summary>
-        public string Operator { get; set; }
+        public string Alias { get; set; }
 
         /// <summary>
-        /// The name of the signal that the <see cref="MicrocodeOperator"/> will apply to the set 'from' and 'to' registers, before the "Reg" unit.
+        /// The name of the signal that the <see cref="MicrocodeAlias"/> will replace the alias with.
         /// </summary>
-        public string OperationPrefix { get; set; }
-
-        /// <summary>
-        /// The name of the signal that the <see cref="MicrocodeOperator"/> will apply to the set 'from' and 'to' registers, after the "Reg" unit.
-        /// </summary>
-        public string OperationSuffix { get; set; }
+        public string OperationName { get; set; }
     }
 }

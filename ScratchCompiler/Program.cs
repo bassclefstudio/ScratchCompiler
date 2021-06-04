@@ -74,6 +74,11 @@ namespace BassClefStudio.ScratchCompiler
                             Console.WriteLine($"Compilation complete!");
                             sucesses++;
                         }
+                        catch(CompilationException compEx)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine($"Compilation of {micro.Name} failed ({compEx.Position.Line},{compEx.Position.Col}): {compEx.Message}");
+                        }
                         catch(Exception ex)
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
@@ -114,6 +119,11 @@ namespace BassClefStudio.ScratchCompiler
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine($"Compilation complete!");
                             sucesses++;
+                        }
+                        catch (CompilationException compEx)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine($"Compilation of {code.Name} failed ({compEx.Position.Line},{compEx.Position.Col}): {compEx.Message}");
                         }
                         catch (Exception ex)
                         {

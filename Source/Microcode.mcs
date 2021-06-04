@@ -1,237 +1,173 @@
-Fetch: Retrieves the next command from memory.
-    Prog>Addr
-    IncReg
-    MemGet
+Fetch: Fetches the next command from memory and prepares the pointer for execution.
+    GetPointer
+    IncPointer
+    Get
     Cmd
-    // At this point, we have set the command we want to execute.
-    // The Prog register has already been incremented, so arguments can simply call Prog>Addr and then Prog+ after retrieving input.
 
-Jump$ (Prog): Sets the next line of code to execute to an address in memory.
-    Prog>Addr
-    IncReg
-    MemGet
-    // This is the address to save to Prog.
-    Val>Prog
+Clear: Clears the entirety of the current stack.
+    Clear
 
-Sub$ (Prog,Stack): Jumps into a subroutine at the given address and sets the return address to the stack.
-    // Store the address we're leaving on the stack.
-    Stack>Addr
-    IncReg
-    Prog>Val
-    Val+
-    MemSet
-    Prog>Addr
-    IncReg
-    MemGet
-    // This is the address to jump to.
-    Val>Prog
+Discard: Discards the top value on the stack.
+    Push
 
-EndSub (Prog,Stack): Exits and returns from the most recently entered subroutine.
-    Stack-
-    Stack>Addr
-    MemGet
-    // This is the address from the stack to return to.
-    Val>Prog
+Return: Gracefully exits from the given thread.
+    Return
 
-JumpEq$ (Prog): Sets the next line of code to execute to an address in memory if the Eq flag is set.
-    Prog>Addr
-    IncReg
-    MemGet
-    // Val is the address to save to Prog if Eq is set.
-    Val?=Prog
+Goto$: Jumps program execution to the given address in local memory.
+    GetPointer
+    Get
+    Jump
 
-JumpGThan$ (Prog): Sets the next line of code to execute to an address in memory if the GThan flag is set.
-    Prog>Addr
-    IncReg
-    MemGet
-    // Val is the address to save to Prog if GThan is set.
-    Val?>Prog
+Sub$: Jumps into a subroutine at the given address in local memory and pulls the return address onto the stack.
+    GetPointer
+    GetPointer
+    Get
+    // Stack currently contains the desired location, then the return location.
+    Jump
 
-JumpLThan$ (Prog): Sets the next line of code to execute to an address in memory if the GThan flag is set.
-    Prog>Addr
-    IncReg
-    MemGet
-    // Val is the address to save to Prog if GThan is set.
-    Val?<Prog
+EndSub: Returns from the most recently entered subroutine.
+    // Anything added to the stack since the 'Sub' command was called will need to be 'discarded' before this will work.
+    Jump
+    IncPointer
 
-JumpNotEq$ (Prog): Sets the next line of code to execute to an address in memory if the Eq flag is not set.
-    Prog>Addr
-    IncReg
-    MemGet
-    // Val is the address to save to Prog if Eq is not set.
-    Prog?=Val
-    // If Eq was set, Prog>Val>Prog doesn't change the value of the Prog register.
-    Val>Prog
+Push$: Pushes the value at the top of the stack to the provided address in local memory.
+    GetPointer
+    IncPointer
+    Get
+    Set
 
-Halt: Halts program execution.
-    HLT
+Pull$: Pulls the value at the address listed in local memory onto the top of the stack.
+    GetPointer
+    IncPointer
+    Get
+    Get
 
-LoadA$ (A): Loads an address of memory into the A register.
-    Prog>Addr
-    IncReg
-    MemGet
-    // Address loaded into Val register.
-    Val>Addr
-    MemGet
-    // Now set the value into the A register.
-    Val>A
+Pull#: Pulls the given input value onto the top of the stack.
+    GetPointer
+    IncPointer
+    Get
 
-LoadA# (A): Sets the value of the A register to a value.
-    Prog>Addr
-    IncReg
-    MemGet
-    // Value loaded into Val register.
-    Val>A
+PushRem$: Pushes the value at the top of the stack to the provided address in remote memory.
+    GetPointer
+    IncPointer
+    Get
+    RSet
 
-LoadAStack (A,Stack): Loads the top value of the stack into the A register.
-    Stack-
-    Stack>Addr
-    MemGet
-    Val>A
+PullRem$: Pulls the value at the address listed in remote memory onto the top of the stack.
+    GetPointer
+    IncPointer
+    Get
+    RGet
 
-StoreAStack (A,Stack): Stores the value of A into the top of the stack.
-    Stack>Addr
-    IncReg
-    A>Val
-    MemSet
+Poke$: Pokes the given (local or remote) memory address.
+    GetPointer
+    IncPointer
+    Get
+    Poke
 
-StoreA$: Stores the value of the A register into an address of memory.
-    Prog>Addr
-    IncReg
-    MemGet
-    // Address loaded into Val register.
-    Val>Addr
-    A>Val
-    MemSet
+Add#: Adds the input value to the value on the top of the stack.
+    GetPointer
+    IncPointer
+    Get
+    Add
 
-IncA (A): Increments the A register by 1.
-    A+
+Add$: Adds the value at the given address to the value on the top of the stack.
+    GetPointer
+    IncPointer
+    Get
+    Get
+    Add
 
-DecA (A): Decrements the A register by 1.
-    A-
+Subtract#: Subtracts the input value from the value on the top of the stack.
+    GetPointer
+    IncPointer
+    Get
+    Neg
+    Add
 
-LoadB$ (B): Loads an address of memory into the B register.
-    Prog>Addr
-    IncReg
-    MemGet
-    // Address loaded into Val register.
-    Val>Addr
-    MemGet
-    // Now set the value into the B register.
-    Val>B
+Subtract$: Subtracts the value at the given address from the value on the top of the stack.
+    GetPointer
+    IncPointer
+    Get
+    Get
+    Neg
+    Add
 
-LoadB# (B): Sets the value of the B register to a value.
-    Prog>Addr
-    IncReg
-    MemGet
-    // Value loaded into Val register.
-    Val>B
-
-StoreB$: Stores the value of the B register into an address of memory.
-    Prog>Addr
-    IncReg
-    MemGet
-    // Address loaded into Val register.
-    Val>Addr
-    B>Val
-    MemSet
-
-IncB (B): Increments the B register by 1.
-    B+
-
-DecB (B): Decrements the B register by 1.
-    B-
-
-AddA$ (A,B): Adds a value to the value of the A register from the B register.
-    Prog>Addr
-    IncReg
-    MemGet
-    // Address loaded into Val register.
-    Val>Addr
-    MemGet
-    // Now set the value into the B register.
-    Val>B
-    Sum
-
-AddA# (A,B): Adds a value to the value of the A register from the B register.
-    Prog>Addr
-    IncReg
-    MemGet
-    // Now set the value into the B register.
-    Val>B
-    Sum
-
-AddB$ (A,B): Adds a value to the value of the B register from the A register.
-    Prog>Addr
-    IncReg
-    MemGet
-    // Address loaded into Val register.
-    Val>Addr
-    MemGet
-    // Now set the value into the A register.
-    Val>A
-    Sum
-    // Swap values around to store sum in B instead of A.
-    A>B
-    Val>A
-
-AddB# (A,B): Adds a value to the value of the B register from the A register.
-    Prog>Addr
-    IncReg
-    MemGet
-    // Now set the value into the A register.
-    Val>A
-    Sum
-    // Swap values around to store sum in B instead of A.
-    A>B
-    Val>A
-
-MultiplyA$ (A,B): Multiplies a value to the value of the A register from the B register.
-    Prog>Addr
-    IncReg
-    MemGet
-    // Address loaded into Val register.
-    Val>Addr
-    MemGet
-    // Now set the value into the B register.
-    Val>B
+Multiply#: Multiples the input value to the value on the top of the stack.
+    GetPointer
+    IncPointer
+    Get
     Prod
 
-MultiplyA# (A,B): Multiplies a value to the value of the A register from the B register.
-    Prog>Addr
-    IncReg
-    MemGet
-    // Now set the value into the B register.
-    Val>B
+Multiply$: Multiplies the value at the given address to the value on the top of the stack.
+    GetPointer
+    IncPointer
+    Get
+    Get
     Prod
 
-MultiplyB$ (A,B): Multiplies a value to the value of the B register from the A register.
-    Prog>Addr
-    IncReg
-    MemGet
-    // Address loaded into Val register.
-    Val>Addr
-    MemGet
-    // Now set the value into the A register.
-    Val>A
+Divide#: Divides the value on the top of the stack by the input value.
+    GetPointer
+    IncPointer
+    Get
+    Inv
     Prod
-    // Swap values around to store sum in B instead of A.
-    A>B
-    Val>A
 
-MultiplyB# (A,B): Multiplies a value to the value of the B register from the A register.
-    Prog>Addr
-    IncReg
-    MemGet
-    // Now set the value into the A register.
-    Val>A
+Divide$: Divides the value on the top of the stack by the value at the given address.
+    GetPointer
+    IncPointer
+    Get
+    Get
+    Inv
     Prod
-    // Swap values around to store sum in B instead of A.
-    A>B
-    Val>A
 
-SendDisplay: Sends the command in memory addresses 8000-8010 to the display.
-    DispCmd
+MountDevice#: Mounts the named device in local memory.
+    GetPointer
+    IncPointer
+    Get
+    MntDev
 
-RefreshKeys: Refreshes the keyboard's currently pressed key (address 8010).
-    KeyRef
+DismountDevice#: Dismounts the named device from local memory.
+    GetPointer
+    IncPointer
+    Get
+    DismntDev
+
+PullDevice#: Pulls changes to the device memory into the local device chunk.
+    GetPointer
+    IncPointer
+    Get
+    PullDev
+
+PushDevice#: Pushes the local device chunk to the device it represents.
+    GetPointer
+    IncPointer
+    Get
+    PushDev
+
+JumpEq$: Jumps to the given address if the last two items in the stack are equal.
+    Eq
+    GetPointer
+    IncPointer
+    Get
+    CJump
+
+JumpGThan$: Jumps to the given address if the second-to-last item in the stack is greater than the last item in the stack.
+    GThan
+    GetPointer
+    IncPointer
+    Get
+    CJump
+
+JumpLThan$: Jumps to the given address if the second-to-last item in the stack is greater than the last item in the stack.
+    LThan
+    GetPointer
+    IncPointer
+    Get
+    CJump
+
+JumpTrue$: Jumps the given address if the value at the top of the stack is 'true'.
+    GetPointer
+    IncPointer
+    Get
+    CJump

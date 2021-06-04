@@ -17,12 +17,12 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
     /// </summary>
     public class MicrocodeCompiler : ICompiler
     {
-        readonly MicrocodeOperator[] Operators;
+        readonly MicrocodeAlias[] Aliases;
         readonly char[] KnownInputModes;
 
         readonly Parser<char, string> CommentHead;
         readonly Parser<char, char> ExceptEndLine;
-        readonly Parser<char, MicrocodeOperator> Operator;
+        readonly Parser<char, MicrocodeAlias> Operator;
 
         readonly Parser<char, MicrocodeDoc> Documentation;
         readonly Parser<char, Unit> Comment;
@@ -38,43 +38,37 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
         /// </summary>
         public MicrocodeCompiler()
         {
-            Operators = new MicrocodeOperator[]
+            Aliases = new MicrocodeAlias[]
             {
-                new MicrocodeOperator(){ Operator = ">", OperationPrefix = "T" },
-                new MicrocodeOperator(){ Operator = "+", OperationPrefix = "Inc" },
-                new MicrocodeOperator(){ Operator = "-", OperationPrefix = "Dec" },
-                new MicrocodeOperator(){ Operator = "?=", OperationPrefix = "T", OperationSuffix = "Eq" },
-                new MicrocodeOperator(){ Operator = "?>", OperationPrefix = "T", OperationSuffix = "GThan" },
-                new MicrocodeOperator(){ Operator = "?<", OperationPrefix = "T", OperationSuffix = "LThan" }
+                
             };
 
             KnownInputModes = new char[] { '$', '#' };
 
             CommentHead = String("//");
-            Operator = OneOf(Operators.Select(o => Try(String(o.Operator)).ThenReturn(o)));
+            Operator = OneOf(Aliases.Select(o => Try(String(o.Alias)).ThenReturn(o)));
             ExceptEndLine = AnyCharExcept('\r', '\n');
 
             Comment = CommentHead.Then(ExceptEndLine.SkipMany()).Labelled("comment");
             Documentation =
                 from name in LetterOrDigit.AtLeastOnceString().Labelled("name")
                 from input in OneOf(KnownInputModes).Optional().Labelled("input-mode")
-                from regs in Letter.ManyString().Where(r => Enum.IsDefined(typeof(Registers), r)).Labelled("register").Separated(Char(',').Before(SkipWhitespaces)).Between(Char('('), Char(')')).Between(SkipWhitespaces).Optional()
                 from colon in Char(':').Before(SkipWhitespaces)
                 from desc in ExceptEndLine.ManyString().Labelled("description")
                 select new MicrocodeDoc() 
                 {
                     CommandName = name, 
                     InputMode = input.Match<ValueType?>(i => i.GetValueType(), () => null),
-                    InvolvedRegisters = regs.Match(
-                        rs => rs.Aggregate(Registers.None, (current, r) => current | Enum.Parse<Registers>(r)), 
-                        () => Registers.None), 
                     Description = desc 
                 };
 
             SignalCall = OneOf(
-                Try(Map((r1, t, r2) => new MicrocodeCall($"Rf{r1}", $"Rt{r2}", $"{t.OperationPrefix}Reg{t.OperationSuffix}"), Letter.AtLeastOnceString(), Operator, Letter.AtLeastOnceString())).Labelled("binary operation"),
-                Try(Map((r1, t) => new MicrocodeCall($"Rf{r1}", $"{t.OperationPrefix}Reg{t.OperationSuffix}"), Letter.AtLeastOnceString(), Operator)).Labelled("unary operation"),
-                Letter.AtLeastOnceString().Select(s => new MicrocodeCall(s))).Labelled("control signal");
+                Operator
+                    .Select(o => new MicrocodeCall(o.OperationName))
+                    .Labelled("control alias"),
+                Letter.AtLeastOnceString()
+                    .Select(s => new MicrocodeCall(s))
+                    .Labelled("control signal"));
 
             Command =
                 from n in Documentation
