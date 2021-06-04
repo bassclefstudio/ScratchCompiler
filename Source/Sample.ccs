@@ -1,318 +1,346 @@
-Position $8000
-    Var .DispX1
-    Var .DispY1
-    Var .DispX2
-    Var .DispY2
+Define .DispCmd     $8004
+Define .DispX       $8005
+Define .DispY       $8006
+Define .DispPen     $8007
+Define .DispSize    $8008
+Define .DispId      $8009
 
-    Define .DispR
-    Constant #255
+Define .Keyboard    $8003
 
-    Define .DispG
-    Constant #255
-
-    Define .DispB
-    Constant #255
-
-    Define .DispS
-    Constant #1
-
-    Define .DispArg
-    Constant #7.5
-
-    Var .DispCmd
-
-Position $8010
-    Var .KeyName
-    Var .KeyPressed
-
-Position $0
+Define .Start
     // Clear the display.
-    LoadA #0
-    StoreA .DispCmd
-    SendDisplay
+    Pull #3
+    PushRem .DispCmd
+    Poke .DispCmd
 
 Define .Loop
     //Update all of the paddle graphics.
-    Sub .SetYellow
+    
+//Yellow paddle:
+    Pull #0
+    PushRem .DispCmd
 
-    LoadA .XPos1
-    StoreA .DispX1
-    StoreA .DispX2
+    Pull .XPos1
+    PushRem .DispX
 
-    LoadA .YPos1
-    AddA .PaddleSize1
-    StoreA .DispY1
+    Pull .YPos1
+    Add .PaddleSize
+    PushRem .DispY
 
-    LoadA .YPos1
-    AddA .PaddleSize2
-    StoreA .DispY2
+    Pull #8
+    PushRem .DispSize
 
-    LoadA #0
-    StoreA .DispArg
-    LoadA #1
-    StoreA .DispCmd
-    SendDisplay
+    Pull #0
+    PushRem .DispPen
 
-    //Draw Scoreboard1
-    LoadA .MaxY
-    AddA #1
-    StoreA .DispY1
-    StoreA .DispY2
+    Pull #0
+    PushRem .DispId
+    Poke .DispCmd
 
-    LoadA #-1
-    StoreA .DispX1
-    LoadA .P1Score
-    MultiplyA #-1
-    AddA #-1
-    StoreA .DispX2
+    Pull .YPos1
+    Subtract .PaddleSize
+    PushRem .DispY
 
-    LoadA #3
-    StoreA .DispArg
-    LoadA #1
-    StoreA .DispCmd
-    SendDisplay
+    Pull #5
+    PushRem .DispPen
 
-    Sub .SetBlue
+    Pull #1
+    PushRem .DispId
+    Poke .DispCmd
 
-    //Draw Scoreboard2
-    LoadA #1
-    StoreA .DispX1
-    LoadA .P2Score
-    AddA #1
-    StoreA .DispX2
+//Blue paddle:
+    Pull .XPos2
+    PushRem .DispX
 
-    LoadA #4
-    StoreA .DispArg
-    LoadA #1
-    StoreA .DispCmd
-    SendDisplay
+    Pull .YPos2
+    Add .PaddleSize
+    PushRem .DispY
 
-    LoadA .XPos2
-    StoreA .DispX1
-    StoreA .DispX2
+    Pull #8
+    PushRem .DispSize
 
-    LoadA .YPos2
-    AddA .PaddleSize1
-    StoreA .DispY1
+    Pull #0
+    PushRem .DispPen
 
-    LoadA .YPos2
-    AddA .PaddleSize2
-    StoreA .DispY2
+    Pull #2
+    PushRem .DispId
+    Poke .DispCmd
 
-    LoadA #1
-    StoreA .DispArg
-    LoadA #1
-    StoreA .DispCmd
-    SendDisplay
+    Pull .YPos2
+    Subtract .PaddleSize
+    PushRem .DispY
+
+    Pull #6
+    PushRem .DispPen
+
+    Pull #3
+    PushRem .DispId
+    Poke .DispCmd
+
+//Draw Scoreboard1:
+    Pull .MaxY
+    Add #48
+    PushRem .DispY
+
+    Pull #-8
+    PushRem .DispX
+
+    Pull #0
+    PushRem .DispPen
+
+    Pull #4
+    PushRem .DispId
+    Poke .DispCmd
+
+    Pull .P1Score
+    Multiply #-8
+    Subtract #8
+    PushRem .DispX
+
+    Pull #5
+    PushRem .DispPen
+
+    Pull #5
+    PushRem .DispId
+    Poke .DispCmd
+
+//Draw Scoreboard2:
+    Pull #8
+    PushRem .DispX
+
+    Pull #0
+    PushRem .DispPen
+
+    Pull #6
+    PushRem .DispId
+    Poke .DispCmd
+
+    Pull .P2Score
+    Multiply #8
+    Add #8
+    PushRem .DispX
+
+    Pull #6
+    PushRem .DispPen
+
+    Pull #7
+    PushRem .DispId
+    Poke .DispCmd
 
 //'Bounce' the first paddle up and down the height of the screen.
-    LoadA .YPos1
-    LoadB .MaxY
+    Pull .YPos1
+    Pull .MaxY
     JumpGThan .GoDown
-    MultiplyB #-1
-    LoadA .YPos1
+    Pull .YPos1
+    Pull .MaxY
+    Multiply #-1
     JumpLThan .GoUp
     Define .AfterTurnAround
-    AddA .YDir1
-    StoreA .YPos1
+    Pull .YDir1
+    Multiply .PlayerSpeed
+    Add .YPos1
+    Push .YPos1
 
 //'Bounce' the second paddle up and down the height of the screen.
-    LoadA .YPos2
-    LoadB .MaxY
+    Pull .YPos2
+    Pull .MaxY
     JumpGThan .DownPressed
-    MultiplyB #-1
-    LoadA .YPos2
+    Pull .YPos2
+    Pull .MaxY
+    Multiply #-1
     JumpLThan .UpPressed
 
 //Check the up and down keys to move the second paddle. 
-    LoadA {Down}
-    StoreA .KeyName
-    RefreshKeys
-    LoadA true
-    LoadB .KeyPressed
+    Pull {Down}
+    PushRem .Keyboard
+    PullRem .Keyboard
+    Pull true
     JumpEq .DownPressed
 
-    LoadA {Up}
-    StoreA .KeyName
-    RefreshKeys
-    LoadA true
-    LoadB .KeyPressed
+    Pull {Up}
+    PushRem .Keyboard
+    PullRem .Keyboard
+    Pull true
     JumpEq .UpPressed
 
     Define .AfterKeys
 
-    LoadA .YPos2
-    AddA .YDir2
-    StoreA .YPos2
+    Pull .YDir2
+    Multiply .PlayerSpeed
+    Add .YPos2
+    Push .YPos2
 
 //'Bounce' the ball along the screen.
-    LoadA .BallY
-    LoadB .MaxY
+    Pull .BallY
+    Pull .MaxY
     JumpGThan .BounceY
-    MultiplyB #-1
-    LoadA .BallY
+    Pull .BallY
+    Pull .MaxY
+    Multiply #-1
     JumpLThan .BounceY
     Define .AfterBounceY
 //Detect collisions in X.
-    LoadA .BallX
-    LoadB .MaxX
+    Pull .BallX
+    Pull .MaxX
     JumpGThan .BounceX2
-    MultiplyB #-1
-    LoadA .BallX
+    Pull .BallX
+    Pull .MaxX
+    Multiply #-1
     JumpLThan .BounceX1
     Define .AfterBounceX
 
 //Move the ball by velocity and display.
-    Sub .SetWhite
+    Pull .BallY
+    Add .BallVy
+    Push .BallY
 
-    LoadA .BallY
-    AddA .BallVy
-    StoreA .BallY
-    StoreA .DispY1
-    StoreA .DispY2
+    Pull .BallX
+    Add .BallVx
+    Push .BallX
 
-    LoadA .BallX
-    AddA .BallVx
-    StoreA .BallX
-    StoreA .DispX1
-    StoreA .DispX2
+    Pull .BallX
+    PushRem .DispX
 
-    LoadA #2
-    StoreA .DispArg
-    LoadA #1
-    StoreA .DispCmd
-    SendDisplay
-Jump .Loop
+    Pull .BallY
+    PushRem .DispY
+
+    Pull #0
+    PushRem .DispPen
+
+    Pull #8
+    PushRem .DispId
+    Poke .DispCmd
+
+    Pull #1
+    PushRem .DispPen
+
+    Pull #9
+    PushRem .DispId
+    Pull #1
+    PushRem .DispCmd
+    Poke .DispCmd
+
+Goto .Loop
 
     // Player positions.
     Define .XPos1
-    Constant #-30
+    Constant #-216
     Define .YPos1
-    Constant #-24
+    Constant #0
     Define .YDir1
     Constant #1
     Define .XPos2
-    Constant #30
+    Constant #216
     Define .YPos2
     Constant #0
     Define .YDir2
     Constant #0
+    Define .PlayerSpeed
+    Constant #4
 
     Define .MaxX
-    Constant #28
+    Constant #200
     Define .MaxY
-    Constant #20
+    Constant #120
 
     Define .P1Score
     Constant #0
     Define .P2Score
     Constant #0
 
-    Define .PaddleSize1
-    Constant #4
-    Define .PaddleSize2
-    Constant #-4
+    Define .PaddleSize
+    Constant #24
 
     Define .BallX
     Constant #0
     Define .BallY
     Constant #0
     Define .BallVx
-    Constant #0.5
+    Constant #2.5
     Define .BallVy
-    Constant #1
-
-Define .SetYellow
-    LoadA #255
-    StoreA .DispR
-    LoadA #180
-    StoreA .DispB
-EndSub
-
-Define .SetBlue
-    LoadA #180
-    StoreA .DispR
-    LoadA #255
-    StoreA .DispB
-EndSub
-
-Define .SetWhite
-    LoadA #255
-    StoreA .DispR
-    LoadA #255
-    StoreA .DispB
-EndSub
+    Constant #5
 
 Define .GoDown
-    LoadB #-1
-    StoreB .YDir1
-    Jump .AfterTurnAround
+    Pull #-1
+    Push .YDir1
+Goto .AfterTurnAround
 Define .GoUp
-    LoadB #1
-    StoreB .YDir1
-    Jump .AfterTurnAround
+    Pull #1
+    Push .YDir1
+Goto .AfterTurnAround
 
 Define .UpPressed
-    LoadA #1
-    StoreA .YDir2
-Jump .AfterKeys
+    Pull #1
+    Push .YDir2
+Goto .AfterKeys
 Define .DownPressed
-    LoadA #-1
-    StoreA .YDir2
-Jump .AfterKeys
+    Pull #-1
+    Push .YDir2
+Goto .AfterKeys
 
 Define .BounceX1
-    LoadA .YPos1
-    MultiplyA #-1
-    AddA .BallY
-    LoadB .PaddleSize1
+    Pull .YPos1
+    Multiply #-1
+    Add .BallY
+    Pull .PaddleSize
     JumpGThan .BounceScore1
-    LoadB .PaddleSize2
+    Pull .YPos1
+    Multiply #-1
+    Add .BallY
+    Pull .PaddleSize
+    Multiply #-1
     JumpLThan .BounceScore1
 //If no score, simply bounce.
-    LoadA .BallVx
-    MultiplyA #-1
-    StoreA .BallVx
-Jump .AfterBounceX
-    Define .BounceScore1
-    LoadA .P2Score
-    AddA #1
-    StoreA .P2Score
-    LoadA #0
-    StoreA .BallX
-    StoreB .BallY
-    LoadA .BallVx
-    MultiplyA #-1
-    StoreA .BallVx
-Jump .AfterBounceX
+    Pull .BallVx
+    Multiply #-1
+    Push .BallVx
+Goto .AfterBounceX
+
+Define .BounceScore1
+    Pull .P2Score
+    Add #1
+    Push .P2Score
+    Pull #0
+    Push .BallX
+    Pull #0
+    Push .BallY
+    Pull .BallVx
+    Multiply #-1
+    Push .BallVx
+Goto .AfterBounceX
 
 Define .BounceX2
-    LoadA .YPos2
-    MultiplyA #-1
-    AddA .BallY
-    LoadB .PaddleSize1
+    Pull .YPos2
+    Multiply #-1
+    Add .BallY
+    Pull .PaddleSize
     JumpGThan .BounceScore2
-    LoadB .PaddleSize2
+    Pull .YPos2
+    Multiply #-1
+    Add .BallY
+    Pull .PaddleSize
+    Multiply #-1
     JumpLThan .BounceScore2
 //If no score, simply bounce.
-    LoadA .BallVx
-    MultiplyA #-1
-    StoreA .BallVx
-Jump .AfterBounceX
+    Pull .BallVx
+    Multiply #-1
+    Push .BallVx
+Goto .AfterBounceX
 Define .BounceScore2
-    LoadA .P1Score
-    AddA #1
-    StoreA .P1Score
-    LoadA #0
-    StoreA .BallX
-    StoreB .BallY
-    LoadA .BallVx
-    MultiplyA #-1
-    StoreA .BallVx
-Jump .AfterBounceX
+    Pull .P1Score
+    Add #1
+    Push .P1Score
+    Pull #0
+    Push .BallX
+    Pull #0
+    Push .BallY
+    Pull .BallVx
+    Multiply #-1
+    Push .BallVx
+Goto .AfterBounceX
 
 Define .BounceY
-    LoadA .BallVy
-    MultiplyA #-1
-    StoreA .BallVy
-Jump .AfterBounceY
+    Pull .BallVy
+    Multiply #-1
+    Push .BallVy
+Goto .AfterBounceY

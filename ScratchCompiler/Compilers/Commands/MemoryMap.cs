@@ -33,7 +33,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
         public JToken GetJson()
         {
             List<string> map = new List<string>();
-            for (int i = 0; i < Memory.Keys.Max(); i++)
+            for (int i = 0; i < Memory.Keys.Max() + 1; i++)
             {
                 map.Add(Memory.GetValueOrDefault(i, string.Empty).ToString());
             }

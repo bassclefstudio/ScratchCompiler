@@ -101,16 +101,29 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
                 Directive.Labelled("directive"));
 
             CompilerCommand =
+                from l in CurrentPos
                 from c in LetterOrDigit.AtLeastOnceString().Where(n => ReservedCommandNames.Contains(n)).Labelled("reserved command")
-                from ws in SkipWhitespaces
-                from v in Value.Separated(SkipWhitespaces)
-                select new CommandCall() { Name = c, Inputs = v.ToArray(), Type = CallType.Compiler };
+                from v in Try(SkipWhitespaces.Then(Value)).Many()
+                select new CommandCall() 
+                { 
+                    Name = c, 
+                    Inputs = v.ToArray(), 
+                    Type = CallType.Compiler,
+                    Position = l
+                };
 
             CallCommand =
+                from l in CurrentPos
                 from c in LetterOrDigit.AtLeastOnceString().Where(n => KnownCommandNames.Contains(n)).Labelled("known command")
                 from ws in SkipWhitespaces
                 from v in Value.Optional()
-                select new CommandCall() { Name = c, Inputs = v.Match(v => new ValueToken[] { v }, () => Array.Empty<ValueToken>()), Type = CallType.Command };
+                select new CommandCall() 
+                { 
+                    Name = c, 
+                    Inputs = v.Match(v => new ValueToken[] { v }, () => Array.Empty<ValueToken>()), 
+                    Type = CallType.Command,
+                    Position = l
+                };
 
             Command = OneOf(Try(CompilerCommand).Labelled("compiler call"), CallCommand.Labelled("command call"));
             Code = OneOf(
@@ -172,7 +185,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
                             }
                             else
                             {
-                                throw new CompilationException($"Could not find an override of {currentCommand.Name} that supports input type {reqValType}.");
+                                throw new CompilationException($"Could not find an override of {currentCommand.Name} that supports input type {reqValType}.", currentCommand.Position);
                             }
                         }
                         else if(currentCommand.Inputs.Length == 0)
@@ -185,12 +198,12 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
                             }
                             else
                             {
-                                throw new CompilationException($"Could not find an override of {currentCommand.Name} that supports no input.");
+                                throw new CompilationException($"Could not find an override of {currentCommand.Name} that supports no input.", currentCommand.Position);
                             }
                         }
                         else
                         {
-                            throw new CompilationException($"Could not find an override of {currentCommand.Name} that supports {currentCommand.Inputs.Length} inputs.");
+                            throw new CompilationException($"Could not find an override of {currentCommand.Name} that supports {currentCommand.Inputs.Length} inputs.", currentCommand.Position);
                         }
                     }
                     else if(currentCommand.Type == CallType.Compiler)
@@ -205,7 +218,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
                                 }
                                 else
                                 {
-                                    throw new CompilationException($"Cannot call Define with {currentCommand.Inputs[0]},{currentCommand.Inputs[2]} - expected directive and address.");
+                                    throw new CompilationException($"Cannot call Define with {currentCommand.Inputs[0]},{currentCommand.Inputs[2]} - expected directive and address.", currentCommand.Position);
                                 }
                             }
                             else if(currentCommand.Inputs.Length == 1)
@@ -216,12 +229,32 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
                                 }
                                 else
                                 {
-                                    throw new CompilationException($"Cannot call Define with {currentCommand.Inputs[0]} - expected directive.");
+                                    throw new CompilationException($"Cannot call Define with {currentCommand.Inputs[0]} - expected directive.", currentCommand.Position);
                                 }
                             }
                             else
                             {
-                                throw new CompilationException("\'Define\' compiler call requires 1 or 2 inputs.");
+                                throw new CompilationException("\'Define\' compiler call requires 1 or 2 inputs.", currentCommand.Position);
+                            }
+                        }
+                        else if (currentCommand.Name == "Var")
+                        {
+                            if (currentCommand.Inputs.Length == 1)
+                            {
+                                if (currentCommand.Inputs[0].Type == ValueType.Directive)
+                                {
+                                    directivePositions.Add(currentCommand.Inputs[0].Value, currentMemoryPosition);
+                                    memoryMap.Memory.Add(currentMemoryPosition, string.Empty);
+                                    currentMemoryPosition++;
+                                }
+                                else
+                                {
+                                    throw new CompilationException($"Cannot call Var with {currentCommand.Inputs[0]} - expected directive.", currentCommand.Position);
+                                }
+                            }
+                            else
+                            {
+                                throw new CompilationException("\'Var\' compiler call requires a single input.", currentCommand.Position);
                             }
                         }
                         else if (currentCommand.Name == "Constant")
@@ -233,7 +266,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
                             }
                             else
                             {
-                                throw new CompilationException("\'Constant\' compiler call requires a single input.");
+                                throw new CompilationException("\'Constant\' compiler call requires a single input.", currentCommand.Position);
                             }
                         }
                     }
@@ -262,7 +295,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
             }
             else
             {
-                throw new CompilationException(result.Error.RenderErrorMessage());
+                throw new CompilationException(result.Error.RenderErrorMessage(), result.Error.ErrorPos);
             }
         }
     }

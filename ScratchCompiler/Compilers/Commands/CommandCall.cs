@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pidgin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,11 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
         /// The input value to the given <see cref="CommandCall"/>.
         /// </summary>
         public ValueToken[] Inputs { get; set; }
+
+        /// <summary>
+        /// Represents the position of the <see cref="CommandCall"/> in the source code.
+        /// </summary>
+        public SourcePos Position { get; set; }
 
         /// <summary>
         /// The <see cref="CallType"/> type of call this <see cref="CommandCall"/> is.

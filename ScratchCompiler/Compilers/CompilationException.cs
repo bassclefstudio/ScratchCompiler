@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pidgin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,12 +13,21 @@ namespace BassClefStudio.ScratchCompiler.Compilers
     [Serializable]
     public class CompilationException : Exception
     {
+        /// <summary>
+        /// The position in the source code where the error occurred.
+        /// </summary>
+        public SourcePos Position { get; }
+
         /// <inheritdoc/>
-        public CompilationException() { }
+        public CompilationException(string message) : base(message)
+        { }
+
         /// <inheritdoc/>
-        public CompilationException(string message) : base(message) { }
-        /// <inheritdoc/>
-        public CompilationException(string message, Exception inner) : base(message, inner) { }
+        public CompilationException(string message, SourcePos position) : base(message)
+        {
+            Position = position;
+        }
+
         /// <inheritdoc/>
         protected CompilationException(
           System.Runtime.Serialization.SerializationInfo info,
