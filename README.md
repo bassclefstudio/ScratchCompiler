@@ -119,7 +119,7 @@ The C# console application `ScratchCompiler` provides a way to 'compile' these `
 
 **MyCommand.mcs**
 ````
-CommandName{$/#}: Description
+CommandName{$/#/?}: Description
 Signal1
 Signal2
 // Comments are omitted at compile-time
@@ -141,7 +141,7 @@ Compilation also generates a `.mcd` file, which contains all of the documentatio
 [
     {
     "CommandName": "MyNewCommand",
-    "InputMode": null,
+    "InputMode": [],
     "Description": "Does some stuff I made up!",
     }
 ]
@@ -165,7 +165,7 @@ Each one of these commands has been defined in the system microcode, whose sourc
 
 > Documentation on the commands is included in the [documentation](#microcode-documentation) for the `/Source/Microcode.mcs` source code.
 
-Note that in many cases, just like the control signals, these commands are named in predictable ways - making compilation much easier. If a command supports input modes, this means that commands with suffixes exist - one with a suffix `$`, and/or one with a suffix `#`. These correspond to whether the inputs to that command should be treated as a memory address (`$`) or an immediate value (`#`). In the `.mcs` code, these commands are defined separately (at least for now).
+Note that in many cases, just like the control signals, these commands are named in predictable ways - making compilation much easier. If a command supports input modes, this means that the command name will be appended by one or more of `$`, `#`, or `?`. These correspond to whether the inputs to that command should be treated as a memory address (`$`), an immediate value (`#`), or an address reference (`?`). In the `.mcs` code, these commands are defined separately.
 
 ## Writing Programs
 Writing programs for this system is the process of defining commands and parameters in [memory](#memory) that will execute some desired action when run. Memory locations that have a command name (e.g. `Pull`) in them will make that command execute when the [`Fetch` cycle](#fetch-cycle) reads that memory location. Around and between these command names can be arguments. Many commands will pull a value or memory address from the next location in memory (using the [`pointer`](#pointer)) and use that as an input to the command.
@@ -197,7 +197,7 @@ Both `char` and `enum` types use immediate mode (`#`) execution.
 #### Input Syntax
 Note that inputs can be written directly after the command being called, for example `Pull $12` will put the `Pull$` command in the first memory address, and then `12` in the following address. Easy as pie!
 
-#### `.` Directives
+#### `.` and `?` Directives
 Using a `.` allows you to define named spots in memory. As your program changes in size, these values will be updated accordingly.
 
 **Example:**
@@ -208,7 +208,14 @@ Define .MyLoop
 ...
 Goto .MyLoop
 ````
-In this example, the loop will function as intended regardless of whether the code (and memory addresses) of the commands change as you work. In addition, the `.` prefix of the input to the `Goto` command will make sure that address-mode commands are used (this is identical to the `$` input-mode, as the `.` directives will be replaced by `$` addresses at compile-time).
+In this example, the loop will function as intended regardless of whether the code (and memory addresses) of the commands change as you work. In addition, the `.` prefix of the input to the `Goto` command will make sure that address-mode commands are used (this is identical to the `$` input-mode, as the `.` directives will be replaced by `$` addresses at compile-time)
+
+If in the code there is a line such as:
+````
+Pull ?MyVar
+````
+
+The directive is resolved by the compiler as usual, but the type of the data is set to `?`, for a memory address reference.
 
 These are the compiler directives at this time:
  - `Define` - names the location in memory, does not move forward address for next line of code.
