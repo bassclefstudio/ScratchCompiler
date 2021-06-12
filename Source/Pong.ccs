@@ -1,131 +1,148 @@
-Define .DispCmd     $8004
-Define .DispX       $8005
-Define .DispY       $8006
-Define .DispPen     $8007
-Define .DispSize    $8008
-Define .DispId      $8009
-
-Define .Keyboard    $8003
-
 Define .Start
+    // Setup devices.
+    GetDevice {Display}
+    Push .DispCmd
+    Discard
+
+    Pull .DispCmd
+    Add #1
+    Copy
+    Push .DispX
+    Add #1
+    Copy
+    Push .DispY
+    Add #1
+    Copy
+    Push .DispPen
+    Add #1
+    Copy
+    Push .DispSize
+    Add #1
+    Copy
+    Push .DispId
+
+    GetDevice {Keyboard}
+    Push .Keyboard
+    Discard
+
     // Clear the display.
     Pull #3
-    PushRem .DispCmd
-    Poke .DispCmd
+    PushRem ?DispCmd
+    Poke ?DispCmd
 
 Define .Loop
     //Update all of the paddle graphics.
     
 //Yellow paddle:
     Pull #0
-    PushRem .DispCmd
+    PushRem ?DispCmd
 
     Pull .XPos1
-    PushRem .DispX
+    PushRem ?DispX
 
     Pull .YPos1
     Add .PaddleSize
-    PushRem .DispY
+    PushRem ?DispY
 
     Pull #8
-    PushRem .DispSize
+    PushRem ?DispSize
 
     Pull #0
-    PushRem .DispPen
+    PushRem ?DispPen
 
     Pull #0
-    PushRem .DispId
-    Poke .DispCmd
+    PushRem ?DispId
+    Poke ?DispCmd
 
     Pull .YPos1
     Subtract .PaddleSize
-    PushRem .DispY
+    PushRem ?DispY
 
     Pull #5
-    PushRem .DispPen
+    PushRem ?DispPen
 
     Pull #1
-    PushRem .DispId
-    Poke .DispCmd
+    PushRem ?DispId
+    Poke ?DispCmd
 
 //Blue paddle:
     Pull .XPos2
-    PushRem .DispX
+    PushRem ?DispX
 
     Pull .YPos2
     Add .PaddleSize
-    PushRem .DispY
+    PushRem ?DispY
 
     Pull #8
-    PushRem .DispSize
+    PushRem ?DispSize
 
     Pull #0
-    PushRem .DispPen
+    PushRem ?DispPen
 
     Pull #2
-    PushRem .DispId
-    Poke .DispCmd
+    PushRem ?DispId
+    Poke ?DispCmd
 
     Pull .YPos2
     Subtract .PaddleSize
-    PushRem .DispY
+    PushRem ?DispY
 
     Pull #6
-    PushRem .DispPen
+    PushRem ?DispPen
 
     Pull #3
-    PushRem .DispId
-    Poke .DispCmd
+    PushRem ?DispId
+    Poke ?DispCmd
 
 //Draw Scoreboard1:
     Pull .MaxY
     Add #48
-    PushRem .DispY
+    PushRem ?DispY
 
     Pull #-8
-    PushRem .DispX
+    PushRem ?DispX
 
     Pull #0
-    PushRem .DispPen
+    PushRem ?DispPen
 
     Pull #4
-    PushRem .DispId
-    Poke .DispCmd
+    PushRem ?DispId
+    Poke ?DispCmd
 
     Pull .P1Score
     Multiply #-8
     Subtract #8
-    PushRem .DispX
+    PushRem ?DispX
 
     Pull #5
-    PushRem .DispPen
+    PushRem ?DispPen
 
     Pull #5
-    PushRem .DispId
-    Poke .DispCmd
+    PushRem ?DispId
+    Poke ?DispCmd
 
 //Draw Scoreboard2:
     Pull #8
-    PushRem .DispX
+    PushRem ?DispX
 
     Pull #0
-    PushRem .DispPen
+    PushRem ?DispPen
 
     Pull #6
-    PushRem .DispId
-    Poke .DispCmd
+    PushRem ?DispId
+    Poke ?DispCmd
 
     Pull .P2Score
     Multiply #8
     Add #8
-    PushRem .DispX
+    PushRem ?DispX
 
     Pull #6
-    PushRem .DispPen
+    PushRem ?DispPen
 
     Pull #7
-    PushRem .DispId
-    Poke .DispCmd
+    PushRem ?DispId
+    Poke ?DispCmd
 
 //'Bounce' the first paddle up and down the height of the screen.
     Pull .YPos1
@@ -152,14 +169,14 @@ Define .Loop
 
 //Check the up and down keys to move the second paddle. 
     Pull {Down}
-    PushRem .Keyboard
-    PullRem .Keyboard
+    PushRem ?Keyboard
+    PullRem ?Keyboard
     Pull true
     JumpEq .DownPressed
 
     Pull {Up}
-    PushRem .Keyboard
-    PullRem .Keyboard
+    PushRem ?Keyboard
+    PullRem ?Keyboard
     Pull true
     JumpEq .UpPressed
 
@@ -199,28 +216,37 @@ Define .Loop
     Push .BallX
 
     Pull .BallX
-    PushRem .DispX
+    PushRem ?DispX
 
     Pull .BallY
-    PushRem .DispY
+    PushRem ?DispY
 
     Pull #0
-    PushRem .DispPen
+    PushRem ?DispPen
 
     Pull #8
-    PushRem .DispId
-    Poke .DispCmd
+    PushRem ?DispId
+    Poke ?DispCmd
 
     Pull #1
-    PushRem .DispPen
+    PushRem ?DispPen
 
     Pull #9
-    PushRem .DispId
+    PushRem ?DispId
     Pull #1
-    PushRem .DispCmd
-    Poke .DispCmd
+    PushRem ?DispCmd
+    Poke ?DispCmd
 
 Goto .Loop
+
+    // Device memory references.
+    Var .DispCmd
+    Var .DispX   
+    Var .DispY
+    Var .DispPen
+    Var .DispSize
+    Var .DispId
+    Var .Keyboard
 
     // Player positions.
     Define .XPos1
@@ -238,19 +264,23 @@ Goto .Loop
     Define .PlayerSpeed
     Constant #4
 
+    // Screen size.
     Define .MaxX
     Constant #200
     Define .MaxY
     Constant #120
 
+    // Scores
     Define .P1Score
     Constant #0
     Define .P2Score
     Constant #0
 
+    // Paddle size
     Define .PaddleSize
     Constant #24
 
+    // Ball position and velocity.
     Define .BallX
     Constant #0
     Define .BallY

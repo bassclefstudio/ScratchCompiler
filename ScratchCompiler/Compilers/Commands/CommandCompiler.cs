@@ -29,6 +29,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
         readonly Parser<char, char> EnumEnd;
         readonly Parser<char, char> AddressMarker;
         readonly Parser<char, char> DirectiveMarker;
+        readonly Parser<char, char> ReferenceMarker;
         readonly Parser<char, string> CommentHead;
         readonly Parser<char, char> ExceptEndLine;
 
@@ -39,6 +40,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
         readonly Parser<char, ValueToken> NullLiteral;
         readonly Parser<char, ValueToken> Address;
         readonly Parser<char, ValueToken> Directive;
+        readonly Parser<char, ValueToken> Reference;
 
         readonly Parser<char, ValueToken> Value;
         readonly Parser<char, CommandCall> CallCommand;
@@ -68,6 +70,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
             CharMarker = Char('\'');
             AddressMarker = Char('$');
             DirectiveMarker = Char('.');
+            ReferenceMarker = Char('?');
             EnumStart = Char('{');
             EnumEnd = Char('}');
             ExceptEndLine = AnyCharExcept('\r', '\n');
@@ -90,6 +93,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
             NullLiteral = NullString.Select(t => new ValueToken() { Value = string.Empty, Type = ValueType.Immediate });
             Address = AddressMarker.Then(Num.Select(h => new ValueToken() { Value = h.ToString(), Type = ValueType.Address }));
             Directive = DirectiveMarker.Then(LetterOrDigit.ManyString().Select(s => new ValueToken() { Value = s, Type = ValueType.Directive }));
+            Reference = ReferenceMarker.Then(LetterOrDigit.ManyString().Select(s => new ValueToken() { Value = s, Type = ValueType.Reference }));
 
             Value = OneOf(
                 NumLiteral.Labelled("number"),
@@ -98,7 +102,8 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
                 Try(BoolLiteral).Labelled("bool"),
                 Try(NullLiteral).Labelled("null"),
                 Address.Labelled("address"),
-                Directive.Labelled("directive"));
+                Directive.Labelled("directive"),
+                Reference.Labelled("reference"));
 
             CompilerCommand =
                 from l in CurrentPos
@@ -115,12 +120,11 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
             CallCommand =
                 from l in CurrentPos
                 from c in LetterOrDigit.AtLeastOnceString().Where(n => KnownCommandNames.Contains(n)).Labelled("known command")
-                from ws in SkipWhitespaces
-                from v in Value.Optional()
+                from v in Try(SkipWhitespaces.Then(Value)).Many()
                 select new CommandCall() 
                 { 
-                    Name = c, 
-                    Inputs = v.Match(v => new ValueToken[] { v }, () => Array.Empty<ValueToken>()), 
+                    Name = c,
+                    Inputs = v.ToArray(),
                     Type = CallType.Command,
                     Position = l
                 };
@@ -171,39 +175,21 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
                 {
                     if (currentCommand.Type == CallType.Command)
                     {
-                        MicrocodeDoc? commandDoc = null;
-                        if (currentCommand.Inputs.Length == 1)
+                        ValueType[] reqValTypes = currentCommand.Inputs.Select(i => i.Type == ValueType.Directive ? ValueType.Address : i.Type).ToArray();
+                        MicrocodeDoc? commandDoc = documentation.GetDoc(currentCommand.Name, reqValTypes);
+                        if (commandDoc.HasValue)
                         {
-                            ValueType reqValType = currentCommand.Inputs[0].Type == ValueType.Directive ? ValueType.Address : currentCommand.Inputs[0].Type;
-                            commandDoc = documentation.GetDoc(currentCommand.Name, reqValType);
-                            if (commandDoc.HasValue)
+                            memoryMap.Memory.Add(currentMemoryPosition, commandDoc.Value.GetFullName());
+                            currentMemoryPosition++;
+                            foreach (var i in currentCommand.Inputs)
                             {
-                                memoryMap.Memory.Add(currentMemoryPosition, commandDoc.Value.GetFullName());
+                                memoryMap.Memory.Add(currentMemoryPosition, i);
                                 currentMemoryPosition++;
-                                memoryMap.Memory.Add(currentMemoryPosition, currentCommand.Inputs[0]);
-                                currentMemoryPosition++;
-                            }
-                            else
-                            {
-                                throw new CompilationException($"Could not find an override of {currentCommand.Name} that supports input type {reqValType}.", currentCommand.Position);
-                            }
-                        }
-                        else if(currentCommand.Inputs.Length == 0)
-                        {
-                            commandDoc = documentation.GetDoc(currentCommand.Name, null);
-                            if (commandDoc.HasValue)
-                            {
-                                memoryMap.Memory.Add(currentMemoryPosition, commandDoc.Value.GetFullName());
-                                currentMemoryPosition++;
-                            }
-                            else
-                            {
-                                throw new CompilationException($"Could not find an override of {currentCommand.Name} that supports no input.", currentCommand.Position);
                             }
                         }
                         else
                         {
-                            throw new CompilationException($"Could not find an override of {currentCommand.Name} that supports {currentCommand.Inputs.Length} inputs.", currentCommand.Position);
+                            throw new CompilationException($"Could not find an override of {currentCommand.Name} that supports input type(s) {reqValTypes.GetInputModes()}.", currentCommand.Position);
                         }
                     }
                     else if(currentCommand.Type == CallType.Compiler)
@@ -279,7 +265,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
                     int address = allLocations[i];
                     if(memoryMap.Memory[address] is ValueToken value)
                     {
-                        if (value.Type == ValueType.Directive)
+                        if (value.Type == ValueType.Directive || value.Type == ValueType.Reference)
                         {
                             memoryMap.Memory[address] = directivePositions[value.Value];
                         }

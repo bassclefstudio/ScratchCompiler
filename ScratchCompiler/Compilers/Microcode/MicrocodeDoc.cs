@@ -18,9 +18,9 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
         public string CommandName { get; set; }
 
         /// <summary>
-        /// A <see cref="ValueType"/> indicating the input mode of this command, or 'null' if this command doesn't have/support input modes.
+        /// A <see cref="ValueType"/> indicating the input modes of this command, or empty if this command doesn't have/support input modes.
         /// </summary>
-        public ValueType? InputMode { get; set; }
+        public ValueType[] InputModes { get; set; }
 
         /// <summary>
         /// A description of the command and what it does.
@@ -32,7 +32,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
         /// </summary>
         public string GetFullName()
         {
-            return $"{CommandName}{InputMode?.GetInputMode()}";
+            return $"{CommandName}{InputModes.GetInputModes()}";
         }
     }
 
@@ -46,13 +46,13 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
         /// </summary>
         /// <param name="list">The list of available <see cref="MicrocodeDoc"/>s.</param>
         /// <param name="name">The <see cref="string"/> name of the command.</param>
-        /// <param name="valueType">The <see cref="ValueType"/> of the command's input.</param>
+        /// <param name="valueTypes">The <see cref="ValueType"/>s of the command's inputs.</param>
         /// <returns>The <see cref="MicrocodeDoc"/> satisfying these conditions, or 'null'.</returns>
-        public static MicrocodeDoc? GetDoc(this IEnumerable<MicrocodeDoc> list, string name, ValueType? valueType)
+        public static MicrocodeDoc? GetDoc(this IEnumerable<MicrocodeDoc> list, string name, params ValueType[] valueTypes)
         {
-            if (list.Any(l => l.CommandName == name && (!l.InputMode.HasValue || l.InputMode.Value == valueType)))
+            if (list.Any(l => l.CommandName == name && l.InputModes.SequenceEqual(valueTypes)))
             {
-                return list.First(l => l.CommandName == name && (!l.InputMode.HasValue || l.InputMode.Value == valueType));
+                return list.First(l => l.CommandName == name && l.InputModes.SequenceEqual(valueTypes));
             }
             else
             {

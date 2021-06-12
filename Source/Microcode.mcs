@@ -1,3 +1,5 @@
+// Base commands.
+
 Fetch: Fetches the next command from memory and prepares the pointer for execution.
     GetPointer
     IncPointer
@@ -9,6 +11,9 @@ Clear: Clears the entirety of the current stack.
 
 Discard: Discards the top value on the stack.
     Push
+
+Copy: Duplicates the top value on the stack.
+    Copy
 
 Return: Gracefully exits from the given thread.
     Return
@@ -30,15 +35,31 @@ EndSub: Returns from the most recently entered subroutine.
     Jump
     IncPointer
 
+// Memory commands.
+
 Push$: Pushes the value at the top of the stack to the provided address in local memory.
     GetPointer
     IncPointer
     Get
     Set
 
+Push?: Pushes the value at the top of the stack to the address referenced in local memory.
+    GetPointer
+    IncPointer
+    Get
+    Get
+    Set
+
 Pull$: Pulls the value at the address listed in local memory onto the top of the stack.
     GetPointer
     IncPointer
+    Get
+    Get
+
+Pull?: Pulls the value at the address referenced in local memory onto the top of the stack.
+    GetPointer
+    IncPointer
+    Get
     Get
     Get
 
@@ -53,9 +74,23 @@ PushRem$: Pushes the value at the top of the stack to the provided address in re
     Get
     RSet
 
+PushRem?: Pushes the value at the top of the stack to the address referenced in remote memory.
+    GetPointer
+    IncPointer
+    Get
+    Get
+    RSet
+
 PullRem$: Pulls the value at the address listed in remote memory onto the top of the stack.
     GetPointer
     IncPointer
+    Get
+    RGet
+
+PullRem?: Pulls the value at the address referenced in remote memory onto the top of the stack.
+    GetPointer
+    IncPointer
+    Get
     Get
     RGet
 
@@ -64,6 +99,15 @@ Poke$: Pokes the given (local or remote) memory address.
     IncPointer
     Get
     Poke
+
+Poke?: Pokes the referenced (local or remote) memory address.
+    GetPointer
+    IncPointer
+    Get
+    Get
+    Poke
+
+// Mathematics commands.
 
 Add#: Adds the input value to the value on the top of the stack.
     GetPointer
@@ -121,29 +165,7 @@ Divide$: Divides the value on the top of the stack by the value at the given add
     Inv
     Prod
 
-MountDevice#: Mounts the named device in local memory.
-    GetPointer
-    IncPointer
-    Get
-    MntDev
-
-DismountDevice#: Dismounts the named device from local memory.
-    GetPointer
-    IncPointer
-    Get
-    DismntDev
-
-PullDevice#: Pulls changes to the device memory into the local device chunk.
-    GetPointer
-    IncPointer
-    Get
-    PullDev
-
-PushDevice#: Pushes the local device chunk to the device it represents.
-    GetPointer
-    IncPointer
-    Get
-    PushDev
+// Boolean commands.
 
 JumpEq$: Jumps to the given address if the last two items in the stack are equal.
     Eq
@@ -171,3 +193,26 @@ JumpTrue$: Jumps the given address if the value at the top of the stack is 'true
     IncPointer
     Get
     CJump
+
+// Device commands.
+
+GetDevice#: Gets the named device's memory address and size and pulls them onto the stack.
+    GetPointer
+    IncPointer
+    Get
+    Dev
+
+Mount$#: Mounts the address and chunk size in the stack to a new chunk in memory.
+    GetPointer
+    IncPointer
+    Get
+    GetPointer
+    IncPointer
+    Get
+    Mnt
+
+Dismount$: Dismounts the chunk located at the given address in memory.
+    GetPointer
+    IncPointer
+    Get
+    DMnt

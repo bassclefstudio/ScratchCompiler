@@ -24,7 +24,11 @@ namespace BassClefStudio.ScratchCompiler.Compilers
         /// <summary>
         /// An address that's been dynamically assigned a name.
         /// </summary>
-        Directive = 2
+        Directive = 2,
+        /// <summary>
+        /// A reference to a memory location that contains a dynamic address.
+        /// </summary>
+        Reference = 3
     }
 
     /// <summary>
@@ -39,7 +43,8 @@ namespace BassClefStudio.ScratchCompiler.Compilers
         {
             new Tuple<char, ValueType>('$', ValueType.Address),
             new Tuple<char, ValueType>('#', ValueType.Immediate),
-            new Tuple<char, ValueType>('.', ValueType.Directive)
+            new Tuple<char, ValueType>('.', ValueType.Directive),
+            new Tuple<char, ValueType>('?', ValueType.Reference)
         };
 
         /// <summary>
@@ -51,5 +56,10 @@ namespace BassClefStudio.ScratchCompiler.Compilers
         /// Get the associated <see cref="char"/> input-mode for the given <see cref="ValueType"/>.
         /// </summary>
         public static char GetInputMode(this ValueType valueType) => ModeBindings.First(b => b.Item2 == valueType).Item1;
+
+        /// <summary>
+        /// Get the associated <see cref="char"/> input-mode for the given <see cref="ValueType"/>.
+        /// </summary>
+        public static string GetInputModes(this ValueType[] valueTypes) => string.Join(",", valueTypes.Select(v => v.GetInputMode()));
     }
 }

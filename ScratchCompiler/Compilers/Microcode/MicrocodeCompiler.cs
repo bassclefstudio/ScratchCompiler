@@ -43,7 +43,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
                 
             };
 
-            KnownInputModes = new char[] { '$', '#' };
+            KnownInputModes = new char[] { '$', '#', '?' };
 
             CommentHead = String("//");
             Operator = OneOf(Aliases.Select(o => Try(String(o.Alias)).ThenReturn(o)));
@@ -52,13 +52,13 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
             Comment = CommentHead.Then(ExceptEndLine.SkipMany()).Labelled("comment");
             Documentation =
                 from name in LetterOrDigit.AtLeastOnceString().Labelled("name")
-                from input in OneOf(KnownInputModes).Optional().Labelled("input-mode")
+                from inputs in OneOf(KnownInputModes).Labelled("input-mode").Many().Labelled("input-modes")
                 from colon in Char(':').Before(SkipWhitespaces)
                 from desc in ExceptEndLine.ManyString().Labelled("description")
                 select new MicrocodeDoc() 
                 {
                     CommandName = name, 
-                    InputMode = input.Match<ValueType?>(i => i.GetValueType(), () => null),
+                    InputModes = inputs.Select(i => i.GetValueType()).ToArray(),
                     Description = desc 
                 };
 
@@ -76,7 +76,11 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
                 from cs in Char(' ').SkipMany().Then(SignalCall.Or(Comment.ThenReturn(new MicrocodeCall()))).SeparatedAndOptionallyTerminatedAtLeastOnce(EndOfLine)
                 select new MicrocodeCommand() { Documentation = n, Calls = cs };
             
-            Microcode = Command.SeparatedAtLeastOnce(SkipWhitespaces);
+            Microcode =
+                Comment.ThenReturn(new Maybe<MicrocodeCommand>()).Or(
+                Command.Select(c => new Maybe<MicrocodeCommand>(c)))
+                .SeparatedAtLeastOnce(SkipWhitespaces)
+                .Select(c => c.Where(m => m.HasValue).Select(m => m.Value));
         }
 
         /// <inheritdoc/>
