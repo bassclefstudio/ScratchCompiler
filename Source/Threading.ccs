@@ -5,6 +5,9 @@
         Sub .SetupCores
         PushDevice {Boot}
 
+        // Initialize vars 
+        Sub .InitVars
+
         // Starts Core 1 on new thread
         // Copies thread init statement to core memory.
         Pull# .InitThread
@@ -18,99 +21,377 @@
         // Starts thread (hopes for the best!)
         Pull .Core1
         PokeIn ?Core1
+    Define .Physics.loop
+        //'Bounce' the first paddle up and down the height of the screen
+            Pull .YPos1
+            Pull .MaxY
+            GotoGThan .Down1
+            Pull .YPos1
+            Pull .MaxY
+            Multiply #-1
+            GotoLThan .Up1
+            Define .After1
+            Pull .YDir1
+            Multiply .PaddleSpeed
+            Add .YPos1
+            Push .YPos1
 
-    Define .Start.loop
+        //'Bounce' the second paddle up and down the height of the screen
+            Pull .YPos2
+            Pull .MaxY
+            GotoGThan .DownPressed
+            Pull .YPos2
+            Pull .MaxY
+            Multiply #-1
+            GotoLThan .UpPressed
 
-        // Draw Core 0 to display
-        MountDevice {Display} 
-        Pull #5
-        Pull #0
-        Pull #0
-        Pull #8
-        Pull #100
-        Pull #0
-        Push ?DispX
-        Push ?DispY
-        Push ?DispSize
-        Push ?DispPen
-        Push ?DispCmd
-        Push ?DispId
-        PushDevice {Display}
-        Poke ?DispCmd
+        //Check the up and down keys to move the second paddle
+            Pull {Down}
+            PushRem ?Keyboard
+            PullRem ?Keyboard
+            Pull true
+            GotoEq .DownPressed
 
-        Pull #6
-        Pull #0
-        Pull .Start.color
-        Pull #8
-        Pull #0
-        Pull #100
-        Push ?DispX
-        Push ?DispY
-        Push ?DispSize
-        Push ?DispPen
-        Push ?DispCmd
-        Push ?DispId
-        PushDevice {Display}
-        Poke ?DispCmd
+            Pull {Up}
+            PushRem ?Keyboard
+            PullRem ?Keyboard
+            Pull true
+            GotoEq .UpPressed
 
-        Pull #7
-        Pull #0
-        Pull .Start.color
-        Pull #8
-        Pull #-100
-        Pull #0
-        Push ?DispX
-        Push ?DispY
-        Push ?DispSize
-        Push ?DispPen
-        Push ?DispCmd
-        Push ?DispId
-        PushDevice {Display}
-        Poke ?DispCmd
+        // Define return point for after player paddle is moved
+            Define .After2
 
-        Pull #8
-        Pull #0
-        Pull .Start.color
-        Pull #8
-        Pull #0
-        Pull #-100
-        Push ?DispX
-        Push ?DispY
-        Push ?DispSize
-        Push ?DispPen
-        Push ?DispCmd
-        Push ?DispId
-        PushDevice {Display}
-        Poke ?DispCmd
+            Pull .YDir2
+            Multiply .PaddleSpeed
+            Add .YPos2
+            Push .YPos2
 
-        Pull #9
+        // Bounce ball in the Y direction
+            Pull .BallY
+            Pull .MaxY
+            GotoGThan .BounceY
+            Pull .BallY
+            Pull .MaxY
+            Multiply #-1
+            GotoLThan .BounceY
+            Define .AfterBounceY
+        // Detect collisions in the X direction
+            Pull .BallX
+            Pull .MaxX
+            GotoGThan .BounceX2
+            Pull .BallX
+            Pull .MaxX
+            Multiply #-1
+            GotoLThan .BounceX1
+            Define .AfterBounceX
+
+        // Adjust player motion
+            Pull .BallY
+            Add .BallVy
+            Push .BallY
+            Pull .BallX
+            Add .BallVx
+            Push .BallX
+    Goto .Physics.loop
+
+// Physics methods
+
+    Define .Down1
+        Pull #-1
+        Push .YDir1
+    Goto .After1
+    Define .Up1
         Pull #1
-        Pull .Start.color
-        Pull #8
-        Pull #100
+        Push .YDir1
+    Goto .After1
+
+    Define .UpPressed
+        Pull #1
+        Push .YDir2
+    Goto .After2
+    Define .DownPressed
+        Pull #-1
+        Push .YDir2
+    Goto .After2
+
+    Define .BounceX1
+        Pull .YPos1
+        Multiply #-1
+        Add .BallY
+        Pull .PaddleSize
+        GotoGThan .BounceScore1
+        Pull .YPos1
+        Multiply #-1
+        Add .BallY
+        Pull .PaddleSize
+        Multiply #-1
+        GotoLThan .BounceScore1
+        //If no score, simply bounce.
+        Pull .BallVx
+        Multiply #-1
+        Push .BallVx
+    Goto .AfterBounceX
+
+    Define .BounceScore1
+        Pull .Score2
+        Add #1
+        Push .Score2
         Pull #0
-        Push ?DispX
-        Push ?DispY
-        Push ?DispSize
-        Push ?DispPen
+        Push .BallX
+        Pull #0
+        Push .BallY
+        Pull .BallVx
+        Multiply #-1
+        Push .BallVx
+    Goto .AfterBounceX
+
+    Define .BounceX2
+        Pull .YPos2
+        Multiply #-1
+        Add .BallY
+        Pull .PaddleSize
+        GotoGThan .BounceScore2
+        Pull .YPos2
+        Multiply #-1
+        Add .BallY
+        Pull .PaddleSize
+        Multiply #-1
+        GotoLThan .BounceScore2
+        //If no score, simply bounce.
+        Pull .BallVx
+        Multiply #-1
+        Push .BallVx
+    Goto .AfterBounceX
+    Define .BounceScore2
+        Pull .Score1
+        Add #1
+        Push .Score1
+        Pull #0
+        Push .BallX
+        Pull #0
+        Push .BallY
+        Pull .BallVx
+        Multiply #-1
+        Push .BallVx
+    Goto .AfterBounceX
+
+    Define .BounceY
+        Pull .BallVy
+        Multiply #-1
+        Push .BallVy
+    Goto .AfterBounceY
+
+// Thread methods
+
+    // Block to copy to new threads
+    Define .InitThread
+        MountDevice {Boot}
+        MountDevice {Display}
+        PullDevice {Boot}
+        Goto .StartThread
+    Define .EndInitThread
+
+    // Starting point on boot volume for secondary threads
+    Define .StartThread
+        Sub .ConnectVars
+    Define .Display.loop
+        PullChunk .ProgVars
+        Pull #0
         Push ?DispCmd
-        Push ?DispId
-        PushDevice {Display}
-        Poke ?DispCmd
+        //Yellow paddle:
+            Pull .XPos1
+            Push ?DispX
+            Pull .YPos1
+            Add .PaddleSize
+            Push ?DispY
+            Pull #8
+            Push ?DispSize
+            Pull #0
+            Push ?DispPen
+            Pull #0
+            Push ?DispId
+            
+            PushDevice {Display}
+            Poke ?DispCmd
+            
+            Pull .YPos1
+            Subtract .PaddleSize
+            Push ?DispY
+            Pull #5
+            Push ?DispPen
+            Pull #1
+            Push ?DispId
 
-        Pull #3
-        Pull .Start.color
-        GotoEq .Start.yellow
-        Pull #3
-        Push .Start.color
-    Goto .Start.loop
-    Define .Start.yellow
-        Pull #5
-        Push .Start.color
-    Goto .Start.loop
+            PushDevice {Display}
+            Poke ?DispCmd
+        //Blue paddle:
+            Pull .XPos2
+            Push ?DispX
+            Pull .YPos2
+            Add .PaddleSize
+            Push ?DispY
+            Pull #8
+            Push ?DispSize
+            Pull #0
+            Push ?DispPen
+            Pull #2
+            Push ?DispId
 
-    Define .Start.color
-    Constant #5
+            PushDevice {Display}
+            Poke ?DispCmd
+
+            Pull .YPos2
+            Subtract .PaddleSize
+            Push ?DispY
+            Pull #6
+            Push ?DispPen
+            Pull #3
+            Push ?DispId
+
+            PushDevice {Display}
+            Poke ?DispCmd
+        //Draw Scoreboard1:
+            Pull .MaxY
+            Add #48
+            Push ?DispY
+            Pull #-8
+            Push ?DispX
+            Pull #0
+            Push ?DispPen
+            Pull #4
+            Push ?DispId
+
+            PushDevice {Display}
+            Poke ?DispCmd
+
+            Pull .Score1
+            Multiply #-8
+            Subtract #8
+            Push ?DispX
+            Pull #5
+            Push ?DispPen
+            Pull #5
+            Push ?DispId
+
+            PushDevice {Display}
+            Poke ?DispCmd
+        //Draw Scoreboard2:
+            Pull #8
+            Push ?DispX
+            Pull #0
+            Push ?DispPen
+            Pull #6
+            Push ?DispId
+
+            PushDevice {Display}
+            Poke ?DispCmd
+
+            Pull .Score2
+            Multiply #8
+            Add #8
+            Push ?DispX
+            Pull #6
+            Push ?DispPen
+            Pull #7
+            Push ?DispId
+
+            PushDevice {Display}
+            Poke ?DispCmd
+        // Ball
+            Pull .BallX
+            Push ?DispX
+            Pull .BallY
+            Push ?DispY
+            Pull #0
+            Push ?DispPen
+            Pull #8
+            Push ?DispId
+
+            PushDevice {Display}
+            Poke ?DispCmd
+
+            Pull #1
+            Push ?DispPen
+            Pull #9
+            Push ?DispId
+
+            Pull #1
+            Push ?DispCmd
+            PushDevice {Display}
+            Poke ?DispCmd
+    Goto .Display.loop
+
+// Program variables
+    // Paddle positions
+        Define .ProgVars    $4000
+        Define .XPos1       $4000
+        Define .YPos1       $4001
+        Define .YDir1       $4002
+        Define .XPos2       $4003
+        Define .YPos2       $4004
+        Define .YDir2       $4005
+        Define .PaddleSpeed $4006
+        Define .PaddleSize  $4007
+    // Screen size
+        Define .MaxX        $4008
+        Define .MaxY        $4009
+    // Scores
+        Define .Score1      $4010
+        Define .Score2      $4011   
+    // Ball position and velocity
+        Define .BallX       $4012
+        Define .BallY       $4013
+        Define .BallVx      $4014
+        Define .BallVy      $4015
+
+    // Connect to the program variables' chunk. 
+    Define .ConnectVars
+        MountChunk #16 .ProgVars
+        PullChunk .ProgVars
+    EndSub
+
+    //Initialize program vars.
+    Define .InitVars
+        MountSelfChunk #16 .ProgVars
+        // Paddle 1
+        Pull #-216
+        Push .XPos1
+        Pull #0
+        Push .YPos1
+        Pull #1
+        Push .YDir1
+        // Paddle 2
+        Pull #216
+        Push .XPos2
+        Pull #0
+        Push .YPos2
+        Pull #1
+        Push .YDir2
+        // Paddle speed and size
+        Pull #2
+        Push .PaddleSpeed
+        Pull #24
+        Push .PaddleSize
+        // Screen size
+        Pull #200
+        Push .MaxX
+        Pull #120
+        Push .MaxY
+        // Scores
+        Pull #0
+        Copy
+        Push .Score1
+        Push .Score2
+        // Ball position and velocity
+        Pull #0
+        Copy
+        Push .BallX
+        Push .BallY
+        Pull #1.25
+        Push .BallVx
+        Pull #2.5
+        Push .BallVy
+    EndSub
 
 // Initialization methods
 
@@ -177,106 +458,6 @@
         Push .Core3
         Discard
     EndSub
-
-// Thread methods
-
-    // Block to copy to new threads
-    Define .InitThread
-        MountDevice {Boot}
-        PullDevice {Boot}
-        Goto .StartThread
-    Define .EndInitThread
-
-    // Starting point on boot volume for secondary threads
-    Define .StartThread.color
-    Constant #3
-    Define .StartThread
-        MountDevice {Display}
-        Pull #0
-        Pull #0
-        Pull #0
-        Pull #8
-        Pull #100
-        Pull #100
-        Push ?DispX
-        Push ?DispY
-        Push ?DispSize
-        Push ?DispPen
-        Push ?DispCmd
-        Push ?DispId
-        PushDevice {Display}
-        Poke ?DispCmd
-
-        Pull #1
-        Pull #0
-        Pull .StartThread.color
-        Pull #8
-        Pull #-100
-        Pull #100
-        Push ?DispX
-        Push ?DispY
-        Push ?DispSize
-        Push ?DispPen
-        Push ?DispCmd
-        Push ?DispId
-        PushDevice {Display}
-        Poke ?DispCmd
-
-        Pull #2
-        Pull #0
-        Pull .StartThread.color
-        Pull #8
-        Pull #-100
-        Pull #-100
-        Push ?DispX
-        Push ?DispY
-        Push ?DispSize
-        Push ?DispPen
-        Push ?DispCmd
-        Push ?DispId
-        PushDevice {Display}
-        Poke ?DispCmd
-
-        Pull #3
-        Pull #0
-        Pull .StartThread.color
-        Pull #8
-        Pull #100
-        Pull #-100
-        Push ?DispX
-        Push ?DispY
-        Push ?DispSize
-        Push ?DispPen
-        Push ?DispCmd
-        Push ?DispId
-        PushDevice {Display}
-        Poke ?DispCmd
-
-        Pull #4
-        Pull #1
-        Pull .StartThread.color
-        Pull #8
-        Pull #100
-        Pull #100
-        Push ?DispX
-        Push ?DispY
-        Push ?DispSize
-        Push ?DispPen
-        Push ?DispCmd
-        Push ?DispId
-        PushDevice {Display}
-        Poke ?DispCmd
-
-        Pull #3
-        Pull .StartThread.color
-        GotoEq .StartThread.yellow
-        Pull #3
-        Push .StartThread.color
-    Goto .StartThread
-    Define .StartThread.yellow
-        Pull #5
-        Push .StartThread.color
-    Goto .StartThread
 
 // Memory methods
 

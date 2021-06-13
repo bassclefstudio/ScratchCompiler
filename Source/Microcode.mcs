@@ -231,6 +231,24 @@ MountDevice#: Mounts the named device to a new chunk in memory.
     Dev
     Mnt
 
+MountChunk#$: Mounts the chunk with the given address and size in memory. 
+    GetPointer
+    IncPointer
+    Get
+    GetPointer
+    IncPointer
+    Get
+    Mnt
+
+MountSelfChunk#$: Mounts the chunk with the given address and size in memory, and defaults ownership to the current core. 
+    GetPointer
+    IncPointer
+    Get
+    GetPointer
+    IncPointer
+    Get
+    MntSelf
+
 DismountDevice#: Dismounts the named device from a chunk in memory.
     GetPointer
     IncPointer
@@ -238,6 +256,12 @@ DismountDevice#: Dismounts the named device from a chunk in memory.
     Dev
     DMnt
     Push
+
+DismountChunk$: Dismounts the chunk in memory with the given address.
+    GetPointer
+    IncPointer
+    Get
+    DMnt
 
 PullDevice#: Refereshes the data in the chunk/mount for the named device in memory.
     GetPointer
@@ -247,6 +271,12 @@ PullDevice#: Refereshes the data in the chunk/mount for the named device in memo
     GDev
     Push
 
+PullChunk$: Refereshes the data in the chunk/mount at the given address in memory.
+    GetPointer
+    IncPointer
+    Get
+    GDev
+
 PushDevice#: Pushes the data stored in the chunk/mount for the named device in memory.
     GetPointer
     IncPointer
@@ -254,3 +284,9 @@ PushDevice#: Pushes the data stored in the chunk/mount for the named device in m
     Dev
     SDev
     Push
+
+PushChunk$: Pushes the data stored in the chunk/mount at the given address in memory.
+    GetPointer
+    IncPointer
+    Get
+    SDev
