@@ -18,6 +18,12 @@ Copy: Duplicates the top value on the stack.
 Return: Gracefully exits from the given thread.
     Return
 
+Wait#: Waits a given number of seconds.
+    GetPointer
+    IncPointer
+    Get
+    Wait
+
 Goto$: Jumps program execution to the given address in local memory.
     GetPointer
     Get

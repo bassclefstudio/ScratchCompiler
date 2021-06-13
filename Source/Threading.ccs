@@ -19,11 +19,43 @@
         Pull .Core1
         PokeIn ?Core1
 
+    Define .Start.loop
+
         // Draw Core 0 to display
-        MountDevice {Display}
-        Pull #2
+        MountDevice {Display} 
+        Pull #5
         Pull #0
         Pull #0
+        Pull #8
+        Pull #100
+        Pull #0
+        Push ?DispX
+        Push ?DispY
+        Push ?DispSize
+        Push ?DispPen
+        Push ?DispCmd
+        Push ?DispId
+        PushDevice {Display}
+        Poke ?DispCmd
+
+        Pull #6
+        Pull #0
+        Pull .Start.color
+        Pull #8
+        Pull #0
+        Pull #100
+        Push ?DispX
+        Push ?DispY
+        Push ?DispSize
+        Push ?DispPen
+        Push ?DispCmd
+        Push ?DispId
+        PushDevice {Display}
+        Poke ?DispCmd
+
+        Pull #7
+        Pull #0
+        Pull .Start.color
         Pull #8
         Pull #-100
         Pull #0
@@ -36,9 +68,24 @@
         PushDevice {Display}
         Poke ?DispCmd
 
-        Pull #3
+        Pull #8
+        Pull #0
+        Pull .Start.color
+        Pull #8
+        Pull #0
+        Pull #-100
+        Push ?DispX
+        Push ?DispY
+        Push ?DispSize
+        Push ?DispPen
+        Push ?DispCmd
+        Push ?DispId
+        PushDevice {Display}
+        Poke ?DispCmd
+
+        Pull #9
         Pull #1
-        Pull #5
+        Pull .Start.color
         Pull #8
         Pull #100
         Pull #0
@@ -50,7 +97,20 @@
         Push ?DispId
         PushDevice {Display}
         Poke ?DispCmd
-    Return
+
+        Pull #3
+        Pull .Start.color
+        GotoEq .Start.yellow
+        Pull #3
+        Push .Start.color
+    Goto .Start.loop
+    Define .Start.yellow
+        Pull #5
+        Push .Start.color
+    Goto .Start.loop
+
+    Define .Start.color
+    Constant #5
 
 // Initialization methods
 
@@ -128,14 +188,16 @@
     Define .EndInitThread
 
     // Starting point on boot volume for secondary threads
+    Define .StartThread.color
+    Constant #3
     Define .StartThread
         MountDevice {Display}
         Pull #0
         Pull #0
         Pull #0
         Pull #8
-        Pull #0
-        Pull #-100
+        Pull #100
+        Pull #100
         Push ?DispX
         Push ?DispY
         Push ?DispSize
@@ -146,10 +208,10 @@
         Poke ?DispCmd
 
         Pull #1
-        Pull #1
-        Pull #1
-        Pull #8
         Pull #0
+        Pull .StartThread.color
+        Pull #8
+        Pull #-100
         Pull #100
         Push ?DispX
         Push ?DispY
@@ -159,7 +221,62 @@
         Push ?DispId
         PushDevice {Display}
         Poke ?DispCmd
-    Return
+
+        Pull #2
+        Pull #0
+        Pull .StartThread.color
+        Pull #8
+        Pull #-100
+        Pull #-100
+        Push ?DispX
+        Push ?DispY
+        Push ?DispSize
+        Push ?DispPen
+        Push ?DispCmd
+        Push ?DispId
+        PushDevice {Display}
+        Poke ?DispCmd
+
+        Pull #3
+        Pull #0
+        Pull .StartThread.color
+        Pull #8
+        Pull #100
+        Pull #-100
+        Push ?DispX
+        Push ?DispY
+        Push ?DispSize
+        Push ?DispPen
+        Push ?DispCmd
+        Push ?DispId
+        PushDevice {Display}
+        Poke ?DispCmd
+
+        Pull #4
+        Pull #1
+        Pull .StartThread.color
+        Pull #8
+        Pull #100
+        Pull #100
+        Push ?DispX
+        Push ?DispY
+        Push ?DispSize
+        Push ?DispPen
+        Push ?DispCmd
+        Push ?DispId
+        PushDevice {Display}
+        Poke ?DispCmd
+
+        Pull #3
+        Pull .StartThread.color
+        GotoEq .StartThread.yellow
+        Pull #3
+        Push .StartThread.color
+    Goto .StartThread
+    Define .StartThread.yellow
+        Pull #5
+        Push .StartThread.color
+    Goto .StartThread
 
 // Memory methods
 
