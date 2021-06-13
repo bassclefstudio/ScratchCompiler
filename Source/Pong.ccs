@@ -147,11 +147,11 @@ Define .Loop
 //'Bounce' the first paddle up and down the height of the screen.
     Pull .YPos1
     Pull .MaxY
-    JumpGThan .GoDown
+    GotoGThan .GoDown
     Pull .YPos1
     Pull .MaxY
     Multiply #-1
-    JumpLThan .GoUp
+    GotoLThan .GoUp
     Define .AfterTurnAround
     Pull .YDir1
     Multiply .PlayerSpeed
@@ -161,24 +161,24 @@ Define .Loop
 //'Bounce' the second paddle up and down the height of the screen.
     Pull .YPos2
     Pull .MaxY
-    JumpGThan .DownPressed
+    GotoGThan .DownPressed
     Pull .YPos2
     Pull .MaxY
     Multiply #-1
-    JumpLThan .UpPressed
+    GotoLThan .UpPressed
 
 //Check the up and down keys to move the second paddle. 
     Pull {Down}
     PushRem ?Keyboard
     PullRem ?Keyboard
     Pull true
-    JumpEq .DownPressed
+    GotoEq .DownPressed
 
     Pull {Up}
     PushRem ?Keyboard
     PullRem ?Keyboard
     Pull true
-    JumpEq .UpPressed
+    GotoEq .UpPressed
 
     Define .AfterKeys
 
@@ -190,20 +190,20 @@ Define .Loop
 //'Bounce' the ball along the screen.
     Pull .BallY
     Pull .MaxY
-    JumpGThan .BounceY
+    GotoGThan .BounceY
     Pull .BallY
     Pull .MaxY
     Multiply #-1
-    JumpLThan .BounceY
+    GotoLThan .BounceY
     Define .AfterBounceY
 //Detect collisions in X.
     Pull .BallX
     Pull .MaxX
-    JumpGThan .BounceX2
+    GotoGThan .BounceX2
     Pull .BallX
     Pull .MaxX
     Multiply #-1
-    JumpLThan .BounceX1
+    GotoLThan .BounceX1
     Define .AfterBounceX
 
 //Move the ball by velocity and display.
@@ -313,13 +313,13 @@ Define .BounceX1
     Multiply #-1
     Add .BallY
     Pull .PaddleSize
-    JumpGThan .BounceScore1
+    GotoGThan .BounceScore1
     Pull .YPos1
     Multiply #-1
     Add .BallY
     Pull .PaddleSize
     Multiply #-1
-    JumpLThan .BounceScore1
+    GotoLThan .BounceScore1
 //If no score, simply bounce.
     Pull .BallVx
     Multiply #-1
@@ -344,13 +344,13 @@ Define .BounceX2
     Multiply #-1
     Add .BallY
     Pull .PaddleSize
-    JumpGThan .BounceScore2
+    GotoGThan .BounceScore2
     Pull .YPos2
     Multiply #-1
     Add .BallY
     Pull .PaddleSize
     Multiply #-1
-    JumpLThan .BounceScore2
+    GotoLThan .BounceScore2
 //If no score, simply bounce.
     Pull .BallVx
     Multiply #-1

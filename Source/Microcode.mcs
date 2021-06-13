@@ -32,6 +32,7 @@ Sub$: Jumps into a subroutine at the given address in local memory and pulls the
 
 EndSub: Returns from the most recently entered subroutine.
     // Anything added to the stack since the 'Sub' command was called will need to be 'discarded' before this will work.
+    // Note that the 'IncPointer' command is to move forward from the 'Sub' command and its input. 
     Jump
     IncPointer
 
@@ -94,13 +95,28 @@ PullRem?: Pulls the value at the address referenced in remote memory onto the to
     Get
     RGet
 
-Poke$: Pokes the given (local or remote) memory address.
+Poke$: Pokes the given (local or remote) memory address with no input.
+    Null
     GetPointer
     IncPointer
     Get
     Poke
 
-Poke?: Pokes the referenced (local or remote) memory address.
+Poke?: Pokes the referenced (local or remote) memory address with no input.
+    Null
+    GetPointer
+    IncPointer
+    Get
+    Get
+    Poke
+
+PokeIn$: Pokes the given (local or remote) memory address with the value at the top of the stack.
+    GetPointer
+    IncPointer
+    Get
+    Poke
+
+PokeIn?: Pokes the referenced (local or remote) memory address with the value at the top of the stack.
     GetPointer
     IncPointer
     Get
@@ -167,28 +183,28 @@ Divide$: Divides the value on the top of the stack by the value at the given add
 
 // Boolean commands.
 
-JumpEq$: Jumps to the given address if the last two items in the stack are equal.
+GotoEq$: Jumps to the given address if the last two items in the stack are equal.
     Eq
     GetPointer
     IncPointer
     Get
     CJump
 
-JumpGThan$: Jumps to the given address if the second-to-last item in the stack is greater than the last item in the stack.
+GotoGThan$: Jumps to the given address if the second-to-last item in the stack is greater than the last item in the stack.
     GThan
     GetPointer
     IncPointer
     Get
     CJump
 
-JumpLThan$: Jumps to the given address if the second-to-last item in the stack is greater than the last item in the stack.
+GotoLThan$: Jumps to the given address if the second-to-last item in the stack is greater than the last item in the stack.
     LThan
     GetPointer
     IncPointer
     Get
     CJump
 
-JumpTrue$: Jumps the given address if the value at the top of the stack is 'true'.
+GotoTrue$: Jumps the given address if the value at the top of the stack is 'true'.
     GetPointer
     IncPointer
     Get
@@ -202,17 +218,33 @@ GetDevice#: Gets the named device's memory address and size and pulls them onto 
     Get
     Dev
 
-Mount$#: Mounts the address and chunk size in the stack to a new chunk in memory.
+MountDevice#: Mounts the named device to a new chunk in memory.
     GetPointer
     IncPointer
     Get
-    GetPointer
-    IncPointer
-    Get
+    Dev
     Mnt
 
-Dismount$: Dismounts the chunk located at the given address in memory.
+DismountDevice#: Dismounts the named device from a chunk in memory.
     GetPointer
     IncPointer
     Get
+    Dev
     DMnt
+    Push
+
+PullDevice#: Refereshes the data in the chunk/mount for the named device in memory.
+    GetPointer
+    IncPointer
+    Get
+    Dev
+    GDev
+    Push
+
+PushDevice#: Pushes the data stored in the chunk/mount for the named device in memory.
+    GetPointer
+    IncPointer
+    Get
+    Dev
+    SDev
+    Push

@@ -31,6 +31,9 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
         /// The <see cref="CallType"/> type of call this <see cref="CommandCall"/> is.
         /// </summary>
         public CallType Type { get; set; }
+
+        /// <inheritdoc/>
+        public override string ToString() => $"{Name}({string.Join(",", Inputs)})";
     }
 
     /// <summary>

@@ -38,6 +38,9 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
         {
             callNames = calls;
         }
+
+        /// <inheritdoc/>
+        public override string ToString() => string.Join("|", CallNames);
     }
 
     /// <summary>
@@ -46,7 +49,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
     public struct MicrocodeAlias
     {
         /// <summary>
-        /// The operator character - i.e. '>' or '|', etc.
+        /// The operator alias.
         /// </summary>
         public string Alias { get; set; }
 

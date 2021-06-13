@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pidgin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,10 +22,12 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
         /// </summary>
         public ValueType Type { get; set; }
 
+        /// <summary>
+        /// The <see cref="SourcePos"/> position of this input value in the source code.
+        /// </summary>
+        public SourcePos Position { get; set; }
+
         /// <inheritdoc/>
-        public override string ToString()
-        {
-            return $"{Type.GetInputMode()}{Value}";
-        }
+        public override string ToString() => $"{{{Type.GetInputMode()}{Value}}}";
     }
 }

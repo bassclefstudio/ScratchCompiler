@@ -30,6 +30,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
         readonly Parser<char, char> AddressMarker;
         readonly Parser<char, char> DirectiveMarker;
         readonly Parser<char, char> ReferenceMarker;
+        readonly Parser<char, char> AnyCommandMarker;
         readonly Parser<char, string> CommentHead;
         readonly Parser<char, char> ExceptEndLine;
 
@@ -71,6 +72,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
             AddressMarker = Char('$');
             DirectiveMarker = Char('.');
             ReferenceMarker = Char('?');
+            AnyCommandMarker = OneOf(LiteralMarker, AddressMarker, ReferenceMarker);
             EnumStart = Char('{');
             EnumEnd = Char('}');
             ExceptEndLine = AnyCharExcept('\r', '\n');
@@ -86,14 +88,41 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
                 "Constant"
             };
 
-            NumLiteral = LiteralMarker.Then(Digit.Or(Char('.')).Or(Char('-')).ManyString().Select(h => new ValueToken() { Value = h, Type = ValueType.Immediate }));
-            CharLiteral = Any.Between(CharMarker).Select(c => new ValueToken() { Value = c.ToString(), Type = ValueType.Immediate });
-            BoolLiteral = OneOf(Try(TrueString), FalseString).Select(t => new ValueToken() { Value = t, Type = ValueType.Immediate });
-            EnumLiteral = Letter.ManyString().Between(EnumStart, EnumEnd).Select(e => new ValueToken() { Value = e, Type = ValueType.Immediate });
-            NullLiteral = NullString.Select(t => new ValueToken() { Value = string.Empty, Type = ValueType.Immediate });
-            Address = AddressMarker.Then(Num.Select(h => new ValueToken() { Value = h.ToString(), Type = ValueType.Address }));
-            Directive = DirectiveMarker.Then(LetterOrDigit.ManyString().Select(s => new ValueToken() { Value = s, Type = ValueType.Directive }));
-            Reference = ReferenceMarker.Then(LetterOrDigit.ManyString().Select(s => new ValueToken() { Value = s, Type = ValueType.Reference }));
+            NumLiteral =
+                from l in CurrentPos
+                from n in LiteralMarker.Then(Digit.Or(Char('.')).Or(Char('-')).ManyString())
+                select new ValueToken() { Value = n, Type = ValueType.Immediate, Position = l };
+            CharLiteral =
+                from l in CurrentPos
+                from c in Any.Between(CharMarker)
+                select new ValueToken() { Value = c.ToString(), Type = ValueType.Immediate, Position = l };
+            BoolLiteral = 
+                from l in CurrentPos
+                from b in OneOf(Try(TrueString), FalseString)
+                select new ValueToken() { Value = b, Type = ValueType.Immediate, Position = l };
+            EnumLiteral =
+                from l in CurrentPos
+                from e in LetterOrDigit.ManyString().Between(EnumStart, EnumEnd)
+                select new ValueToken() { Value = e, Type = ValueType.Immediate, Position = l };
+            NullLiteral =
+                from l in CurrentPos
+                from n in NullString
+                select new ValueToken() { Value = string.Empty, Type = ValueType.Immediate, Position = l };
+            Address = 
+                from l in CurrentPos
+                from a in AddressMarker
+                from n in Num
+                select new ValueToken() { Value = n.ToString(), Type = ValueType.Address, Position = l };
+            Directive = 
+                from l in CurrentPos
+                from d in DirectiveMarker
+                from n in LetterOrDigit.Or(DirectiveMarker).ManyString()
+                select new ValueToken() { Value = n, Type = ValueType.Directive, Position = l };
+            Reference =
+                from l in CurrentPos
+                from r in ReferenceMarker
+                from n in LetterOrDigit.Or(DirectiveMarker).ManyString()
+                select new ValueToken() { Value = n, Type = ValueType.Reference, Position = l };
 
             Value = OneOf(
                 NumLiteral.Labelled("number"),
@@ -119,7 +148,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
 
             CallCommand =
                 from l in CurrentPos
-                from c in LetterOrDigit.AtLeastOnceString().Where(n => KnownCommandNames.Contains(n)).Labelled("known command")
+                from c in LetterOrDigit.Or(AnyCommandMarker).AtLeastOnceString().Where(n => KnownCommandNames.Contains(n)).Labelled("known command")
                 from v in Try(SkipWhitespaces.Then(Value)).Many()
                 select new CommandCall() 
                 { 
@@ -161,7 +190,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
         private async Task CompileAsync(FileInfo inputFile, IEnumerable<MicrocodeDoc> documentation, DirectoryInfo outputDirectory)
         {
             string inputCode = await File.ReadAllTextAsync(inputFile.FullName);
-            KnownCommandNames = documentation.Select(d => d.CommandName).Distinct();
+            KnownCommandNames = documentation.SelectMany(d => new string[] { d.CommandName, d.GetFullName() }).Distinct();
             var result = Code.Parse(inputCode);
             if (result.Success)
             {
@@ -179,17 +208,17 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
                         MicrocodeDoc? commandDoc = documentation.GetDoc(currentCommand.Name, reqValTypes);
                         if (commandDoc.HasValue)
                         {
-                            memoryMap.Memory.Add(currentMemoryPosition, commandDoc.Value.GetFullName());
+                            memoryMap.AddMemory(currentMemoryPosition, currentCommand.Position, commandDoc.Value.GetFullName());
                             currentMemoryPosition++;
                             foreach (var i in currentCommand.Inputs)
                             {
-                                memoryMap.Memory.Add(currentMemoryPosition, i);
+                                memoryMap.AddMemory(currentMemoryPosition, i);
                                 currentMemoryPosition++;
                             }
                         }
                         else
                         {
-                            throw new CompilationException($"Could not find an override of {currentCommand.Name} that supports input type(s) {reqValTypes.GetInputModes()}.", currentCommand.Position);
+                            throw new CompilationException($"Could not find an override of {currentCommand.Name} that supports input type(s) [{reqValTypes.GetInputModes()}].", currentCommand.Position);
                         }
                     }
                     else if(currentCommand.Type == CallType.Compiler)
@@ -230,7 +259,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
                                 if (currentCommand.Inputs[0].Type == ValueType.Directive)
                                 {
                                     directivePositions.Add(currentCommand.Inputs[0].Value, currentMemoryPosition);
-                                    memoryMap.Memory.Add(currentMemoryPosition, string.Empty);
+                                    memoryMap.AddMemory(currentMemoryPosition, currentCommand.Position, string.Empty);
                                     currentMemoryPosition++;
                                 }
                                 else
@@ -247,7 +276,7 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
                         {
                             if (currentCommand.Inputs.Length == 1)
                             {
-                                memoryMap.Memory.Add(currentMemoryPosition, currentCommand.Inputs[0]);
+                                memoryMap.AddMemory(currentMemoryPosition, currentCommand.Inputs[0]);
                                 currentMemoryPosition++;
                             }
                             else
@@ -267,7 +296,14 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Commands
                     {
                         if (value.Type == ValueType.Directive || value.Type == ValueType.Reference)
                         {
-                            memoryMap.Memory[address] = directivePositions[value.Value];
+                            try
+                            {
+                                memoryMap.Memory[address] = directivePositions[value.Value];
+                            }
+                            catch(KeyNotFoundException)
+                            {
+                                throw new CompilationException($"Resolving directive {value} failed.", memoryMap.SourcePositions[address]);
+                            }
                         }
                         else
                         {

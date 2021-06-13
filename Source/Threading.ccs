@@ -1,0 +1,208 @@
+// Boot entry point
+    Define .Start
+        // Initialize the cores and various memory.
+        Sub .SetupDevices
+        Sub .SetupCores
+        PushDevice {Boot}
+
+        // Starts Core 1 on new thread
+        // Copies thread init statement to core memory.
+        Pull# .InitThread
+        Push .Copy.startAddress
+        Pull .Core1
+        Push .Copy.destAddress
+        Pull# .EndInitThread
+        Subtract# .InitThread
+        Push .Copy.length
+        Sub .Copy
+        // Starts thread (hopes for the best!)
+        Pull .Core1
+        PokeIn ?Core1
+
+        // Draw Core 0 to display
+        MountDevice {Display}
+        Pull #2
+        Pull #0
+        Pull #0
+        Pull #8
+        Pull #-100
+        Pull #0
+        Push ?DispX
+        Push ?DispY
+        Push ?DispSize
+        Push ?DispPen
+        Push ?DispCmd
+        Push ?DispId
+        PushDevice {Display}
+        Poke ?DispCmd
+
+        Pull #3
+        Pull #1
+        Pull #5
+        Pull #8
+        Pull #100
+        Pull #0
+        Push ?DispX
+        Push ?DispY
+        Push ?DispSize
+        Push ?DispPen
+        Push ?DispCmd
+        Push ?DispId
+        PushDevice {Display}
+        Poke ?DispCmd
+    Return
+
+// Initialization methods
+
+    Define .SetupDevices
+        Sub .SetupDisplay
+        Sub .SetupKeyboard
+    EndSub
+
+    Define .SetupKeyboard
+        //Set the keyboard memory address variable.
+        GetDevice {Keyboard}
+        Push .Keyboard
+        Discard
+    EndSub
+
+    Define .SetupDisplay
+        // Get the display memory address.
+        GetDevice {Display}
+        Push .DispCmd
+        Discard
+
+        // Set the various display address variables.
+        Pull .DispCmd
+        Add #1
+        Copy
+        Push .DispX
+        Add #1
+        Copy
+        Push .DispY
+        Add #1
+        Copy
+        Push .DispPen
+        Add #1
+        Copy
+        Push .DispSize
+        Add #1
+        Push .DispId
+
+        // Clear the display.
+        Pull #3
+        PushRem ?DispCmd
+        Poke ?DispCmd
+    EndSub
+
+    Define .SetupCores
+        // Get the Core0 memory address.
+        GetDevice {Core0}
+        Push .Core0
+        // Get the core memory size.
+        Push .CoreSize
+
+        // Get the Core1 memory address.
+        GetDevice {Core1}
+        Push .Core1
+        Discard
+
+        // Get the Core2 memory address.
+        GetDevice {Core2}
+        Push .Core2
+        Discard
+
+        // Get the Core3 memory address.
+        GetDevice {Core3}
+        Push .Core3
+        Discard
+    EndSub
+
+// Thread methods
+
+    // Block to copy to new threads
+    Define .InitThread
+        MountDevice {Boot}
+        PullDevice {Boot}
+        Goto .StartThread
+    Define .EndInitThread
+
+    // Starting point on boot volume for secondary threads
+    Define .StartThread
+        MountDevice {Display}
+        Pull #0
+        Pull #0
+        Pull #0
+        Pull #8
+        Pull #0
+        Pull #-100
+        Push ?DispX
+        Push ?DispY
+        Push ?DispSize
+        Push ?DispPen
+        Push ?DispCmd
+        Push ?DispId
+        PushDevice {Display}
+        Poke ?DispCmd
+
+        Pull #1
+        Pull #1
+        Pull #1
+        Pull #8
+        Pull #0
+        Pull #100
+        Push ?DispX
+        Push ?DispY
+        Push ?DispSize
+        Push ?DispPen
+        Push ?DispCmd
+        Push ?DispId
+        PushDevice {Display}
+        Poke ?DispCmd
+    Return
+
+// Memory methods
+
+    // Copies a block of memory: (startAddress, destAddress, length)
+        // Method variables.
+        Var .Copy.length
+        Var .Copy.destAddress
+        Var .Copy.startAddress
+    Define .Copy
+        // Loop while copying memory
+        Define .Copy.l1
+            // Move memory from startAddress to destAddress
+            Pull ?Copy.startAddress
+            PushRem ?Copy.destAddress
+
+            // Increment variables
+            Pull #1
+            Copy
+            Add .Copy.startAddress
+            Push .Copy.startAddress
+            Add .Copy.destAddress
+            Push .Copy.destAddress
+            Pull .Copy.length
+            Subtract #1
+            Copy
+            Push .Copy.length
+            // Loop .Copy.l1 if length > 0
+            Pull #0
+        GotoGThan .Copy.l1
+    EndSub
+
+// Device memory references
+    Var .DispCmd
+    Var .DispX   
+    Var .DispY
+    Var .DispPen
+    Var .DispSize
+    Var .DispId
+    Var .Keyboard
+
+// Core memory references
+    Var .Core0
+    Var .CoreSize
+    Var .Core1
+    Var .Core2
+    Var .Core3

@@ -40,44 +40,16 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
         public IEnumerable<string> TrimCalls()
         {
             List<string> signals = new List<string>();
-            string regF = null;
-            string regT = null;
             IEnumerable<string> calls = Calls.SelectMany(c => c.CallNames);
             foreach (var call in calls)
             {
-                if (string.IsNullOrEmpty(call))
-                {
-                    // Ignore empty control signals.
-                }
-                else
-                {
-                    // Register access optimization.
-                    if (call.StartsWith("Rf"))
-                    {
-                        string reg = call[2..];
-                        if (reg != regF)
-                        {
-                            regF = reg;
-                            signals.Add(call);
-                        }
-                    }
-                    else if (call.StartsWith("Rt"))
-                    {
-                        string reg = call[2..];
-                        if (reg != regT)
-                        {
-                            regT = reg;
-                            signals.Add(call);
-                        }
-                    }
-                    else
-                    {
-                        signals.Add(call);
-                    }
-                }
+                signals.Add(call);
             }
 
             return signals;
         }
+
+        /// <inheritdoc/>
+        public override string ToString() => $"{Documentation}:{{{string.Join("|", Calls)}}}";
     }
 }

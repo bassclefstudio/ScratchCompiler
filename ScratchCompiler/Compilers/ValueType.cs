@@ -60,6 +60,6 @@ namespace BassClefStudio.ScratchCompiler.Compilers
         /// <summary>
         /// Get the associated <see cref="char"/> input-mode for the given <see cref="ValueType"/>.
         /// </summary>
-        public static string GetInputModes(this ValueType[] valueTypes) => string.Join(",", valueTypes.Select(v => v.GetInputMode()));
+        public static string GetInputModes(this ValueType[] valueTypes) => string.Concat(valueTypes.Select(v => v.GetInputMode()));
     }
 }

@@ -34,6 +34,9 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
         {
             return $"{CommandName}{InputModes.GetInputModes()}";
         }
+
+        /// <inheritdoc/>
+        public override string ToString() => GetFullName();
     }
 
     /// <summary>
@@ -45,14 +48,18 @@ namespace BassClefStudio.ScratchCompiler.Compilers.Microcode
         /// Gets the documentation for the desired command and <see cref="ValueType"/>.
         /// </summary>
         /// <param name="list">The list of available <see cref="MicrocodeDoc"/>s.</param>
-        /// <param name="name">The <see cref="string"/> name of the command.</param>
-        /// <param name="valueTypes">The <see cref="ValueType"/>s of the command's inputs.</param>
+        /// <param name="name">The <see cref="string"/> name (or full name) of the command.</param>
+        /// <param name="valueTypes">The <see cref="ValueType"/>s of the command's inputs, used to find overrides.</param>
         /// <returns>The <see cref="MicrocodeDoc"/> satisfying these conditions, or 'null'.</returns>
         public static MicrocodeDoc? GetDoc(this IEnumerable<MicrocodeDoc> list, string name, params ValueType[] valueTypes)
         {
             if (list.Any(l => l.CommandName == name && l.InputModes.SequenceEqual(valueTypes)))
             {
                 return list.First(l => l.CommandName == name && l.InputModes.SequenceEqual(valueTypes));
+            }
+            else if (list.Any(l => l.GetFullName() == name))
+            {
+                return list.First(l => l.GetFullName() == name);
             }
             else
             {
