@@ -1,0 +1,113 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+deviceAddress = 0
+deviceId = 0
+deviceName = 
+deviceSize = 0
+getDevice = 0
+getRequest.s1 = 0
+handleRequest = 0
+handleRequest.action = 0
+handleRequest.addr = 0
+start.s1 = 0
+
+
+
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    deviceName = "";
+    Motion.GoToXY(0, 0);
+    Looks.Hide();
+}
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(StartDevices)
+{
+    deviceId = List.IndexOf(DeviceName, deviceName);
+    If (deviceId > 0)
+    {
+        deviceAddress = DeviceAdress[deviceId];
+        deviceSize = DeviceSize[deviceId];
+        Call Initialize Device;
+        Call await StartDevice:;
+    }
+}
+
+
+//----- Custom blocks -------------------------------------------------------------------------------------------------
+
+Define await StartDevice: (warp=false)
+{
+    start.s1 = 0;
+    Forever
+    {
+        Wait Until (Not ((start.s1 == NewRequest)));
+        Call handleRequest:(start.s1);
+        start.s1 += 1;
+    }
+}
+
+Define deleteRequest:(string Id) (warp=true)
+{
+    getRequest.s1 = List.IndexOf(RequestId, Id);
+    List.DeleteItem(RequestId, getRequest.s1);
+    List.DeleteItem(RequestAction, getRequest.s1);
+    List.DeleteItem(RequestAddr, getRequest.s1);
+    List.DeleteItem(RequestValue, getRequest.s1);
+}
+
+Define getDevice:(string Address) (warp=true)
+{
+    getDevice = "";
+}
+
+Define handleRequest:(string Id) (warp=true)
+{
+    getRequest.s1 = List.IndexOf(RequestId, Id);
+    handleRequest.action = RequestAction[getRequest.s1];
+    handleRequest.addr = RequestAddr[getRequest.s1];
+    handleRequest = RequestValue[getRequest.s1];
+    If ((Not ((handleRequest.addr < deviceAddress))) And (handleRequest.addr < (deviceAddress + deviceSize)))
+    {
+        If (handleRequest.action == "get")
+        {
+            Call getDevice:((handleRequest.addr - deviceAddress));
+            handleRequest = getDevice;
+        }
+        Else
+        {
+            If (handleRequest.action == "set")
+            {
+                Call setDevice:((handleRequest.addr - deviceAddress))(handleRequest);
+                Call deleteRequest:(Id);
+            }
+            Else
+            {
+            }
+        }
+        getRequest.s1 = List.IndexOf(RequestId, Id);
+        List.ReplaceItem(RequestValue, getRequest.s1, handleRequest);
+    }
+}
+
+Define Initialize Device (warp=true)
+{
+}
+
+Define setDevice:(string Address)(string Value) (warp=true)
+{
+}
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+Icon.png
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+pop.wav

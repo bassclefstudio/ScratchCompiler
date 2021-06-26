@@ -1,0 +1,101 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+BootSize = 1000
+CoreMemSize = 500
+devices.c1 = 4
+RequestedCores = 4
+
+
+
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    Motion.GoToXY(0, 0);
+    Looks.Hide();
+}
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(Initialize)
+{
+    Call Initialize Logging;
+    Call Load Data;
+    Call Initialize Requests;
+    Call Create Devices;
+    Event.Broadcast("StartDevices");
+    Call Create Cores;
+    Event.Broadcast("StartCores");
+}
+
+
+//----- Custom blocks -------------------------------------------------------------------------------------------------
+
+Define Create Cores (warp=true)
+{
+    RequestedCores = 4;
+    CoreMemSize = 500;
+    devices.c1 = 0;
+    Repeat (RequestedCores)
+    {
+        Call registerDevice:(Operator.Join("Core", devices.c1))((BootSize + (devices.c1 * CoreMemSize))) [(CoreMemSize) ];
+        If (devices.c1 > 0)
+        {
+            Control.CreateCloneOf(Core);
+        }
+        devices.c1 += 1;
+    }
+}
+
+Define Create Devices (warp=true)
+{
+    List.DeleteAll(DeviceName);
+    List.DeleteAll(DeviceAdress);
+    List.DeleteAll(DeviceSize);
+    BootSize = 1000;
+    CanBoot = "false";
+    Call registerDevice:("Boot")(0) [(BootSize) ];
+    Call registerDevice:("Mouse")(8000) [(3) ];
+    Call registerDevice:("Keyboard")(8003) [(1) ];
+    Call registerDevice:("Display")(8004) [(6) ];
+}
+
+Define Initialize Logging (warp=true)
+{
+    LogEnabled = "true";
+    List.DeleteAll(Log);
+}
+
+Define Initialize Requests (warp=true)
+{
+    NewRequest = 0;
+    List.DeleteAll(RequestId);
+    List.DeleteAll(RequestAction);
+    List.DeleteAll(RequestAddr);
+    List.DeleteAll(RequestValue);
+    NullChar = "%";
+}
+
+Define Load Data (warp=true)
+{
+    Microcode = "[{"Name":"Fetch","Signals":"GetPointer|IncPointer|Get|Cmd"},{"Name":"Clear","Signals":"Clear"},{"Name":"Discard","Signals":"Push"},{"Name":"Copy","Signals":"Copy"},{"Name":"Return","Signals":"Return"},{"Name":"Wait#","Signals":"GetPointer|IncPointer|Get|Wait"},{"Name":"Goto$","Signals":"GetPointer|Get|Jump"},{"Name":"Sub$","Signals":"GetPointer|GetPointer|Get|Jump"},{"Name":"EndSub","Signals":"Jump|IncPointer"},{"Name":"Push$","Signals":"GetPointer|IncPointer|Get|Set"},{"Name":"Push?","Signals":"GetPointer|IncPointer|Get|Get|Set"},{"Name":"Pull$","Signals":"GetPointer|IncPointer|Get|Get"},{"Name":"Pull?","Signals":"GetPointer|IncPointer|Get|Get|Get"},{"Name":"Pull#","Signals":"GetPointer|IncPointer|Get"},{"Name":"PushRem$","Signals":"GetPointer|IncPointer|Get|RSet"},{"Name":"PushRem?","Signals":"GetPointer|IncPointer|Get|Get|RSet"},{"Name":"PullRem$","Signals":"GetPointer|IncPointer|Get|RGet"},{"Name":"PullRem?","Signals":"GetPointer|IncPointer|Get|Get|RGet"},{"Name":"Poke$","Signals":"Null|GetPointer|IncPointer|Get|Poke"},{"Name":"Poke?","Signals":"Null|GetPointer|IncPointer|Get|Get|Poke"},{"Name":"PokeIn$","Signals":"GetPointer|IncPointer|Get|Poke"},{"Name":"PokeIn?","Signals":"GetPointer|IncPointer|Get|Get|Poke"},{"Name":"Add#","Signals":"GetPointer|IncPointer|Get|Add"},{"Name":"Add$","Signals":"GetPointer|IncPointer|Get|Get|Add"},{"Name":"Subtract#","Signals":"GetPointer|IncPointer|Get|Neg|Add"},{"Name":"Subtract$","Signals":"GetPointer|IncPointer|Get|Get|Neg|Add"},{"Name":"Multiply#","Signals":"GetPointer|IncPointer|Get|Prod"},{"Name":"Multiply$","Signals":"GetPointer|IncPointer|Get|Get|Prod"},{"Name":"Divide#","Signals":"GetPointer|IncPointer|Get|Inv|Prod"},{"Name":"Divide$","Signals":"GetPointer|IncPointer|Get|Get|Inv|Prod"},{"Name":"GotoEq$","Signals":"Eq|GetPointer|IncPointer|Get|CJump"},{"Name":"GotoGThan$","Signals":"GThan|GetPointer|IncPointer|Get|CJump"},{"Name":"GotoLThan$","Signals":"LThan|GetPointer|IncPointer|Get|CJump"},{"Name":"GotoTrue$","Signals":"GetPointer|IncPointer|Get|CJump"},{"Name":"GetDevice#","Signals":"GetPointer|IncPointer|Get|Dev"},{"Name":"MountDevice#","Signals":"GetPointer|IncPointer|Get|Dev|Mnt"},{"Name":"MountChunk#$","Signals":"GetPointer|IncPointer|Get|GetPointer|IncPointer|Get|Mnt"},{"Name":"MountSelfChunk#$","Signals":"GetPointer|IncPointer|Get|GetPointer|IncPointer|Get|MntSelf"},{"Name":"DismountDevice#","Signals":"GetPointer|IncPointer|Get|Dev|DMnt|Push"},{"Name":"DismountChunk$","Signals":"GetPointer|IncPointer|Get|DMnt"},{"Name":"PullDevice#","Signals":"GetPointer|IncPointer|Get|Dev|GDev|Push"},{"Name":"PullChunk$","Signals":"GetPointer|IncPointer|Get|GDev"},{"Name":"PushDevice#","Signals":"GetPointer|IncPointer|Get|Dev|SDev|Push"},{"Name":"PushChunk$","Signals":"GetPointer|IncPointer|Get|SDev"}]";
+    BootVolume = "["Sub$","562","Sub$","611","PushDevice#","Boot","Sub$","496","Pull#","270","Push$","635","Pull$","672","Push$","634","Pull#","278","Subtract#","270","Push$","633","Sub$","636","Pull$","672","PokeIn?","672","Pull$","4001","Pull$","4009","GotoGThan$","134","Pull$","4001","Pull$","4009","Multiply#","-1","GotoLThan$","140","Pull$","4002","Multiply$","4006","Add$","4001","Push$","4001","Pull$","4004","Pull$","4009","GotoGThan$","152","Pull$","4004","Pull$","4009","Multiply#","-1","GotoLThan$","146","Pull#","Down","PushRem?","669","PullRem?","669","Pull#","true","GotoEq$","152","Pull#","Up","PushRem?","669","PullRem?","669","Pull#","true","GotoEq$","146","Pull$","4005","Multiply$","4006","Add$","4004","Push$","4004","Pull$","4013","Pull$","4009","GotoGThan$","262","Pull$","4013","Pull$","4009","Multiply#","-1","GotoLThan$","262","Pull$","4012","Pull$","4008","GotoGThan$","210","Pull$","4012","Pull$","4008","Multiply#","-1","GotoLThan$","158","Pull$","4013","Add$","4015","Push$","4013","Pull$","4012","Add$","4014","Push$","4012","Goto$","28","Pull#","-1","Push$","4002","Goto$","42","Pull#","1","Push$","4002","Goto$","42","Pull#","1","Push$","4005","Goto$","84","Pull#","-1","Push$","4005","Goto$","84","Pull$","4001","Multiply#","-1","Add$","4013","Pull$","4007","GotoGThan$","188","Pull$","4001","Multiply#","-1","Add$","4013","Pull$","4007","Multiply#","-1","GotoLThan$","188","Pull$","4014","Multiply#","-1","Push$","4014","Goto$","120","Pull$","4011","Add#","1","Push$","4011","Pull#","0","Push$","4012","Pull#","0","Push$","4013","Pull$","4014","Multiply#","-1","Push$","4014","Goto$","120","Pull$","4004","Multiply#","-1","Add$","4013","Pull$","4007","GotoGThan$","240","Pull$","4004","Multiply#","-1","Add$","4013","Pull$","4007","Multiply#","-1","GotoLThan$","240","Pull$","4014","Multiply#","-1","Push$","4014","Goto$","120","Pull$","4010","Add#","1","Push$","4010","Pull#","0","Push$","4012","Pull#","0","Push$","4013","Pull$","4014","Multiply#","-1","Push$","4014","Goto$","120","Pull$","4015","Multiply#","-1","Push$","4015","Goto$","106","MountDevice#","Boot","MountDevice#","Display","PullDevice#","Boot","Goto$","278","Sub$","490","PullChunk$","4000","Pull#","0","Push?","663","Pull$","4000","Push?","664","Pull$","4001","Add$","4007","Push?","665","Pull#","8","Push?","667","Pull#","0","Push?","666","Pull#","0","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4001","Subtract$","4007","Push?","665","Pull#","5","Push?","666","Pull#","1","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4003","Push?","664","Pull$","4004","Add$","4007","Push?","665","Pull#","8","Push?","667","Pull#","0","Push?","666","Pull#","2","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4004","Subtract$","4007","Push?","665","Pull#","6","Push?","666","Pull#","3","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4009","Add#","48","Push?","665","Pull#","-8","Push?","664","Pull#","0","Push?","666","Pull#","4","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4010","Multiply#","-8","Subtract#","8","Push?","664","Pull#","5","Push?","666","Pull#","5","Push?","668","PushDevice#","Display","Poke?","663","Pull#","8","Push?","664","Pull#","0","Push?","666","Pull#","6","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4011","Multiply#","8","Add#","8","Push?","664","Pull#","6","Push?","666","Pull#","7","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4012","Push?","664","Pull$","4013","Push?","665","Pull#","0","Push?","666","Pull#","8","Push?","668","PushDevice#","Display","Poke?","663","Pull#","1","Push?","666","Pull#","9","Push?","668","Pull#","1","Push?","663","PushDevice#","Display","Poke?","663","Goto$","280","MountChunk#$","16","4000","PullChunk$","4000","EndSub","MountSelfChunk#$","16","4000","Pull#","-216","Push$","4000","Pull#","0","Push$","4001","Pull#","1","Push$","4002","Pull#","216","Push$","4003","Pull#","0","Push$","4004","Pull#","1","Push$","4005","Pull#","2","Push$","4006","Pull#","24","Push$","4007","Pull#","200","Push$","4008","Pull#","120","Push$","4009","Pull#","0","Copy","Push$","4010","Push$","4011","Pull#","0","Copy","Push$","4012","Push$","4013","Pull#","1.25","Push$","4014","Pull#","2.5","Push$","4015","EndSub","Sub$","573","Sub$","567","EndSub","GetDevice#","Keyboard","Push$","669","Discard","EndSub","GetDevice#","Display","Push$","663","Discard","Pull$","663","Add#","1","Copy","Push$","664","Add#","1","Copy","Push$","665","Add#","1","Copy","Push$","666","Add#","1","Copy","Push$","667","Add#","1","Push$","668","Pull#","3","PushRem?","663","Poke?","663","EndSub","GetDevice#","Core0","Push$","670","Push$","671","GetDevice#","Core1","Push$","672","Discard","GetDevice#","Core2","Push$","673","Discard","GetDevice#","Core3","Push$","674","Discard","EndSub","","","","Pull?","635","PushRem?","634","Pull#","1","Copy","Add$","635","Push$","635","Add$","634","Push$","634","Pull$","633","Subtract#","1","Copy","Push$","633","Pull#","0","GotoGThan$","636","EndSub","","","","","","","","","","","",""]";
+}
+
+Define registerDevice:(string Name)(string Address) [(string Size) ] (warp=true)
+{
+    List.Add(DeviceName, Name);
+    List.Add(DeviceAdress, Address);
+    List.Add(DeviceSize, Size);
+}
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+Icon.png
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+pop.wav

@@ -1,0 +1,2310 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+bufferCommand.c1 = 29
+bufferCommand.s1 = Get
+bufferCommand.s2 = t
+coreAddress = 1000
+coreId = 0
+execute.command = Pull$
+execute.currentStack = 652
+execute.pointer = 653
+execute.return = false
+findChunk = 2
+findChunk.c1 = 2
+getIndex = 1153
+getMem = 633
+getRequest.s1 = 0
+handleRequest = 
+handleRequest.action = 
+handleRequest.addr = 
+mountDevice.s1 = 1
+newChunk = 3
+newRequest = 2006
+placeChunk = 1501
+runCommand.c1 = 3
+runCommand.s1 = 12
+signal.s1 = 634
+start.s1 = 1946
+sync.c1 = 1000
+sync.index = 501
+sync.length = 1000
+sync.start = 0
+waitRequest = 
+
+
+//----- Lists ---------------------------------------------------------------------------------------------------------
+
+bufferCommand = { 
+    GetPointer
+    IncPointer
+    Get
+    Get
+}
+chunkIndex = { 
+    1
+    501
+    1501
+}
+chunkIsClone = { 
+    
+    1
+    
+}
+chunkSize = { 
+    500
+    1000
+    16
+}
+chunkStart = { 
+    1000
+    0
+    4000
+}
+execute.stack = { 
+    23
+    633
+}
+executeAddresses = { 
+    0
+}
+myMemory = { 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    Sub$
+    562
+    Sub$
+    611
+    PushDevice#
+    Boot
+    Sub$
+    496
+    Pull#
+    270
+    Push$
+    635
+    Pull$
+    672
+    Push$
+    634
+    Pull#
+    278
+    Subtract#
+    270
+    Push$
+    633
+    Sub$
+    636
+    Pull$
+    672
+    PokeIn?
+    672
+    Pull$
+    4001
+    Pull$
+    4009
+    GotoGThan$
+    134
+    Pull$
+    4001
+    Pull$
+    4009
+    Multiply#
+    -1
+    GotoLThan$
+    140
+    Pull$
+    4002
+    Multiply$
+    4006
+    Add$
+    4001
+    Push$
+    4001
+    Pull$
+    4004
+    Pull$
+    4009
+    GotoGThan$
+    152
+    Pull$
+    4004
+    Pull$
+    4009
+    Multiply#
+    -1
+    GotoLThan$
+    146
+    Pull#
+    Down
+    PushRem?
+    669
+    PullRem?
+    669
+    Pull#
+    true
+    GotoEq$
+    152
+    Pull#
+    Up
+    PushRem?
+    669
+    PullRem?
+    669
+    Pull#
+    true
+    GotoEq$
+    146
+    Pull$
+    4005
+    Multiply$
+    4006
+    Add$
+    4004
+    Push$
+    4004
+    Pull$
+    4013
+    Pull$
+    4009
+    GotoGThan$
+    262
+    Pull$
+    4013
+    Pull$
+    4009
+    Multiply#
+    -1
+    GotoLThan$
+    262
+    Pull$
+    4012
+    Pull$
+    4008
+    GotoGThan$
+    210
+    Pull$
+    4012
+    Pull$
+    4008
+    Multiply#
+    -1
+    GotoLThan$
+    158
+    Pull$
+    4013
+    Add$
+    4015
+    Push$
+    4013
+    Pull$
+    4012
+    Add$
+    4014
+    Push$
+    4012
+    Goto$
+    28
+    Pull#
+    -1
+    Push$
+    4002
+    Goto$
+    42
+    Pull#
+    1
+    Push$
+    4002
+    Goto$
+    42
+    Pull#
+    1
+    Push$
+    4005
+    Goto$
+    84
+    Pull#
+    -1
+    Push$
+    4005
+    Goto$
+    84
+    Pull$
+    4001
+    Multiply#
+    -1
+    Add$
+    4013
+    Pull$
+    4007
+    GotoGThan$
+    188
+    Pull$
+    4001
+    Multiply#
+    -1
+    Add$
+    4013
+    Pull$
+    4007
+    Multiply#
+    -1
+    GotoLThan$
+    188
+    Pull$
+    4014
+    Multiply#
+    -1
+    Push$
+    4014
+    Goto$
+    120
+    Pull$
+    4011
+    Add#
+    1
+    Push$
+    4011
+    Pull#
+    0
+    Push$
+    4012
+    Pull#
+    0
+    Push$
+    4013
+    Pull$
+    4014
+    Multiply#
+    -1
+    Push$
+    4014
+    Goto$
+    120
+    Pull$
+    4004
+    Multiply#
+    -1
+    Add$
+    4013
+    Pull$
+    4007
+    GotoGThan$
+    240
+    Pull$
+    4004
+    Multiply#
+    -1
+    Add$
+    4013
+    Pull$
+    4007
+    Multiply#
+    -1
+    GotoLThan$
+    240
+    Pull$
+    4014
+    Multiply#
+    -1
+    Push$
+    4014
+    Goto$
+    120
+    Pull$
+    4010
+    Add#
+    1
+    Push$
+    4010
+    Pull#
+    0
+    Push$
+    4012
+    Pull#
+    0
+    Push$
+    4013
+    Pull$
+    4014
+    Multiply#
+    -1
+    Push$
+    4014
+    Goto$
+    120
+    Pull$
+    4015
+    Multiply#
+    -1
+    Push$
+    4015
+    Goto$
+    106
+    MountDevice#
+    Boot
+    MountDevice#
+    Display
+    PullDevice#
+    Boot
+    Goto$
+    278
+    Sub$
+    490
+    PullChunk$
+    4000
+    Pull#
+    0
+    Push?
+    663
+    Pull$
+    4000
+    Push?
+    664
+    Pull$
+    4001
+    Add$
+    4007
+    Push?
+    665
+    Pull#
+    8
+    Push?
+    667
+    Pull#
+    0
+    Push?
+    666
+    Pull#
+    0
+    Push?
+    668
+    PushDevice#
+    Display
+    Poke?
+    663
+    Pull$
+    4001
+    Subtract$
+    4007
+    Push?
+    665
+    Pull#
+    5
+    Push?
+    666
+    Pull#
+    1
+    Push?
+    668
+    PushDevice#
+    Display
+    Poke?
+    663
+    Pull$
+    4003
+    Push?
+    664
+    Pull$
+    4004
+    Add$
+    4007
+    Push?
+    665
+    Pull#
+    8
+    Push?
+    667
+    Pull#
+    0
+    Push?
+    666
+    Pull#
+    2
+    Push?
+    668
+    PushDevice#
+    Display
+    Poke?
+    663
+    Pull$
+    4004
+    Subtract$
+    4007
+    Push?
+    665
+    Pull#
+    6
+    Push?
+    666
+    Pull#
+    3
+    Push?
+    668
+    PushDevice#
+    Display
+    Poke?
+    663
+    Pull$
+    4009
+    Add#
+    48
+    Push?
+    665
+    Pull#
+    -8
+    Push?
+    664
+    Pull#
+    0
+    Push?
+    666
+    Pull#
+    4
+    Push?
+    668
+    PushDevice#
+    Display
+    Poke?
+    663
+    Pull$
+    4010
+    Multiply#
+    -8
+    Subtract#
+    8
+    Push?
+    664
+    Pull#
+    5
+    Push?
+    666
+    Pull#
+    5
+    Push?
+    668
+    PushDevice#
+    Display
+    Poke?
+    663
+    Pull#
+    8
+    Push?
+    664
+    Pull#
+    0
+    Push?
+    666
+    Pull#
+    6
+    Push?
+    668
+    PushDevice#
+    Display
+    Poke?
+    663
+    Pull$
+    4011
+    Multiply#
+    8
+    Add#
+    8
+    Push?
+    664
+    Pull#
+    6
+    Push?
+    666
+    Pull#
+    7
+    Push?
+    668
+    PushDevice#
+    Display
+    Poke?
+    663
+    Pull$
+    4012
+    Push?
+    664
+    Pull$
+    4013
+    Push?
+    665
+    Pull#
+    0
+    Push?
+    666
+    Pull#
+    8
+    Push?
+    668
+    PushDevice#
+    Display
+    Poke?
+    663
+    Pull#
+    1
+    Push?
+    666
+    Pull#
+    9
+    Push?
+    668
+    Pull#
+    1
+    Push?
+    663
+    PushDevice#
+    Display
+    Poke?
+    663
+    Goto$
+    280
+    MountChunk#$
+    16
+    4000
+    PullChunk$
+    4000
+    EndSub
+    MountSelfChunk#$
+    16
+    4000
+    Pull#
+    -216
+    Push$
+    4000
+    Pull#
+    0
+    Push$
+    4001
+    Pull#
+    1
+    Push$
+    4002
+    Pull#
+    216
+    Push$
+    4003
+    Pull#
+    0
+    Push$
+    4004
+    Pull#
+    1
+    Push$
+    4005
+    Pull#
+    2
+    Push$
+    4006
+    Pull#
+    24
+    Push$
+    4007
+    Pull#
+    200
+    Push$
+    4008
+    Pull#
+    120
+    Push$
+    4009
+    Pull#
+    0
+    Copy
+    Push$
+    4010
+    Push$
+    4011
+    Pull#
+    0
+    Copy
+    Push$
+    4012
+    Push$
+    4013
+    Pull#
+    1.25
+    Push$
+    4014
+    Pull#
+    2.5
+    Push$
+    4015
+    EndSub
+    Sub$
+    573
+    Sub$
+    567
+    EndSub
+    GetDevice#
+    Keyboard
+    Push$
+    669
+    Discard
+    EndSub
+    GetDevice#
+    Display
+    Push$
+    663
+    Discard
+    Pull$
+    663
+    Add#
+    1
+    Copy
+    Push$
+    664
+    Add#
+    1
+    Copy
+    Push$
+    665
+    Add#
+    1
+    Copy
+    Push$
+    666
+    Add#
+    1
+    Copy
+    Push$
+    667
+    Add#
+    1
+    Push$
+    668
+    Pull#
+    3
+    PushRem?
+    663
+    Poke?
+    663
+    EndSub
+    GetDevice#
+    Core0
+    Push$
+    670
+    Push$
+    671
+    GetDevice#
+    Core1
+    Push$
+    672
+    Discard
+    GetDevice#
+    Core2
+    Push$
+    673
+    Discard
+    GetDevice#
+    Core3
+    Push$
+    674
+    Discard
+    EndSub
+    4
+    1505
+    275
+    Pull?
+    635
+    PushRem?
+    634
+    Pull#
+    1
+    Copy
+    Add$
+    635
+    Push$
+    635
+    Add$
+    634
+    Push$
+    634
+    Pull$
+    633
+    Subtract#
+    1
+    Copy
+    Push$
+    633
+    Pull#
+    0
+    GotoGThan$
+    636
+    EndSub
+    8004
+    8005
+    8006
+    8007
+    8008
+    8009
+    8003
+    1000
+    500
+    1500
+    2000
+    2500
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    -216
+    0
+    1
+    216
+    0
+    1
+    2
+    24
+    200
+    120
+    0
+    0
+    0
+    0
+    1.25
+    2.5
+}
+pull.await = { }
+
+
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    Motion.GoToXY(0, 0);
+    Looks.Hide();
+    Call Initialize Main Core;
+}
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(Boot)
+{
+    If (coreId == 0)
+    {
+        Call await mountDevice:("Boot");
+        Call pokeExecute:(0);
+    }
+    Forever
+    {
+        Wait Until (List.Length(executeAddresses) > 0);
+        Call await execute:(executeAddresses[1]);
+        List.DeleteItem(executeAddresses, 1);
+    }
+}
+
+WhenBroadcastReceived(StartCores)
+{
+    Call await startCore:;
+}
+
+
+//----- Start as clone ------------------------------------------------------------------------------------------------
+
+Control.WhenIStartAsClone()
+{
+    coreId = ActiveCores;
+    ActiveCores += 1;
+}
+
+
+//----- Custom blocks -------------------------------------------------------------------------------------------------
+
+Define await execute:(string Address) (warp=false)
+{
+    Call clearStack:;
+    execute.return = "false";
+    execute.pointer = Address;
+    Repeat Until (execute.return == "true")
+    {
+        Call await runCommand:("Fetch");
+        Call coreLog:("exe")(Operator.Join(execute.command, Operator.Join("@", execute.pointer)));
+        Call await runCommand:(execute.command);
+    }
+}
+
+Define await getMemRemote:(string RemoteAddress) (warp=false)
+{
+    Call newRequest:("get")(RemoteAddress) (value(NullChar) );
+    Call await waitRequest:(newRequest);
+    getMem = waitRequest;
+}
+
+Define await mountDevice:(string DeviceName) (warp=false)
+{
+    mountDevice.s1 = List.IndexOf(DeviceName, DeviceName);
+    Call createChunk:(DeviceAdress[mountDevice.s1]) [(DeviceSize[mountDevice.s1]) ]((Not ()));
+    Call await pullChunk:(newChunk);
+}
+
+Define await pullChunk:(string Chunk#) (warp=false)
+{
+    sync.start = chunkStart[Chunk#];
+    sync.length = chunkSize[Chunk#];
+    sync.index = chunkIndex[Chunk#];
+    sync.c1 = 0;
+    List.DeleteAll(pull.await);
+    Repeat (sync.length)
+    {
+        Call newRequest:("get")((sync.start + sync.c1)) (value(NullChar) );
+        List.Add(pull.await, newRequest);
+        sync.c1 += 1;
+    }
+    sync.c1 = 0;
+    Repeat (sync.length)
+    {
+        Call await waitRequest:(pull.await[1]);
+        List.DeleteItem(pull.await, 1);
+        List.ReplaceItem(myMemory, (sync.index + sync.c1), waitRequest);
+        sync.c1 += 1;
+    }
+}
+
+Define await runCommand:(string CommandName) (warp=false)
+{
+    runCommand.s1 = List.IndexOf(CommandNames, CommandName);
+    If (Not ((runCommand.s1 == 0)))
+    {
+        Call bufferCommand:(CommandSignals[runCommand.s1]);
+        runCommand.c1 = 0;
+        Repeat (List.Length(bufferCommand))
+        {
+            runCommand.c1 += 1;
+            Call await signal:(bufferCommand[runCommand.c1]);
+        }
+    }
+    Else
+    {
+    }
+}
+
+Define await signal:(string Signal) (warp=false)
+{
+    If (Signal == "Null")
+    {
+        Call pullStack:(NullChar);
+    }
+    Else
+    {
+        If (Signal == "Wait")
+        {
+            Call pushStack:;
+            Control.Wait(execute.currentStack);
+        }
+        Else
+        {
+            If (Signal == "Get")
+            {
+                Call pushStack:;
+                Call getMem:(execute.currentStack);
+                Call pullStack:(getMem);
+            }
+            Else
+            {
+                If (Signal == "Set")
+                {
+                    Call pushStack:;
+                    signal.s1 = execute.currentStack;
+                    Call pushStack:;
+                    Call setMem:(signal.s1)(execute.currentStack);
+                }
+                Else
+                {
+                    If (Signal == "RGet")
+                    {
+                        Call pushStack:;
+                        Call await getMemRemote:(execute.currentStack);
+                        Call pullStack:(getMem);
+                    }
+                    Else
+                    {
+                        If (Signal == "RSet")
+                        {
+                            Call pushStack:;
+                            signal.s1 = execute.currentStack;
+                            Call pushStack:;
+                            Call setMemRemote:(signal.s1)(execute.currentStack);
+                        }
+                        Else
+                        {
+                            If (Signal == "Poke")
+                            {
+                                Call pushStack:;
+                                signal.s1 = execute.currentStack;
+                                Call pushStack:;
+                                Call pokeRemote:(signal.s1)(execute.currentStack);
+                            }
+                            Else
+                            {
+                                If (Signal == "Cmd")
+                                {
+                                    Call pushStack:;
+                                    execute.command = execute.currentStack;
+                                }
+                                Else
+                                {
+                                    If (Signal == "Jump")
+                                    {
+                                        Call pushStack:;
+                                        Call jump:(execute.currentStack);
+                                    }
+                                    Else
+                                    {
+                                        If (Signal == "CJump")
+                                        {
+                                            Call pushStack:;
+                                            signal.s1 = execute.currentStack;
+                                            Call pushStack:;
+                                            If (execute.currentStack == "true")
+                                            {
+                                                Call jump:(signal.s1);
+                                            }
+                                        }
+                                        Else
+                                        {
+                                            If (Signal == "IncPointer")
+                                            {
+                                                Call incPointer:;
+                                            }
+                                            Else
+                                            {
+                                                If (Signal == "GetPointer")
+                                                {
+                                                    Call pullStack:(execute.pointer);
+                                                }
+                                                Else
+                                                {
+                                                    If (Signal == "Clear")
+                                                    {
+                                                        Call clearStack:;
+                                                    }
+                                                    Else
+                                                    {
+                                                        If (Signal == "Push")
+                                                        {
+                                                            Call pushStack:;
+                                                        }
+                                                        Else
+                                                        {
+                                                            If (Signal == "Copy")
+                                                            {
+                                                                Call pushStack:;
+                                                                Call pullStack:(execute.currentStack);
+                                                                Call pullStack:(execute.currentStack);
+                                                            }
+                                                            Else
+                                                            {
+                                                                If (Signal == "Return")
+                                                                {
+                                                                    execute.return = "true";
+                                                                }
+                                                                Else
+                                                                {
+                                                                    If (Signal == "Add")
+                                                                    {
+                                                                        Call pushStack:;
+                                                                        signal.s1 = execute.currentStack;
+                                                                        Call pushStack:;
+                                                                        Call pullStack:((signal.s1 + execute.currentStack));
+                                                                    }
+                                                                    Else
+                                                                    {
+                                                                        If (Signal == "Neg")
+                                                                        {
+                                                                            Call pushStack:;
+                                                                            Call pullStack:((0 - execute.currentStack));
+                                                                        }
+                                                                        Else
+                                                                        {
+                                                                            If (Signal == "Prod")
+                                                                            {
+                                                                                Call pushStack:;
+                                                                                signal.s1 = execute.currentStack;
+                                                                                Call pushStack:;
+                                                                                Call pullStack:((signal.s1 * execute.currentStack));
+                                                                            }
+                                                                            Else
+                                                                            {
+                                                                                If (Signal == "Inv")
+                                                                                {
+                                                                                    Call pushStack:;
+                                                                                    Call pullStack:((1 / execute.currentStack));
+                                                                                }
+                                                                                Else
+                                                                                {
+                                                                                    If (Signal == "Eq")
+                                                                                    {
+                                                                                        Call pushStack:;
+                                                                                        signal.s1 = execute.currentStack;
+                                                                                        Call pushStack:;
+                                                                                        Call pullStack:((execute.currentStack == signal.s1));
+                                                                                    }
+                                                                                    Else
+                                                                                    {
+                                                                                        If (Signal == "NEq")
+                                                                                        {
+                                                                                            Call pushStack:;
+                                                                                            signal.s1 = execute.currentStack;
+                                                                                            Call pushStack:;
+                                                                                            Call pullStack:((Not ((execute.currentStack == signal.s1))));
+                                                                                        }
+                                                                                        Else
+                                                                                        {
+                                                                                            If (Signal == "GThan")
+                                                                                            {
+                                                                                                Call pushStack:;
+                                                                                                signal.s1 = execute.currentStack;
+                                                                                                Call pushStack:;
+                                                                                                Call pullStack:((execute.currentStack > signal.s1));
+                                                                                            }
+                                                                                            Else
+                                                                                            {
+                                                                                                If (Signal == "LThan")
+                                                                                                {
+                                                                                                    Call pushStack:;
+                                                                                                    signal.s1 = execute.currentStack;
+                                                                                                    Call pushStack:;
+                                                                                                    Call pullStack:((execute.currentStack < signal.s1));
+                                                                                                }
+                                                                                                Else
+                                                                                                {
+                                                                                                    If (Signal == "Not")
+                                                                                                    {
+                                                                                                        Call pushStack:;
+                                                                                                        Call pullStack:((Not ((execute.currentStack == "true"))));
+                                                                                                    }
+                                                                                                    Else
+                                                                                                    {
+                                                                                                        If (Signal == "Or")
+                                                                                                        {
+                                                                                                            Call pushStack:;
+                                                                                                            signal.s1 = execute.currentStack;
+                                                                                                            Call pushStack:;
+                                                                                                            Call pullStack:(((signal.s1 == "true") Or (execute.currentStack == "true")));
+                                                                                                        }
+                                                                                                        Else
+                                                                                                        {
+                                                                                                            If (Signal == "And")
+                                                                                                            {
+                                                                                                                Call pushStack:;
+                                                                                                                signal.s1 = execute.currentStack;
+                                                                                                                Call pushStack:;
+                                                                                                                Call pullStack:(((signal.s1 == "true") And (execute.currentStack == "true")));
+                                                                                                            }
+                                                                                                            Else
+                                                                                                            {
+                                                                                                                If (Signal == "Dev")
+                                                                                                                {
+                                                                                                                    Call pushStack:;
+                                                                                                                    signal.s1 = List.IndexOf(DeviceName, execute.currentStack);
+                                                                                                                    Call pullStack:(DeviceSize[signal.s1]);
+                                                                                                                    Call pullStack:(DeviceAdress[signal.s1]);
+                                                                                                                    Call coreLog:("mnt")(Operator.Join(Operator.Join(Operator.Join("Found ", "{"), Operator.Join(execute.currentStack, "} at ")), Operator.Join(Operator.Join(DeviceAdress[signal.s1], " ["), Operator.Join(DeviceSize[signal.s1], "]"))));
+                                                                                                                }
+                                                                                                                Else
+                                                                                                                {
+                                                                                                                    If (Signal == "Mnt")
+                                                                                                                    {
+                                                                                                                        Call pushStack:;
+                                                                                                                        signal.s1 = execute.currentStack;
+                                                                                                                        Call pushStack:;
+                                                                                                                        Call createChunk:(signal.s1) [(execute.currentStack) ]((Not ()));
+                                                                                                                        Call coreLog:("mnt")(Operator.Join(Operator.Join("Mounted ", Operator.Join(signal.s1, " [")), Operator.Join(Operator.Join(execute.currentStack, "] as #"), Operator.Join(newChunk, " (Clone)"))));
+                                                                                                                    }
+                                                                                                                    Else
+                                                                                                                    {
+                                                                                                                        If (Signal == "MntSelf")
+                                                                                                                        {
+                                                                                                                            Call pushStack:;
+                                                                                                                            signal.s1 = execute.currentStack;
+                                                                                                                            Call pushStack:;
+                                                                                                                            Call createChunk:(signal.s1) [(execute.currentStack) ]();
+                                                                                                                            Call coreLog:("mnt")(Operator.Join(Operator.Join("Mounted ", Operator.Join(signal.s1, " [")), Operator.Join(Operator.Join(execute.currentStack, "] as #"), Operator.Join(newChunk, " (Owner)"))));
+                                                                                                                        }
+                                                                                                                        Else
+                                                                                                                        {
+                                                                                                                            If (Signal == "DMnt")
+                                                                                                                            {
+                                                                                                                                Call pushStack:;
+                                                                                                                                Call findChunk:(execute.currentStack);
+                                                                                                                                Call deleteChunk:(findChunk);
+                                                                                                                                Call coreLog:("mnt")(Operator.Join("Dismounted chunk #", findChunk));
+                                                                                                                            }
+                                                                                                                            Else
+                                                                                                                            {
+                                                                                                                                If (Signal == "CID")
+                                                                                                                                {
+                                                                                                                                    Call pullStack:(Operator.Join("Core", coreId));
+                                                                                                                                }
+                                                                                                                                Else
+                                                                                                                                {
+                                                                                                                                    If (Signal == "GDev")
+                                                                                                                                    {
+                                                                                                                                        Call pushStack:;
+                                                                                                                                        Call findChunk:(execute.currentStack);
+                                                                                                                                        Call await pullChunk:(findChunk);
+                                                                                                                                        Call coreLog:("mnt")(Operator.Join("Pulled chunk #", findChunk));
+                                                                                                                                    }
+                                                                                                                                    Else
+                                                                                                                                    {
+                                                                                                                                        If (Signal == "SDev")
+                                                                                                                                        {
+                                                                                                                                            Call pushStack:;
+                                                                                                                                            Call findChunk:(execute.currentStack);
+                                                                                                                                            Call pushChunk:(findChunk);
+                                                                                                                                            Call coreLog:("mnt")(Operator.Join("Pushed chunk #", findChunk));
+                                                                                                                                        }
+                                                                                                                                        Else
+                                                                                                                                        {
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+Define await startCore: (warp=false)
+{
+    Call Initialize Memory;
+    Call Initialize Core Chunk;
+    start.s1 = 0;
+    Forever
+    {
+        Wait Until (Not ((start.s1 == NewRequest)));
+        Call handleRequest:(start.s1);
+        start.s1 += 1;
+    }
+}
+
+Define await waitRequest:(string Id) (warp=false)
+{
+    waitRequest = "";
+    Wait Until (Not ((RequestValue[List.IndexOf(RequestId, Id)] == NullChar)));
+    waitRequest = RequestValue[List.IndexOf(RequestId, Id)];
+    Call deleteRequest:(Id);
+}
+
+Define bufferCommand:(string Signals) (warp=true)
+{
+    bufferCommand.s1 = "";
+    List.DeleteAll(bufferCommand);
+    bufferCommand.c1 = 0;
+    Repeat (Variable.Length(Signals))
+    {
+        bufferCommand.c1 += 1;
+        bufferCommand.s2 = Operator.LetterOf(Signals, bufferCommand.c1);
+        If (bufferCommand.s2 == "|")
+        {
+            List.Add(bufferCommand, bufferCommand.s1);
+            bufferCommand.s1 = "";
+        }
+        Else
+        {
+            bufferCommand.s1 = Operator.Join(bufferCommand.s1, bufferCommand.s2);
+        }
+    }
+    If (Variable.Length(bufferCommand.s1) > 0)
+    {
+        List.Add(bufferCommand, bufferCommand.s1);
+    }
+}
+
+Define clearStack: (warp=true)
+{
+    List.DeleteAll(execute.stack);
+}
+
+Define coreLog:(string Method)(string Message) (warp=true)
+{
+    If (LogEnabled == "true")
+    {
+        List.Add(Log, Operator.Join(Operator.Join(Operator.Join("Core", coreId), Operator.Join(" [", Method)), Operator.Join(Operator.Join("]: "", Message), """)));
+    }
+}
+
+Define createChunk:(string ChunkStart) [(string ChunkSize) ](bool IsClone) (warp=true)
+{
+    List.Add(chunkStart, ChunkStart);
+    List.Add(chunkSize, ChunkSize);
+    List.Add(chunkIsClone, (IsClone == "true"));
+    Call placeChunk:(ChunkSize);
+    List.Add(chunkIndex, placeChunk);
+    newChunk = List.Length(chunkIndex);
+}
+
+Define deleteChunk:(string Chunk#) (warp=true)
+{
+    List.DeleteItem(chunkStart, Chunk#);
+    List.DeleteItem(chunkSize, Chunk#);
+    List.DeleteItem(chunkIsClone, Chunk#);
+    List.DeleteItem(chunkIndex, Chunk#);
+}
+
+Define deleteRequest:(string Id) (warp=true)
+{
+    getRequest.s1 = List.IndexOf(RequestId, Id);
+    List.DeleteItem(RequestId, getRequest.s1);
+    List.DeleteItem(RequestAction, getRequest.s1);
+    List.DeleteItem(RequestAddr, getRequest.s1);
+    List.DeleteItem(RequestValue, getRequest.s1);
+}
+
+Define findChunk:(string Address) (warp=true)
+{
+    findChunk.c1 = 1;
+    findChunk = 0;
+    Repeat Until ((findChunk.c1 > List.Length(chunkIndex)) Or (Not ((findChunk == 0))))
+    {
+        If ((Not ((Address < chunkStart[findChunk.c1]))) And (Address < (chunkStart[findChunk.c1] + chunkSize[findChunk.c1])))
+        {
+            findChunk = findChunk.c1;
+        }
+        Else
+        {
+            findChunk.c1 += 1;
+        }
+    }
+}
+
+Define findChunkIndex:(string StartIndex)(string EndIndex) (warp=true)
+{
+    findChunk.c1 = 1;
+    findChunk = 0;
+    Repeat Until ((findChunk.c1 > List.Length(chunkIndex)) Or (Not ((findChunk == 0))))
+    {
+        If ((EndIndex < chunkIndex[findChunk.c1]) Or (StartIndex > ((chunkIndex[findChunk.c1] + chunkSize[findChunk.c1]) - 1)))
+        {
+            findChunk.c1 += 1;
+        }
+        Else
+        {
+            findChunk = findChunk.c1;
+        }
+    }
+}
+
+Define getIndex:(string Address) (warp=true)
+{
+    getIndex = 0;
+    Call findChunk:(Address);
+    If (Not ((findChunk == 0)))
+    {
+        getIndex = (chunkIndex[findChunk] + (Address - chunkStart[findChunk]));
+    }
+}
+
+Define getMem:(string Address) (warp=true)
+{
+    Call getIndex:(Address);
+    getMem = myMemory[getIndex];
+}
+
+Define handleRequest:(string Id) (warp=true)
+{
+    getRequest.s1 = List.IndexOf(RequestId, Id);
+    handleRequest.action = RequestAction[getRequest.s1];
+    handleRequest.addr = RequestAddr[getRequest.s1];
+    handleRequest = RequestValue[getRequest.s1];
+    Call findChunk:(handleRequest.addr);
+    If ((Not ((findChunk == 0))) And (chunkIsClone[findChunk] == "false"))
+    {
+        If (handleRequest.action == "get")
+        {
+            Call getMem:(handleRequest.addr);
+            handleRequest = getMem;
+        }
+        Else
+        {
+            If (handleRequest.action == "set")
+            {
+                Call setMem:(handleRequest.addr)(handleRequest);
+                Call deleteRequest:(Id);
+            }
+            Else
+            {
+                If (handleRequest.action == "poke")
+                {
+                    Call pokeExecute:(handleRequest);
+                    Call deleteRequest:(Id);
+                }
+                Else
+                {
+                }
+            }
+        }
+        getRequest.s1 = List.IndexOf(RequestId, Id);
+        List.ReplaceItem(RequestValue, getRequest.s1, handleRequest);
+    }
+}
+
+Define incPointer: (warp=true)
+{
+    execute.pointer += 1;
+}
+
+Define Initialize Core Chunk (warp=true)
+{
+    mountDevice.s1 = List.IndexOf(DeviceName, Operator.Join("Core", coreId));
+    coreAddress = DeviceAdress[mountDevice.s1];
+    Call createChunk:(coreAddress) [(DeviceSize[mountDevice.s1]) ]();
+}
+
+Define Initialize Main Core (warp=true)
+{
+    coreId = 0;
+    ActiveCores = 1;
+}
+
+Define Initialize Memory (warp=true)
+{
+    List.DeleteAll(chunkStart);
+    List.DeleteAll(chunkSize);
+    List.DeleteAll(chunkIndex);
+    List.DeleteAll(chunkIsClone);
+    List.DeleteAll(myMemory);
+    List.DeleteAll(executeAddresses);
+}
+
+Define jump:(string Pointer) (warp=true)
+{
+    execute.pointer = Pointer;
+}
+
+Define newRequest:(string Action)(string Address) (value(string Value) ) (warp=true)
+{
+    newRequest = NewRequest;
+    NewRequest += 1;
+    List.Add(RequestId, newRequest);
+    List.Add(RequestAction, Action);
+    List.Add(RequestAddr, Address);
+    List.Add(RequestValue, Value);
+}
+
+Define placeChunk:(string Size) (warp=true)
+{
+    placeChunk = 1;
+    findChunk = "";
+    Repeat Until (findChunk == 0)
+    {
+        Call findChunkIndex:(placeChunk)(((placeChunk + Size) - 1));
+        If (Not ((findChunk == 0)))
+        {
+            placeChunk = (chunkIndex[findChunk] + chunkSize[findChunk]);
+        }
+    }
+    Repeat ((((placeChunk + Size) - 1) - List.Length(myMemory)))
+    {
+        List.Add(myMemory, "");
+    }
+}
+
+Define pokeExecute:(string Address) (warp=true)
+{
+    List.Add(executeAddresses, Address);
+}
+
+Define pokeRemote:(string RemoteAddress)(string Parameter) (warp=true)
+{
+    Call newRequest:("poke")(RemoteAddress) (value(Parameter) );
+}
+
+Define pullStack:(string Value) (warp=true)
+{
+    List.Add(execute.stack, Value);
+}
+
+Define pushChunk:(string Chunk#) (warp=true)
+{
+    sync.start = chunkStart[Chunk#];
+    sync.length = chunkSize[Chunk#];
+    sync.index = chunkIndex[Chunk#];
+    sync.c1 = 0;
+    Repeat (sync.length)
+    {
+        Call newRequest:("set")((sync.start + sync.c1)) (value(myMemory[(sync.index + sync.c1)]) );
+        sync.c1 += 1;
+    }
+}
+
+Define pushStack: (warp=true)
+{
+    execute.currentStack = execute.stack[List.Length(execute.stack)];
+    List.DeleteItem(execute.stack, List.Length(execute.stack));
+}
+
+Define setMem:(string Address)(string Value) (warp=true)
+{
+    Call getIndex:(Address);
+    List.ReplaceItem(myMemory, getIndex, Value);
+}
+
+Define setMemRemote:(string RemoteAddress)(string Value) (warp=true)
+{
+    Call newRequest:("set")(RemoteAddress) (value(Value) );
+}
+
+
+//----- Orphaned blocks -----------------------------------------------------------------------------------------------
+
+ChunkName
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+Icon.png
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+pop.wav

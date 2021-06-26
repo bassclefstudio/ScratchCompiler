@@ -1,0 +1,3990 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+deviceAddress = 0
+deviceId = 1
+deviceName = Boot
+deviceSize = 1000
+getDevice = 
+getRequest.s1 = 0
+handleRequest = 
+handleRequest.action = set
+handleRequest.addr = 943
+import.c1 = 675
+json.get = "GetPointer|IncPointer|Get|SDev"
+json.get.c1 = 1
+json.read.c1 = 675
+json.set.c1 = 1
+json.write = {"Hello!":{"This Is?":"Mop"},"World":"A pretty big place"}
+json.write.c1 = 2
+start.s1 = 1946
+string.checkInBraces = 1
+string.checkInBraces.c1 = 5030
+string.checkInBraces.s1 = 0
+string.getInBraces = "Sub$","562","Sub$","611","PushDevice#","Boot","Sub$","496","Pull#","270","Push$","635","Pull$","672","Push$","634","Pull#","278","Subtract#","270","Push$","633","Sub$","636","Pull$","672","PokeIn?","672","Pull$","4001","Pull$","4009","GotoGThan$","134","Pull$","4001","Pull$","4009","Multiply#","-1","GotoLThan$","140","Pull$","4002","Multiply$","4006","Add$","4001","Push$","4001","Pull$","4004","Pull$","4009","GotoGThan$","152","Pull$","4004","Pull$","4009","Multiply#","-1","GotoLThan$","146","Pull#","Down","PushRem?","669","PullRem?","669","Pull#","true","GotoEq$","152","Pull#","Up","PushRem?","669","PullRem?","669","Pull#","true","GotoEq$","146","Pull$","4005","Multiply$","4006","Add$","4004","Push$","4004","Pull$","4013","Pull$","4009","GotoGThan$","262","Pull$","4013","Pull$","4009","Multiply#","-1","GotoLThan$","262","Pull$","4012","Pull$","4008","GotoGThan$","210","Pull$","4012","Pull$","4008","Multiply#","-1","GotoLThan$","158","Pull$","4013","Add$","4015","Push$","4013","Pull$","4012","Add$","4014","Push$","4012","Goto$","28","Pull#","-1","Push$","4002","Goto$","42","Pull#","1","Push$","4002","Goto$","42","Pull#","1","Push$","4005","Goto$","84","Pull#","-1","Push$","4005","Goto$","84","Pull$","4001","Multiply#","-1","Add$","4013","Pull$","4007","GotoGThan$","188","Pull$","4001","Multiply#","-1","Add$","4013","Pull$","4007","Multiply#","-1","GotoLThan$","188","Pull$","4014","Multiply#","-1","Push$","4014","Goto$","120","Pull$","4011","Add#","1","Push$","4011","Pull#","0","Push$","4012","Pull#","0","Push$","4013","Pull$","4014","Multiply#","-1","Push$","4014","Goto$","120","Pull$","4004","Multiply#","-1","Add$","4013","Pull$","4007","GotoGThan$","240","Pull$","4004","Multiply#","-1","Add$","4013","Pull$","4007","Multiply#","-1","GotoLThan$","240","Pull$","4014","Multiply#","-1","Push$","4014","Goto$","120","Pull$","4010","Add#","1","Push$","4010","Pull#","0","Push$","4012","Pull#","0","Push$","4013","Pull$","4014","Multiply#","-1","Push$","4014","Goto$","120","Pull$","4015","Multiply#","-1","Push$","4015","Goto$","106","MountDevice#","Boot","MountDevice#","Display","PullDevice#","Boot","Goto$","278","Sub$","490","PullChunk$","4000","Pull#","0","Push?","663","Pull$","4000","Push?","664","Pull$","4001","Add$","4007","Push?","665","Pull#","8","Push?","667","Pull#","0","Push?","666","Pull#","0","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4001","Subtract$","4007","Push?","665","Pull#","5","Push?","666","Pull#","1","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4003","Push?","664","Pull$","4004","Add$","4007","Push?","665","Pull#","8","Push?","667","Pull#","0","Push?","666","Pull#","2","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4004","Subtract$","4007","Push?","665","Pull#","6","Push?","666","Pull#","3","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4009","Add#","48","Push?","665","Pull#","-8","Push?","664","Pull#","0","Push?","666","Pull#","4","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4010","Multiply#","-8","Subtract#","8","Push?","664","Pull#","5","Push?","666","Pull#","5","Push?","668","PushDevice#","Display","Poke?","663","Pull#","8","Push?","664","Pull#","0","Push?","666","Pull#","6","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4011","Multiply#","8","Add#","8","Push?","664","Pull#","6","Push?","666","Pull#","7","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4012","Push?","664","Pull$","4013","Push?","665","Pull#","0","Push?","666","Pull#","8","Push?","668","PushDevice#","Display","Poke?","663","Pull#","1","Push?","666","Pull#","9","Push?","668","Pull#","1","Push?","663","PushDevice#","Display","Poke?","663","Goto$","280","MountChunk#$","16","4000","PullChunk$","4000","EndSub","MountSelfChunk#$","16","4000","Pull#","-216","Push$","4000","Pull#","0","Push$","4001","Pull#","1","Push$","4002","Pull#","216","Push$","4003","Pull#","0","Push$","4004","Pull#","1","Push$","4005","Pull#","2","Push$","4006","Pull#","24","Push$","4007","Pull#","200","Push$","4008","Pull#","120","Push$","4009","Pull#","0","Copy","Push$","4010","Push$","4011","Pull#","0","Copy","Push$","4012","Push$","4013","Pull#","1.25","Push$","4014","Pull#","2.5","Push$","4015","EndSub","Sub$","573","Sub$","567","EndSub","GetDevice#","Keyboard","Push$","669","Discard","EndSub","GetDevice#","Display","Push$","663","Discard","Pull$","663","Add#","1","Copy","Push$","664","Add#","1","Copy","Push$","665","Add#","1","Copy","Push$","666","Add#","1","Copy","Push$","667","Add#","1","Push$","668","Pull#","3","PushRem?","663","Poke?","663","EndSub","GetDevice#","Core0","Push$","670","Push$","671","GetDevice#","Core1","Push$","672","Discard","GetDevice#","Core2","Push$","673","Discard","GetDevice#","Core3","Push$","674","Discard","EndSub","","","","Pull?","635","PushRem?","634","Pull#","1","Copy","Add$","635","Push$","635","Add$","634","Push$","634","Pull$","633","Subtract#","1","Copy","Push$","633","Pull#","0","GotoGThan$","636","EndSub","","","","","","","","","","","",""
+string.getInBraces.c1 = 5028
+string.getIndicesOf.c1 = 5028
+string.getIndicesOf.c2 = 5028
+string.getIndicesOf.s1 = 
+string.getIndicesOf.s3 = 0
+string.getIndicesOf.s4 = 0
+string.join = "Hello!":{"This Is?":"Mop"},"World":"A pretty big place"
+string.join.c1 = 2
+string.split.c1 = 674
+string.split.c2 = 5028
+string.split.doesLastHaveChar = false
+string.split.s1 = ""
+string.toData = 
+string.toData.c1 = 3
+string.toString = "World"
+string.toString.c1 = 6
+
+
+//----- Lists ---------------------------------------------------------------------------------------------------------
+
+bootVolume = { 
+    Sub$
+    562
+    Sub$
+    611
+    PushDevice#
+    Boot
+    Sub$
+    496
+    Pull#
+    270
+    Push$
+    635
+    Pull$
+    672
+    Push$
+    634
+    Pull#
+    278
+    Subtract#
+    270
+    Push$
+    633
+    Sub$
+    636
+    Pull$
+    672
+    PokeIn?
+    672
+    Pull$
+    4001
+    Pull$
+    4009
+    GotoGThan$
+    134
+    Pull$
+    4001
+    Pull$
+    4009
+    Multiply#
+    -1
+    GotoLThan$
+    140
+    Pull$
+    4002
+    Multiply$
+    4006
+    Add$
+    4001
+    Push$
+    4001
+    Pull$
+    4004
+    Pull$
+    4009
+    GotoGThan$
+    152
+    Pull$
+    4004
+    Pull$
+    4009
+    Multiply#
+    -1
+    GotoLThan$
+    146
+    Pull#
+    Down
+    PushRem?
+    669
+    PullRem?
+    669
+    Pull#
+    true
+    GotoEq$
+    152
+    Pull#
+    Up
+    PushRem?
+    669
+    PullRem?
+    669
+    Pull#
+    true
+    GotoEq$
+    146
+    Pull$
+    4005
+    Multiply$
+    4006
+    Add$
+    4004
+    Push$
+    4004
+    Pull$
+    4013
+    Pull$
+    4009
+    GotoGThan$
+    262
+    Pull$
+    4013
+    Pull$
+    4009
+    Multiply#
+    -1
+    GotoLThan$
+    262
+    Pull$
+    4012
+    Pull$
+    4008
+    GotoGThan$
+    210
+    Pull$
+    4012
+    Pull$
+    4008
+    Multiply#
+    -1
+    GotoLThan$
+    158
+    Pull$
+    4013
+    Add$
+    4015
+    Push$
+    4013
+    Pull$
+    4012
+    Add$
+    4014
+    Push$
+    4012
+    Goto$
+    28
+    Pull#
+    -1
+    Push$
+    4002
+    Goto$
+    42
+    Pull#
+    1
+    Push$
+    4002
+    Goto$
+    42
+    Pull#
+    1
+    Push$
+    4005
+    Goto$
+    84
+    Pull#
+    -1
+    Push$
+    4005
+    Goto$
+    84
+    Pull$
+    4001
+    Multiply#
+    -1
+    Add$
+    4013
+    Pull$
+    4007
+    GotoGThan$
+    188
+    Pull$
+    4001
+    Multiply#
+    -1
+    Add$
+    4013
+    Pull$
+    4007
+    Multiply#
+    -1
+    GotoLThan$
+    188
+    Pull$
+    4014
+    Multiply#
+    -1
+    Push$
+    4014
+    Goto$
+    120
+    Pull$
+    4011
+    Add#
+    1
+    Push$
+    4011
+    Pull#
+    0
+    Push$
+    4012
+    Pull#
+    0
+    Push$
+    4013
+    Pull$
+    4014
+    Multiply#
+    -1
+    Push$
+    4014
+    Goto$
+    120
+    Pull$
+    4004
+    Multiply#
+    -1
+    Add$
+    4013
+    Pull$
+    4007
+    GotoGThan$
+    240
+    Pull$
+    4004
+    Multiply#
+    -1
+    Add$
+    4013
+    Pull$
+    4007
+    Multiply#
+    -1
+    GotoLThan$
+    240
+    Pull$
+    4014
+    Multiply#
+    -1
+    Push$
+    4014
+    Goto$
+    120
+    Pull$
+    4010
+    Add#
+    1
+    Push$
+    4010
+    Pull#
+    0
+    Push$
+    4012
+    Pull#
+    0
+    Push$
+    4013
+    Pull$
+    4014
+    Multiply#
+    -1
+    Push$
+    4014
+    Goto$
+    120
+    Pull$
+    4015
+    Multiply#
+    -1
+    Push$
+    4015
+    Goto$
+    106
+    MountDevice#
+    Boot
+    MountDevice#
+    Display
+    PullDevice#
+    Boot
+    Goto$
+    278
+    Sub$
+    490
+    PullChunk$
+    4000
+    Pull#
+    0
+    Push?
+    663
+    Pull$
+    4000
+    Push?
+    664
+    Pull$
+    4001
+    Add$
+    4007
+    Push?
+    665
+    Pull#
+    8
+    Push?
+    667
+    Pull#
+    0
+    Push?
+    666
+    Pull#
+    0
+    Push?
+    668
+    PushDevice#
+    Display
+    Poke?
+    663
+    Pull$
+    4001
+    Subtract$
+    4007
+    Push?
+    665
+    Pull#
+    5
+    Push?
+    666
+    Pull#
+    1
+    Push?
+    668
+    PushDevice#
+    Display
+    Poke?
+    663
+    Pull$
+    4003
+    Push?
+    664
+    Pull$
+    4004
+    Add$
+    4007
+    Push?
+    665
+    Pull#
+    8
+    Push?
+    667
+    Pull#
+    0
+    Push?
+    666
+    Pull#
+    2
+    Push?
+    668
+    PushDevice#
+    Display
+    Poke?
+    663
+    Pull$
+    4004
+    Subtract$
+    4007
+    Push?
+    665
+    Pull#
+    6
+    Push?
+    666
+    Pull#
+    3
+    Push?
+    668
+    PushDevice#
+    Display
+    Poke?
+    663
+    Pull$
+    4009
+    Add#
+    48
+    Push?
+    665
+    Pull#
+    -8
+    Push?
+    664
+    Pull#
+    0
+    Push?
+    666
+    Pull#
+    4
+    Push?
+    668
+    PushDevice#
+    Display
+    Poke?
+    663
+    Pull$
+    4010
+    Multiply#
+    -8
+    Subtract#
+    8
+    Push?
+    664
+    Pull#
+    5
+    Push?
+    666
+    Pull#
+    5
+    Push?
+    668
+    PushDevice#
+    Display
+    Poke?
+    663
+    Pull#
+    8
+    Push?
+    664
+    Pull#
+    0
+    Push?
+    666
+    Pull#
+    6
+    Push?
+    668
+    PushDevice#
+    Display
+    Poke?
+    663
+    Pull$
+    4011
+    Multiply#
+    8
+    Add#
+    8
+    Push?
+    664
+    Pull#
+    6
+    Push?
+    666
+    Pull#
+    7
+    Push?
+    668
+    PushDevice#
+    Display
+    Poke?
+    663
+    Pull$
+    4012
+    Push?
+    664
+    Pull$
+    4013
+    Push?
+    665
+    Pull#
+    0
+    Push?
+    666
+    Pull#
+    8
+    Push?
+    668
+    PushDevice#
+    Display
+    Poke?
+    663
+    Pull#
+    1
+    Push?
+    666
+    Pull#
+    9
+    Push?
+    668
+    Pull#
+    1
+    Push?
+    663
+    PushDevice#
+    Display
+    Poke?
+    663
+    Goto$
+    280
+    MountChunk#$
+    16
+    4000
+    PullChunk$
+    4000
+    EndSub
+    MountSelfChunk#$
+    16
+    4000
+    Pull#
+    -216
+    Push$
+    4000
+    Pull#
+    0
+    Push$
+    4001
+    Pull#
+    1
+    Push$
+    4002
+    Pull#
+    216
+    Push$
+    4003
+    Pull#
+    0
+    Push$
+    4004
+    Pull#
+    1
+    Push$
+    4005
+    Pull#
+    2
+    Push$
+    4006
+    Pull#
+    24
+    Push$
+    4007
+    Pull#
+    200
+    Push$
+    4008
+    Pull#
+    120
+    Push$
+    4009
+    Pull#
+    0
+    Copy
+    Push$
+    4010
+    Push$
+    4011
+    Pull#
+    0
+    Copy
+    Push$
+    4012
+    Push$
+    4013
+    Pull#
+    1.25
+    Push$
+    4014
+    Pull#
+    2.5
+    Push$
+    4015
+    EndSub
+    Sub$
+    573
+    Sub$
+    567
+    EndSub
+    GetDevice#
+    Keyboard
+    Push$
+    669
+    Discard
+    EndSub
+    GetDevice#
+    Display
+    Push$
+    663
+    Discard
+    Pull$
+    663
+    Add#
+    1
+    Copy
+    Push$
+    664
+    Add#
+    1
+    Copy
+    Push$
+    665
+    Add#
+    1
+    Copy
+    Push$
+    666
+    Add#
+    1
+    Copy
+    Push$
+    667
+    Add#
+    1
+    Push$
+    668
+    Pull#
+    3
+    PushRem?
+    663
+    Poke?
+    663
+    EndSub
+    GetDevice#
+    Core0
+    Push$
+    670
+    Push$
+    671
+    GetDevice#
+    Core1
+    Push$
+    672
+    Discard
+    GetDevice#
+    Core2
+    Push$
+    673
+    Discard
+    GetDevice#
+    Core3
+    Push$
+    674
+    Discard
+    EndSub
+    
+    
+    
+    Pull?
+    635
+    PushRem?
+    634
+    Pull#
+    1
+    Copy
+    Add$
+    635
+    Push$
+    635
+    Add$
+    634
+    Push$
+    634
+    Pull$
+    633
+    Subtract#
+    1
+    Copy
+    Push$
+    633
+    Pull#
+    0
+    GotoGThan$
+    636
+    EndSub
+    8004
+    8005
+    8006
+    8007
+    8008
+    8009
+    8003
+    1000
+    500
+    1500
+    2000
+    2500
+}
+import.keys = { }
+import.values = { 
+    {"Name":"Fetch","Signals":"GetPointer|IncPointer|Get|Cmd"}
+    {"Name":"Clear","Signals":"Clear"}
+    {"Name":"Discard","Signals":"Push"}
+    {"Name":"Copy","Signals":"Copy"}
+    {"Name":"Return","Signals":"Return"}
+    {"Name":"Wait#","Signals":"GetPointer|IncPointer|Get|Wait"}
+    {"Name":"Goto$","Signals":"GetPointer|Get|Jump"}
+    {"Name":"Sub$","Signals":"GetPointer|GetPointer|Get|Jump"}
+    {"Name":"EndSub","Signals":"Jump|IncPointer"}
+    {"Name":"Push$","Signals":"GetPointer|IncPointer|Get|Set"}
+    {"Name":"Push?","Signals":"GetPointer|IncPointer|Get|Get|Set"}
+    {"Name":"Pull$","Signals":"GetPointer|IncPointer|Get|Get"}
+    {"Name":"Pull?","Signals":"GetPointer|IncPointer|Get|Get|Get"}
+    {"Name":"Pull#","Signals":"GetPointer|IncPointer|Get"}
+    {"Name":"PushRem$","Signals":"GetPointer|IncPointer|Get|RSet"}
+    {"Name":"PushRem?","Signals":"GetPointer|IncPointer|Get|Get|RSet"}
+    {"Name":"PullRem$","Signals":"GetPointer|IncPointer|Get|RGet"}
+    {"Name":"PullRem?","Signals":"GetPointer|IncPointer|Get|Get|RGet"}
+    {"Name":"Poke$","Signals":"Null|GetPointer|IncPointer|Get|Poke"}
+    {"Name":"Poke?","Signals":"Null|GetPointer|IncPointer|Get|Get|Poke"}
+    {"Name":"PokeIn$","Signals":"GetPointer|IncPointer|Get|Poke"}
+    {"Name":"PokeIn?","Signals":"GetPointer|IncPointer|Get|Get|Poke"}
+    {"Name":"Add#","Signals":"GetPointer|IncPointer|Get|Add"}
+    {"Name":"Add$","Signals":"GetPointer|IncPointer|Get|Get|Add"}
+    {"Name":"Subtract#","Signals":"GetPointer|IncPointer|Get|Neg|Add"}
+    {"Name":"Subtract$","Signals":"GetPointer|IncPointer|Get|Get|Neg|Add"}
+    {"Name":"Multiply#","Signals":"GetPointer|IncPointer|Get|Prod"}
+    {"Name":"Multiply$","Signals":"GetPointer|IncPointer|Get|Get|Prod"}
+    {"Name":"Divide#","Signals":"GetPointer|IncPointer|Get|Inv|Prod"}
+    {"Name":"Divide$","Signals":"GetPointer|IncPointer|Get|Get|Inv|Prod"}
+    {"Name":"GotoEq$","Signals":"Eq|GetPointer|IncPointer|Get|CJump"}
+    {"Name":"GotoGThan$","Signals":"GThan|GetPointer|IncPointer|Get|CJump"}
+    {"Name":"GotoLThan$","Signals":"LThan|GetPointer|IncPointer|Get|CJump"}
+    {"Name":"GotoTrue$","Signals":"GetPointer|IncPointer|Get|CJump"}
+    {"Name":"GetDevice#","Signals":"GetPointer|IncPointer|Get|Dev"}
+    {"Name":"MountDevice#","Signals":"GetPointer|IncPointer|Get|Dev|Mnt"}
+    {"Name":"MountChunk#$","Signals":"GetPointer|IncPointer|Get|GetPointer|IncPointer|Get|Mnt"}
+    {"Name":"MountSelfChunk#$","Signals":"GetPointer|IncPointer|Get|GetPointer|IncPointer|Get|MntSelf"}
+    {"Name":"DismountDevice#","Signals":"GetPointer|IncPointer|Get|Dev|DMnt|Push"}
+    {"Name":"DismountChunk$","Signals":"GetPointer|IncPointer|Get|DMnt"}
+    {"Name":"PullDevice#","Signals":"GetPointer|IncPointer|Get|Dev|GDev|Push"}
+    {"Name":"PullChunk$","Signals":"GetPointer|IncPointer|Get|GDev"}
+    {"Name":"PushDevice#","Signals":"GetPointer|IncPointer|Get|Dev|SDev|Push"}
+    {"Name":"PushChunk$","Signals":"GetPointer|IncPointer|Get|SDev"}
+}
+json.keys = { 
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+    10
+    11
+    12
+    13
+    14
+    15
+    16
+    17
+    18
+    19
+    20
+    21
+    22
+    23
+    24
+    25
+    26
+    27
+    28
+    29
+    30
+    31
+    32
+    33
+    34
+    35
+    36
+    37
+    38
+    39
+    40
+    41
+    42
+    43
+    44
+    45
+    46
+    47
+    48
+    49
+    50
+    51
+    52
+    53
+    54
+    55
+    56
+    57
+    58
+    59
+    60
+    61
+    62
+    63
+    64
+    65
+    66
+    67
+    68
+    69
+    70
+    71
+    72
+    73
+    74
+    75
+    76
+    77
+    78
+    79
+    80
+    81
+    82
+    83
+    84
+    85
+    86
+    87
+    88
+    89
+    90
+    91
+    92
+    93
+    94
+    95
+    96
+    97
+    98
+    99
+    100
+    101
+    102
+    103
+    104
+    105
+    106
+    107
+    108
+    109
+    110
+    111
+    112
+    113
+    114
+    115
+    116
+    117
+    118
+    119
+    120
+    121
+    122
+    123
+    124
+    125
+    126
+    127
+    128
+    129
+    130
+    131
+    132
+    133
+    134
+    135
+    136
+    137
+    138
+    139
+    140
+    141
+    142
+    143
+    144
+    145
+    146
+    147
+    148
+    149
+    150
+    151
+    152
+    153
+    154
+    155
+    156
+    157
+    158
+    159
+    160
+    161
+    162
+    163
+    164
+    165
+    166
+    167
+    168
+    169
+    170
+    171
+    172
+    173
+    174
+    175
+    176
+    177
+    178
+    179
+    180
+    181
+    182
+    183
+    184
+    185
+    186
+    187
+    188
+    189
+    190
+    191
+    192
+    193
+    194
+    195
+    196
+    197
+    198
+    199
+    200
+    201
+    202
+    203
+    204
+    205
+    206
+    207
+    208
+    209
+    210
+    211
+    212
+    213
+    214
+    215
+    216
+    217
+    218
+    219
+    220
+    221
+    222
+    223
+    224
+    225
+    226
+    227
+    228
+    229
+    230
+    231
+    232
+    233
+    234
+    235
+    236
+    237
+    238
+    239
+    240
+    241
+    242
+    243
+    244
+    245
+    246
+    247
+    248
+    249
+    250
+    251
+    252
+    253
+    254
+    255
+    256
+    257
+    258
+    259
+    260
+    261
+    262
+    263
+    264
+    265
+    266
+    267
+    268
+    269
+    270
+    271
+    272
+    273
+    274
+    275
+    276
+    277
+    278
+    279
+    280
+    281
+    282
+    283
+    284
+    285
+    286
+    287
+    288
+    289
+    290
+    291
+    292
+    293
+    294
+    295
+    296
+    297
+    298
+    299
+    300
+    301
+    302
+    303
+    304
+    305
+    306
+    307
+    308
+    309
+    310
+    311
+    312
+    313
+    314
+    315
+    316
+    317
+    318
+    319
+    320
+    321
+    322
+    323
+    324
+    325
+    326
+    327
+    328
+    329
+    330
+    331
+    332
+    333
+    334
+    335
+    336
+    337
+    338
+    339
+    340
+    341
+    342
+    343
+    344
+    345
+    346
+    347
+    348
+    349
+    350
+    351
+    352
+    353
+    354
+    355
+    356
+    357
+    358
+    359
+    360
+    361
+    362
+    363
+    364
+    365
+    366
+    367
+    368
+    369
+    370
+    371
+    372
+    373
+    374
+    375
+    376
+    377
+    378
+    379
+    380
+    381
+    382
+    383
+    384
+    385
+    386
+    387
+    388
+    389
+    390
+    391
+    392
+    393
+    394
+    395
+    396
+    397
+    398
+    399
+    400
+    401
+    402
+    403
+    404
+    405
+    406
+    407
+    408
+    409
+    410
+    411
+    412
+    413
+    414
+    415
+    416
+    417
+    418
+    419
+    420
+    421
+    422
+    423
+    424
+    425
+    426
+    427
+    428
+    429
+    430
+    431
+    432
+    433
+    434
+    435
+    436
+    437
+    438
+    439
+    440
+    441
+    442
+    443
+    444
+    445
+    446
+    447
+    448
+    449
+    450
+    451
+    452
+    453
+    454
+    455
+    456
+    457
+    458
+    459
+    460
+    461
+    462
+    463
+    464
+    465
+    466
+    467
+    468
+    469
+    470
+    471
+    472
+    473
+    474
+    475
+    476
+    477
+    478
+    479
+    480
+    481
+    482
+    483
+    484
+    485
+    486
+    487
+    488
+    489
+    490
+    491
+    492
+    493
+    494
+    495
+    496
+    497
+    498
+    499
+    500
+    501
+    502
+    503
+    504
+    505
+    506
+    507
+    508
+    509
+    510
+    511
+    512
+    513
+    514
+    515
+    516
+    517
+    518
+    519
+    520
+    521
+    522
+    523
+    524
+    525
+    526
+    527
+    528
+    529
+    530
+    531
+    532
+    533
+    534
+    535
+    536
+    537
+    538
+    539
+    540
+    541
+    542
+    543
+    544
+    545
+    546
+    547
+    548
+    549
+    550
+    551
+    552
+    553
+    554
+    555
+    556
+    557
+    558
+    559
+    560
+    561
+    562
+    563
+    564
+    565
+    566
+    567
+    568
+    569
+    570
+    571
+    572
+    573
+    574
+    575
+    576
+    577
+    578
+    579
+    580
+    581
+    582
+    583
+    584
+    585
+    586
+    587
+    588
+    589
+    590
+    591
+    592
+    593
+    594
+    595
+    596
+    597
+    598
+    599
+    600
+    601
+    602
+    603
+    604
+    605
+    606
+    607
+    608
+    609
+    610
+    611
+    612
+    613
+    614
+    615
+    616
+    617
+    618
+    619
+    620
+    621
+    622
+    623
+    624
+    625
+    626
+    627
+    628
+    629
+    630
+    631
+    632
+    633
+    634
+    635
+    636
+    637
+    638
+    639
+    640
+    641
+    642
+    643
+    644
+    645
+    646
+    647
+    648
+    649
+    650
+    651
+    652
+    653
+    654
+    655
+    656
+    657
+    658
+    659
+    660
+    661
+    662
+    663
+    664
+    665
+    666
+    667
+    668
+    669
+    670
+    671
+    672
+    673
+    674
+    675
+}
+json.levels = { 
+    {"Name":"PushChunk$","Signals":"GetPointer|IncPointer|Get|SDev"}
+}
+json.path = { 
+    Signals
+}
+json.values = { 
+    "Sub$"
+    "562"
+    "Sub$"
+    "611"
+    "PushDevice#"
+    "Boot"
+    "Sub$"
+    "496"
+    "Pull#"
+    "270"
+    "Push$"
+    "635"
+    "Pull$"
+    "672"
+    "Push$"
+    "634"
+    "Pull#"
+    "278"
+    "Subtract#"
+    "270"
+    "Push$"
+    "633"
+    "Sub$"
+    "636"
+    "Pull$"
+    "672"
+    "PokeIn?"
+    "672"
+    "Pull$"
+    "4001"
+    "Pull$"
+    "4009"
+    "GotoGThan$"
+    "134"
+    "Pull$"
+    "4001"
+    "Pull$"
+    "4009"
+    "Multiply#"
+    "-1"
+    "GotoLThan$"
+    "140"
+    "Pull$"
+    "4002"
+    "Multiply$"
+    "4006"
+    "Add$"
+    "4001"
+    "Push$"
+    "4001"
+    "Pull$"
+    "4004"
+    "Pull$"
+    "4009"
+    "GotoGThan$"
+    "152"
+    "Pull$"
+    "4004"
+    "Pull$"
+    "4009"
+    "Multiply#"
+    "-1"
+    "GotoLThan$"
+    "146"
+    "Pull#"
+    "Down"
+    "PushRem?"
+    "669"
+    "PullRem?"
+    "669"
+    "Pull#"
+    "true"
+    "GotoEq$"
+    "152"
+    "Pull#"
+    "Up"
+    "PushRem?"
+    "669"
+    "PullRem?"
+    "669"
+    "Pull#"
+    "true"
+    "GotoEq$"
+    "146"
+    "Pull$"
+    "4005"
+    "Multiply$"
+    "4006"
+    "Add$"
+    "4004"
+    "Push$"
+    "4004"
+    "Pull$"
+    "4013"
+    "Pull$"
+    "4009"
+    "GotoGThan$"
+    "262"
+    "Pull$"
+    "4013"
+    "Pull$"
+    "4009"
+    "Multiply#"
+    "-1"
+    "GotoLThan$"
+    "262"
+    "Pull$"
+    "4012"
+    "Pull$"
+    "4008"
+    "GotoGThan$"
+    "210"
+    "Pull$"
+    "4012"
+    "Pull$"
+    "4008"
+    "Multiply#"
+    "-1"
+    "GotoLThan$"
+    "158"
+    "Pull$"
+    "4013"
+    "Add$"
+    "4015"
+    "Push$"
+    "4013"
+    "Pull$"
+    "4012"
+    "Add$"
+    "4014"
+    "Push$"
+    "4012"
+    "Goto$"
+    "28"
+    "Pull#"
+    "-1"
+    "Push$"
+    "4002"
+    "Goto$"
+    "42"
+    "Pull#"
+    "1"
+    "Push$"
+    "4002"
+    "Goto$"
+    "42"
+    "Pull#"
+    "1"
+    "Push$"
+    "4005"
+    "Goto$"
+    "84"
+    "Pull#"
+    "-1"
+    "Push$"
+    "4005"
+    "Goto$"
+    "84"
+    "Pull$"
+    "4001"
+    "Multiply#"
+    "-1"
+    "Add$"
+    "4013"
+    "Pull$"
+    "4007"
+    "GotoGThan$"
+    "188"
+    "Pull$"
+    "4001"
+    "Multiply#"
+    "-1"
+    "Add$"
+    "4013"
+    "Pull$"
+    "4007"
+    "Multiply#"
+    "-1"
+    "GotoLThan$"
+    "188"
+    "Pull$"
+    "4014"
+    "Multiply#"
+    "-1"
+    "Push$"
+    "4014"
+    "Goto$"
+    "120"
+    "Pull$"
+    "4011"
+    "Add#"
+    "1"
+    "Push$"
+    "4011"
+    "Pull#"
+    "0"
+    "Push$"
+    "4012"
+    "Pull#"
+    "0"
+    "Push$"
+    "4013"
+    "Pull$"
+    "4014"
+    "Multiply#"
+    "-1"
+    "Push$"
+    "4014"
+    "Goto$"
+    "120"
+    "Pull$"
+    "4004"
+    "Multiply#"
+    "-1"
+    "Add$"
+    "4013"
+    "Pull$"
+    "4007"
+    "GotoGThan$"
+    "240"
+    "Pull$"
+    "4004"
+    "Multiply#"
+    "-1"
+    "Add$"
+    "4013"
+    "Pull$"
+    "4007"
+    "Multiply#"
+    "-1"
+    "GotoLThan$"
+    "240"
+    "Pull$"
+    "4014"
+    "Multiply#"
+    "-1"
+    "Push$"
+    "4014"
+    "Goto$"
+    "120"
+    "Pull$"
+    "4010"
+    "Add#"
+    "1"
+    "Push$"
+    "4010"
+    "Pull#"
+    "0"
+    "Push$"
+    "4012"
+    "Pull#"
+    "0"
+    "Push$"
+    "4013"
+    "Pull$"
+    "4014"
+    "Multiply#"
+    "-1"
+    "Push$"
+    "4014"
+    "Goto$"
+    "120"
+    "Pull$"
+    "4015"
+    "Multiply#"
+    "-1"
+    "Push$"
+    "4015"
+    "Goto$"
+    "106"
+    "MountDevice#"
+    "Boot"
+    "MountDevice#"
+    "Display"
+    "PullDevice#"
+    "Boot"
+    "Goto$"
+    "278"
+    "Sub$"
+    "490"
+    "PullChunk$"
+    "4000"
+    "Pull#"
+    "0"
+    "Push?"
+    "663"
+    "Pull$"
+    "4000"
+    "Push?"
+    "664"
+    "Pull$"
+    "4001"
+    "Add$"
+    "4007"
+    "Push?"
+    "665"
+    "Pull#"
+    "8"
+    "Push?"
+    "667"
+    "Pull#"
+    "0"
+    "Push?"
+    "666"
+    "Pull#"
+    "0"
+    "Push?"
+    "668"
+    "PushDevice#"
+    "Display"
+    "Poke?"
+    "663"
+    "Pull$"
+    "4001"
+    "Subtract$"
+    "4007"
+    "Push?"
+    "665"
+    "Pull#"
+    "5"
+    "Push?"
+    "666"
+    "Pull#"
+    "1"
+    "Push?"
+    "668"
+    "PushDevice#"
+    "Display"
+    "Poke?"
+    "663"
+    "Pull$"
+    "4003"
+    "Push?"
+    "664"
+    "Pull$"
+    "4004"
+    "Add$"
+    "4007"
+    "Push?"
+    "665"
+    "Pull#"
+    "8"
+    "Push?"
+    "667"
+    "Pull#"
+    "0"
+    "Push?"
+    "666"
+    "Pull#"
+    "2"
+    "Push?"
+    "668"
+    "PushDevice#"
+    "Display"
+    "Poke?"
+    "663"
+    "Pull$"
+    "4004"
+    "Subtract$"
+    "4007"
+    "Push?"
+    "665"
+    "Pull#"
+    "6"
+    "Push?"
+    "666"
+    "Pull#"
+    "3"
+    "Push?"
+    "668"
+    "PushDevice#"
+    "Display"
+    "Poke?"
+    "663"
+    "Pull$"
+    "4009"
+    "Add#"
+    "48"
+    "Push?"
+    "665"
+    "Pull#"
+    "-8"
+    "Push?"
+    "664"
+    "Pull#"
+    "0"
+    "Push?"
+    "666"
+    "Pull#"
+    "4"
+    "Push?"
+    "668"
+    "PushDevice#"
+    "Display"
+    "Poke?"
+    "663"
+    "Pull$"
+    "4010"
+    "Multiply#"
+    "-8"
+    "Subtract#"
+    "8"
+    "Push?"
+    "664"
+    "Pull#"
+    "5"
+    "Push?"
+    "666"
+    "Pull#"
+    "5"
+    "Push?"
+    "668"
+    "PushDevice#"
+    "Display"
+    "Poke?"
+    "663"
+    "Pull#"
+    "8"
+    "Push?"
+    "664"
+    "Pull#"
+    "0"
+    "Push?"
+    "666"
+    "Pull#"
+    "6"
+    "Push?"
+    "668"
+    "PushDevice#"
+    "Display"
+    "Poke?"
+    "663"
+    "Pull$"
+    "4011"
+    "Multiply#"
+    "8"
+    "Add#"
+    "8"
+    "Push?"
+    "664"
+    "Pull#"
+    "6"
+    "Push?"
+    "666"
+    "Pull#"
+    "7"
+    "Push?"
+    "668"
+    "PushDevice#"
+    "Display"
+    "Poke?"
+    "663"
+    "Pull$"
+    "4012"
+    "Push?"
+    "664"
+    "Pull$"
+    "4013"
+    "Push?"
+    "665"
+    "Pull#"
+    "0"
+    "Push?"
+    "666"
+    "Pull#"
+    "8"
+    "Push?"
+    "668"
+    "PushDevice#"
+    "Display"
+    "Poke?"
+    "663"
+    "Pull#"
+    "1"
+    "Push?"
+    "666"
+    "Pull#"
+    "9"
+    "Push?"
+    "668"
+    "Pull#"
+    "1"
+    "Push?"
+    "663"
+    "PushDevice#"
+    "Display"
+    "Poke?"
+    "663"
+    "Goto$"
+    "280"
+    "MountChunk#$"
+    "16"
+    "4000"
+    "PullChunk$"
+    "4000"
+    "EndSub"
+    "MountSelfChunk#$"
+    "16"
+    "4000"
+    "Pull#"
+    "-216"
+    "Push$"
+    "4000"
+    "Pull#"
+    "0"
+    "Push$"
+    "4001"
+    "Pull#"
+    "1"
+    "Push$"
+    "4002"
+    "Pull#"
+    "216"
+    "Push$"
+    "4003"
+    "Pull#"
+    "0"
+    "Push$"
+    "4004"
+    "Pull#"
+    "1"
+    "Push$"
+    "4005"
+    "Pull#"
+    "2"
+    "Push$"
+    "4006"
+    "Pull#"
+    "24"
+    "Push$"
+    "4007"
+    "Pull#"
+    "200"
+    "Push$"
+    "4008"
+    "Pull#"
+    "120"
+    "Push$"
+    "4009"
+    "Pull#"
+    "0"
+    "Copy"
+    "Push$"
+    "4010"
+    "Push$"
+    "4011"
+    "Pull#"
+    "0"
+    "Copy"
+    "Push$"
+    "4012"
+    "Push$"
+    "4013"
+    "Pull#"
+    "1.25"
+    "Push$"
+    "4014"
+    "Pull#"
+    "2.5"
+    "Push$"
+    "4015"
+    "EndSub"
+    "Sub$"
+    "573"
+    "Sub$"
+    "567"
+    "EndSub"
+    "GetDevice#"
+    "Keyboard"
+    "Push$"
+    "669"
+    "Discard"
+    "EndSub"
+    "GetDevice#"
+    "Display"
+    "Push$"
+    "663"
+    "Discard"
+    "Pull$"
+    "663"
+    "Add#"
+    "1"
+    "Copy"
+    "Push$"
+    "664"
+    "Add#"
+    "1"
+    "Copy"
+    "Push$"
+    "665"
+    "Add#"
+    "1"
+    "Copy"
+    "Push$"
+    "666"
+    "Add#"
+    "1"
+    "Copy"
+    "Push$"
+    "667"
+    "Add#"
+    "1"
+    "Push$"
+    "668"
+    "Pull#"
+    "3"
+    "PushRem?"
+    "663"
+    "Poke?"
+    "663"
+    "EndSub"
+    "GetDevice#"
+    "Core0"
+    "Push$"
+    "670"
+    "Push$"
+    "671"
+    "GetDevice#"
+    "Core1"
+    "Push$"
+    "672"
+    "Discard"
+    "GetDevice#"
+    "Core2"
+    "Push$"
+    "673"
+    "Discard"
+    "GetDevice#"
+    "Core3"
+    "Push$"
+    "674"
+    "Discard"
+    "EndSub"
+    ""
+    ""
+    ""
+    "Pull?"
+    "635"
+    "PushRem?"
+    "634"
+    "Pull#"
+    "1"
+    "Copy"
+    "Add$"
+    "635"
+    "Push$"
+    "635"
+    "Add$"
+    "634"
+    "Push$"
+    "634"
+    "Pull$"
+    "633"
+    "Subtract#"
+    "1"
+    "Copy"
+    "Push$"
+    "633"
+    "Pull#"
+    "0"
+    "GotoGThan$"
+    "636"
+    "EndSub"
+    ""
+    ""
+    ""
+    ""
+    ""
+    ""
+    ""
+    ""
+    ""
+    ""
+    ""
+    ""
+}
+json.view.s1 = { 
+    "Name":"PushChunk$"
+    "Signals":"GetPointer|IncPointer|Get|SDev"
+}
+string.closeBraces = { 
+    }
+    ]
+}
+string.escapableCharacters = { }
+string.getIndicesOf = { 
+    7
+    13
+    20
+    26
+    40
+    47
+    54
+    60
+    68
+    74
+    82
+    88
+    96
+    102
+    110
+    116
+    124
+    130
+    142
+    148
+    156
+    162
+    169
+    175
+    183
+    189
+    199
+    205
+    213
+    220
+    228
+    235
+    248
+    254
+    262
+    269
+    277
+    284
+    296
+    301
+    314
+    320
+    328
+    335
+    347
+    354
+    361
+    368
+    376
+    383
+    391
+    398
+    406
+    413
+    426
+    432
+    440
+    447
+    455
+    462
+    474
+    479
+    492
+    498
+    506
+    513
+    524
+    530
+    541
+    547
+    555
+    562
+    572
+    578
+    586
+    591
+    602
+    608
+    619
+    625
+    633
+    640
+    650
+    656
+    664
+    671
+    683
+    690
+    697
+    704
+    712
+    719
+    727
+    734
+    742
+    749
+    762
+    768
+    776
+    783
+    791
+    798
+    810
+    815
+    828
+    834
+    842
+    849
+    857
+    864
+    877
+    883
+    891
+    898
+    906
+    913
+    925
+    930
+    943
+    949
+    957
+    964
+    971
+    978
+    986
+    993
+    1001
+    1008
+    1015
+    1022
+    1030
+    1037
+    1045
+    1050
+    1058
+    1063
+    1071
+    1078
+    1086
+    1091
+    1099
+    1103
+    1111
+    1118
+    1126
+    1131
+    1139
+    1143
+    1151
+    1158
+    1166
+    1171
+    1179
+    1184
+    1192
+    1199
+    1207
+    1212
+    1220
+    1227
+    1239
+    1244
+    1251
+    1258
+    1266
+    1273
+    1286
+    1292
+    1300
+    1307
+    1319
+    1324
+    1331
+    1338
+    1346
+    1353
+    1365
+    1370
+    1383
+    1389
+    1397
+    1404
+    1416
+    1421
+    1429
+    1436
+    1444
+    1450
+    1458
+    1465
+    1472
+    1476
+    1484
+    1491
+    1499
+    1503
+    1511
+    1518
+    1526
+    1530
+    1538
+    1545
+    1553
+    1560
+    1572
+    1577
+    1585
+    1592
+    1600
+    1606
+    1614
+    1621
+    1633
+    1638
+    1645
+    1652
+    1660
+    1667
+    1680
+    1686
+    1694
+    1701
+    1713
+    1718
+    1725
+    1732
+    1740
+    1747
+    1759
+    1764
+    1777
+    1783
+    1791
+    1798
+    1810
+    1815
+    1823
+    1830
+    1838
+    1844
+    1852
+    1859
+    1866
+    1870
+    1878
+    1885
+    1893
+    1897
+    1905
+    1912
+    1920
+    1924
+    1932
+    1939
+    1947
+    1954
+    1966
+    1971
+    1979
+    1986
+    1994
+    2000
+    2008
+    2015
+    2027
+    2032
+    2040
+    2047
+    2055
+    2061
+    2076
+    2083
+    2098
+    2108
+    2122
+    2129
+    2137
+    2143
+    2150
+    2156
+    2169
+    2176
+    2184
+    2188
+    2196
+    2202
+    2210
+    2217
+    2225
+    2231
+    2239
+    2246
+    2253
+    2260
+    2268
+    2274
+    2282
+    2286
+    2294
+    2300
+    2308
+    2312
+    2320
+    2326
+    2334
+    2338
+    2346
+    2352
+    2366
+    2376
+    2384
+    2390
+    2398
+    2405
+    2417
+    2424
+    2432
+    2438
+    2446
+    2450
+    2458
+    2464
+    2472
+    2476
+    2484
+    2490
+    2504
+    2514
+    2522
+    2528
+    2536
+    2543
+    2551
+    2557
+    2565
+    2572
+    2579
+    2586
+    2594
+    2600
+    2608
+    2612
+    2620
+    2626
+    2634
+    2638
+    2646
+    2652
+    2660
+    2664
+    2672
+    2678
+    2692
+    2702
+    2710
+    2716
+    2724
+    2731
+    2743
+    2750
+    2758
+    2764
+    2772
+    2776
+    2784
+    2790
+    2798
+    2802
+    2810
+    2816
+    2830
+    2840
+    2848
+    2854
+    2862
+    2869
+    2876
+    2881
+    2889
+    2895
+    2903
+    2908
+    2916
+    2922
+    2930
+    2934
+    2942
+    2948
+    2956
+    2960
+    2968
+    2974
+    2988
+    2998
+    3006
+    3012
+    3020
+    3027
+    3039
+    3044
+    3056
+    3060
+    3068
+    3074
+    3082
+    3086
+    3094
+    3100
+    3108
+    3112
+    3120
+    3126
+    3140
+    3150
+    3158
+    3164
+    3172
+    3176
+    3184
+    3190
+    3198
+    3202
+    3210
+    3216
+    3224
+    3228
+    3236
+    3242
+    3256
+    3266
+    3274
+    3280
+    3288
+    3295
+    3307
+    3311
+    3318
+    3322
+    3330
+    3336
+    3344
+    3348
+    3356
+    3362
+    3370
+    3374
+    3382
+    3388
+    3402
+    3412
+    3420
+    3426
+    3434
+    3441
+    3449
+    3455
+    3463
+    3470
+    3478
+    3484
+    3492
+    3496
+    3504
+    3510
+    3518
+    3522
+    3530
+    3536
+    3550
+    3560
+    3568
+    3574
+    3582
+    3586
+    3594
+    3600
+    3608
+    3612
+    3620
+    3626
+    3634
+    3638
+    3646
+    3652
+    3666
+    3676
+    3684
+    3690
+    3698
+    3704
+    3719
+    3724
+    3731
+    3744
+    3751
+    3760
+    3779
+    3784
+    3791
+    3799
+    3806
+    3814
+    3821
+    3829
+    3833
+    3841
+    3848
+    3856
+    3860
+    3868
+    3875
+    3883
+    3889
+    3897
+    3904
+    3912
+    3916
+    3924
+    3931
+    3939
+    3943
+    3951
+    3958
+    3966
+    3970
+    3978
+    3985
+    3993
+    3998
+    4006
+    4013
+    4021
+    4027
+    4035
+    4042
+    4050
+    4056
+    4064
+    4071
+    4079
+    4083
+    4090
+    4098
+    4105
+    4113
+    4120
+    4128
+    4132
+    4139
+    4147
+    4154
+    4162
+    4169
+    4177
+    4184
+    4192
+    4199
+    4207
+    4213
+    4221
+    4228
+    4237
+    4244
+    4250
+    4257
+    4263
+    4272
+    4285
+    4296
+    4304
+    4310
+    4320
+    4329
+    4342
+    4352
+    4360
+    4366
+    4376
+    4384
+    4390
+    4397
+    4401
+    4408
+    4416
+    4422
+    4429
+    4433
+    4440
+    4448
+    4454
+    4461
+    4465
+    4472
+    4480
+    4486
+    4493
+    4497
+    4504
+    4512
+    4518
+    4525
+    4529
+    4537
+    4543
+    4551
+    4555
+    4566
+    4572
+    4580
+    4586
+    4595
+    4608
+    4616
+    4624
+    4630
+    4638
+    4644
+    4657
+    4665
+    4673
+    4679
+    4689
+    4702
+    4710
+    4718
+    4724
+    4734
+    4747
+    4755
+    4763
+    4769
+    4779
+    4788
+    4791
+    4794
+    4797
+    4805
+    4811
+    4822
+    4828
+    4836
+    4840
+    4847
+    4854
+    4860
+    4868
+    4874
+    4881
+    4887
+    4895
+    4901
+    4909
+    4915
+    4927
+    4931
+    4938
+    4946
+    4952
+    4960
+    4964
+    4977
+    4983
+    4992
+    4995
+    4998
+    5001
+    5004
+    5007
+    5010
+    5013
+    5016
+    5019
+    5022
+    5025
+}
+string.join.input = { 
+    "Hello!":{"This Is?":"Mop"}
+    "World":"A pretty big place"
+}
+string.openBraces = { 
+    {
+    [
+}
+string.split = { 
+    "Sub$"
+    "562"
+    "Sub$"
+    "611"
+    "PushDevice#"
+    "Boot"
+    "Sub$"
+    "496"
+    "Pull#"
+    "270"
+    "Push$"
+    "635"
+    "Pull$"
+    "672"
+    "Push$"
+    "634"
+    "Pull#"
+    "278"
+    "Subtract#"
+    "270"
+    "Push$"
+    "633"
+    "Sub$"
+    "636"
+    "Pull$"
+    "672"
+    "PokeIn?"
+    "672"
+    "Pull$"
+    "4001"
+    "Pull$"
+    "4009"
+    "GotoGThan$"
+    "134"
+    "Pull$"
+    "4001"
+    "Pull$"
+    "4009"
+    "Multiply#"
+    "-1"
+    "GotoLThan$"
+    "140"
+    "Pull$"
+    "4002"
+    "Multiply$"
+    "4006"
+    "Add$"
+    "4001"
+    "Push$"
+    "4001"
+    "Pull$"
+    "4004"
+    "Pull$"
+    "4009"
+    "GotoGThan$"
+    "152"
+    "Pull$"
+    "4004"
+    "Pull$"
+    "4009"
+    "Multiply#"
+    "-1"
+    "GotoLThan$"
+    "146"
+    "Pull#"
+    "Down"
+    "PushRem?"
+    "669"
+    "PullRem?"
+    "669"
+    "Pull#"
+    "true"
+    "GotoEq$"
+    "152"
+    "Pull#"
+    "Up"
+    "PushRem?"
+    "669"
+    "PullRem?"
+    "669"
+    "Pull#"
+    "true"
+    "GotoEq$"
+    "146"
+    "Pull$"
+    "4005"
+    "Multiply$"
+    "4006"
+    "Add$"
+    "4004"
+    "Push$"
+    "4004"
+    "Pull$"
+    "4013"
+    "Pull$"
+    "4009"
+    "GotoGThan$"
+    "262"
+    "Pull$"
+    "4013"
+    "Pull$"
+    "4009"
+    "Multiply#"
+    "-1"
+    "GotoLThan$"
+    "262"
+    "Pull$"
+    "4012"
+    "Pull$"
+    "4008"
+    "GotoGThan$"
+    "210"
+    "Pull$"
+    "4012"
+    "Pull$"
+    "4008"
+    "Multiply#"
+    "-1"
+    "GotoLThan$"
+    "158"
+    "Pull$"
+    "4013"
+    "Add$"
+    "4015"
+    "Push$"
+    "4013"
+    "Pull$"
+    "4012"
+    "Add$"
+    "4014"
+    "Push$"
+    "4012"
+    "Goto$"
+    "28"
+    "Pull#"
+    "-1"
+    "Push$"
+    "4002"
+    "Goto$"
+    "42"
+    "Pull#"
+    "1"
+    "Push$"
+    "4002"
+    "Goto$"
+    "42"
+    "Pull#"
+    "1"
+    "Push$"
+    "4005"
+    "Goto$"
+    "84"
+    "Pull#"
+    "-1"
+    "Push$"
+    "4005"
+    "Goto$"
+    "84"
+    "Pull$"
+    "4001"
+    "Multiply#"
+    "-1"
+    "Add$"
+    "4013"
+    "Pull$"
+    "4007"
+    "GotoGThan$"
+    "188"
+    "Pull$"
+    "4001"
+    "Multiply#"
+    "-1"
+    "Add$"
+    "4013"
+    "Pull$"
+    "4007"
+    "Multiply#"
+    "-1"
+    "GotoLThan$"
+    "188"
+    "Pull$"
+    "4014"
+    "Multiply#"
+    "-1"
+    "Push$"
+    "4014"
+    "Goto$"
+    "120"
+    "Pull$"
+    "4011"
+    "Add#"
+    "1"
+    "Push$"
+    "4011"
+    "Pull#"
+    "0"
+    "Push$"
+    "4012"
+    "Pull#"
+    "0"
+    "Push$"
+    "4013"
+    "Pull$"
+    "4014"
+    "Multiply#"
+    "-1"
+    "Push$"
+    "4014"
+    "Goto$"
+    "120"
+    "Pull$"
+    "4004"
+    "Multiply#"
+    "-1"
+    "Add$"
+    "4013"
+    "Pull$"
+    "4007"
+    "GotoGThan$"
+    "240"
+    "Pull$"
+    "4004"
+    "Multiply#"
+    "-1"
+    "Add$"
+    "4013"
+    "Pull$"
+    "4007"
+    "Multiply#"
+    "-1"
+    "GotoLThan$"
+    "240"
+    "Pull$"
+    "4014"
+    "Multiply#"
+    "-1"
+    "Push$"
+    "4014"
+    "Goto$"
+    "120"
+    "Pull$"
+    "4010"
+    "Add#"
+    "1"
+    "Push$"
+    "4010"
+    "Pull#"
+    "0"
+    "Push$"
+    "4012"
+    "Pull#"
+    "0"
+    "Push$"
+    "4013"
+    "Pull$"
+    "4014"
+    "Multiply#"
+    "-1"
+    "Push$"
+    "4014"
+    "Goto$"
+    "120"
+    "Pull$"
+    "4015"
+    "Multiply#"
+    "-1"
+    "Push$"
+    "4015"
+    "Goto$"
+    "106"
+    "MountDevice#"
+    "Boot"
+    "MountDevice#"
+    "Display"
+    "PullDevice#"
+    "Boot"
+    "Goto$"
+    "278"
+    "Sub$"
+    "490"
+    "PullChunk$"
+    "4000"
+    "Pull#"
+    "0"
+    "Push?"
+    "663"
+    "Pull$"
+    "4000"
+    "Push?"
+    "664"
+    "Pull$"
+    "4001"
+    "Add$"
+    "4007"
+    "Push?"
+    "665"
+    "Pull#"
+    "8"
+    "Push?"
+    "667"
+    "Pull#"
+    "0"
+    "Push?"
+    "666"
+    "Pull#"
+    "0"
+    "Push?"
+    "668"
+    "PushDevice#"
+    "Display"
+    "Poke?"
+    "663"
+    "Pull$"
+    "4001"
+    "Subtract$"
+    "4007"
+    "Push?"
+    "665"
+    "Pull#"
+    "5"
+    "Push?"
+    "666"
+    "Pull#"
+    "1"
+    "Push?"
+    "668"
+    "PushDevice#"
+    "Display"
+    "Poke?"
+    "663"
+    "Pull$"
+    "4003"
+    "Push?"
+    "664"
+    "Pull$"
+    "4004"
+    "Add$"
+    "4007"
+    "Push?"
+    "665"
+    "Pull#"
+    "8"
+    "Push?"
+    "667"
+    "Pull#"
+    "0"
+    "Push?"
+    "666"
+    "Pull#"
+    "2"
+    "Push?"
+    "668"
+    "PushDevice#"
+    "Display"
+    "Poke?"
+    "663"
+    "Pull$"
+    "4004"
+    "Subtract$"
+    "4007"
+    "Push?"
+    "665"
+    "Pull#"
+    "6"
+    "Push?"
+    "666"
+    "Pull#"
+    "3"
+    "Push?"
+    "668"
+    "PushDevice#"
+    "Display"
+    "Poke?"
+    "663"
+    "Pull$"
+    "4009"
+    "Add#"
+    "48"
+    "Push?"
+    "665"
+    "Pull#"
+    "-8"
+    "Push?"
+    "664"
+    "Pull#"
+    "0"
+    "Push?"
+    "666"
+    "Pull#"
+    "4"
+    "Push?"
+    "668"
+    "PushDevice#"
+    "Display"
+    "Poke?"
+    "663"
+    "Pull$"
+    "4010"
+    "Multiply#"
+    "-8"
+    "Subtract#"
+    "8"
+    "Push?"
+    "664"
+    "Pull#"
+    "5"
+    "Push?"
+    "666"
+    "Pull#"
+    "5"
+    "Push?"
+    "668"
+    "PushDevice#"
+    "Display"
+    "Poke?"
+    "663"
+    "Pull#"
+    "8"
+    "Push?"
+    "664"
+    "Pull#"
+    "0"
+    "Push?"
+    "666"
+    "Pull#"
+    "6"
+    "Push?"
+    "668"
+    "PushDevice#"
+    "Display"
+    "Poke?"
+    "663"
+    "Pull$"
+    "4011"
+    "Multiply#"
+    "8"
+    "Add#"
+    "8"
+    "Push?"
+    "664"
+    "Pull#"
+    "6"
+    "Push?"
+    "666"
+    "Pull#"
+    "7"
+    "Push?"
+    "668"
+    "PushDevice#"
+    "Display"
+    "Poke?"
+    "663"
+    "Pull$"
+    "4012"
+    "Push?"
+    "664"
+    "Pull$"
+    "4013"
+    "Push?"
+    "665"
+    "Pull#"
+    "0"
+    "Push?"
+    "666"
+    "Pull#"
+    "8"
+    "Push?"
+    "668"
+    "PushDevice#"
+    "Display"
+    "Poke?"
+    "663"
+    "Pull#"
+    "1"
+    "Push?"
+    "666"
+    "Pull#"
+    "9"
+    "Push?"
+    "668"
+    "Pull#"
+    "1"
+    "Push?"
+    "663"
+    "PushDevice#"
+    "Display"
+    "Poke?"
+    "663"
+    "Goto$"
+    "280"
+    "MountChunk#$"
+    "16"
+    "4000"
+    "PullChunk$"
+    "4000"
+    "EndSub"
+    "MountSelfChunk#$"
+    "16"
+    "4000"
+    "Pull#"
+    "-216"
+    "Push$"
+    "4000"
+    "Pull#"
+    "0"
+    "Push$"
+    "4001"
+    "Pull#"
+    "1"
+    "Push$"
+    "4002"
+    "Pull#"
+    "216"
+    "Push$"
+    "4003"
+    "Pull#"
+    "0"
+    "Push$"
+    "4004"
+    "Pull#"
+    "1"
+    "Push$"
+    "4005"
+    "Pull#"
+    "2"
+    "Push$"
+    "4006"
+    "Pull#"
+    "24"
+    "Push$"
+    "4007"
+    "Pull#"
+    "200"
+    "Push$"
+    "4008"
+    "Pull#"
+    "120"
+    "Push$"
+    "4009"
+    "Pull#"
+    "0"
+    "Copy"
+    "Push$"
+    "4010"
+    "Push$"
+    "4011"
+    "Pull#"
+    "0"
+    "Copy"
+    "Push$"
+    "4012"
+    "Push$"
+    "4013"
+    "Pull#"
+    "1.25"
+    "Push$"
+    "4014"
+    "Pull#"
+    "2.5"
+    "Push$"
+    "4015"
+    "EndSub"
+    "Sub$"
+    "573"
+    "Sub$"
+    "567"
+    "EndSub"
+    "GetDevice#"
+    "Keyboard"
+    "Push$"
+    "669"
+    "Discard"
+    "EndSub"
+    "GetDevice#"
+    "Display"
+    "Push$"
+    "663"
+    "Discard"
+    "Pull$"
+    "663"
+    "Add#"
+    "1"
+    "Copy"
+    "Push$"
+    "664"
+    "Add#"
+    "1"
+    "Copy"
+    "Push$"
+    "665"
+    "Add#"
+    "1"
+    "Copy"
+    "Push$"
+    "666"
+    "Add#"
+    "1"
+    "Copy"
+    "Push$"
+    "667"
+    "Add#"
+    "1"
+    "Push$"
+    "668"
+    "Pull#"
+    "3"
+    "PushRem?"
+    "663"
+    "Poke?"
+    "663"
+    "EndSub"
+    "GetDevice#"
+    "Core0"
+    "Push$"
+    "670"
+    "Push$"
+    "671"
+    "GetDevice#"
+    "Core1"
+    "Push$"
+    "672"
+    "Discard"
+    "GetDevice#"
+    "Core2"
+    "Push$"
+    "673"
+    "Discard"
+    "GetDevice#"
+    "Core3"
+    "Push$"
+    "674"
+    "Discard"
+    "EndSub"
+    ""
+    ""
+    ""
+    "Pull?"
+    "635"
+    "PushRem?"
+    "634"
+    "Pull#"
+    "1"
+    "Copy"
+    "Add$"
+    "635"
+    "Push$"
+    "635"
+    "Add$"
+    "634"
+    "Push$"
+    "634"
+    "Pull$"
+    "633"
+    "Subtract#"
+    "1"
+    "Copy"
+    "Push$"
+    "633"
+    "Pull#"
+    "0"
+    "GotoGThan$"
+    "636"
+    "EndSub"
+    ""
+    ""
+    ""
+    ""
+    ""
+    ""
+    ""
+    ""
+    ""
+    ""
+    ""
+    ""
+}
+
+
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    deviceName = "Boot";
+    Motion.GoToXY(0, 0);
+    Looks.Hide();
+}
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(StartDevices)
+{
+    deviceId = List.IndexOf(DeviceName, deviceName);
+    If (deviceId > 0)
+    {
+        deviceAddress = DeviceAdress[deviceId];
+        deviceSize = DeviceSize[deviceId];
+        Call Initialize Device;
+        Call await StartDevice:;
+    }
+}
+
+
+//----- Custom blocks -------------------------------------------------------------------------------------------------
+
+Define await StartDevice: (warp=false)
+{
+    start.s1 = 0;
+    Forever
+    {
+        Wait Until (Not ((start.s1 == NewRequest)));
+        Call handleRequest:(start.s1);
+        start.s1 += 1;
+    }
+}
+
+Define bootLog:(string Method)(string Message) (warp=true)
+{
+    If (LogEnabled == "true")
+    {
+        List.Add(Log, Operator.Join(Operator.Join("Boot [", Method), Operator.Join(Operator.Join("]: "", Message), """)));
+    }
+}
+
+Define buildCommands: (warp=true)
+{
+    List.DeleteAll(CommandNames);
+    List.DeleteAll(CommandSignals);
+    Call importMicrocode:(Microcode);
+}
+
+Define Check if(string String) has braces(string [)(string ])  (warp=true)
+{
+    If (Not (((Operator.LetterOf(String, 1) == [) And (Operator.LetterOf(String, Variable.Length(String)) == ]))))
+    {
+        string.checkInBraces = "false";
+    }
+    Else
+    {
+        string.checkInBraces.c1 = 0;
+        string.checkInBraces.s1 = 0;
+        Repeat Until (((string.checkInBraces.s1 < 1) And ((string.checkInBraces.c1 > 1) And (string.checkInBraces.c1 < Variable.Length(String)))) Or (string.checkInBraces.c1 > Variable.Length(String)))
+        {
+            string.checkInBraces.c1 += 1;
+            If (Operator.LetterOf(String, string.checkInBraces.c1) == [)
+            {
+                string.checkInBraces.s1 += 1;
+            }
+            If (Operator.LetterOf(String, string.checkInBraces.c1) == ])
+            {
+                string.checkInBraces.s1 += -1;
+            }
+        }
+        string.checkInBraces = (string.checkInBraces.c1 > Variable.Length(String));
+    }
+}
+
+Define deleteRequest:(string Id) (warp=true)
+{
+    getRequest.s1 = List.IndexOf(RequestId, Id);
+    List.DeleteItem(RequestId, getRequest.s1);
+    List.DeleteItem(RequestAction, getRequest.s1);
+    List.DeleteItem(RequestAddr, getRequest.s1);
+    List.DeleteItem(RequestValue, getRequest.s1);
+}
+
+Define Escape(string String) to string (warp=true)
+{
+    string.toString.c1 = 0;
+    string.toString = "";
+    Repeat Until (string.toString.c1 > Variable.Length(String))
+    {
+        string.toString.c1 += 1;
+        If List.ContainsItem(string.escapableCharacters, Operator.LetterOf(String, string.toString.c1))
+        {
+            string.toString = Operator.Join(Operator.Join(string.toString, "\"), Operator.LetterOf(String, string.toString.c1));
+        }
+        Else
+        {
+            string.toString = Operator.Join(string.toString, Operator.LetterOf(String, string.toString.c1));
+        }
+    }
+    string.toString = Operator.Join(""", Operator.Join(string.toString, """));
+}
+
+Define getDevice:(string Address) (warp=true)
+{
+    getDevice = bootVolume[(Address + 1)];
+}
+
+Define Get Indices in(string String) of substring(string Substring) (ignoreInQuotes(string Q) , ignoreInBraces(string B) ) (warp=true)
+{
+    string.getIndicesOf.c1 = 0;
+    string.getIndicesOf.s4 = 0;
+    string.getIndicesOf.s1 = "";
+    List.DeleteAll(string.getIndicesOf);
+    Repeat Until (string.getIndicesOf.c1 > ((Variable.Length(String) - Variable.Length(Substring)) + 1))
+    {
+        string.getIndicesOf.c1 += 1;
+        string.getIndicesOf.c2 = string.getIndicesOf.c1;
+        string.getIndicesOf.s3 = 0;
+        string.getIndicesOf.s1 = "";
+        Repeat Until ((Variable.Length(string.getIndicesOf.s1) == Variable.Length(Substring)) Or (string.getIndicesOf.c2 > Variable.Length(String)))
+        {
+            If ((Operator.LetterOf(String, string.getIndicesOf.c2) == """) And (Q == "true"))
+            {
+                string.getIndicesOf.c2 += 1;
+                Repeat Until ((Operator.LetterOf(String, string.getIndicesOf.c2) == """) Or (string.getIndicesOf.c2 > Variable.Length(String)))
+                {
+                    string.getIndicesOf.c2 += 1;
+                }
+            }
+            If (List.ContainsItem(string.openBraces, Operator.LetterOf(String, string.getIndicesOf.c2)) And (B == "true"))
+            {
+                string.getIndicesOf.s3 += 1;
+                Repeat Until ((string.getIndicesOf.s3 == 0) Or (string.getIndicesOf.c2 > Variable.Length(String)))
+                {
+                    string.getIndicesOf.c2 += 1;
+                    If List.ContainsItem(string.openBraces, Operator.LetterOf(String, string.getIndicesOf.c2))
+                    {
+                        string.getIndicesOf.s3 += 1;
+                    }
+                    If List.ContainsItem(string.closeBraces, Operator.LetterOf(String, string.getIndicesOf.c2))
+                    {
+                        string.getIndicesOf.s3 += -1;
+                    }
+                }
+            }
+            string.getIndicesOf.s1 = Operator.Join(string.getIndicesOf.s1, Operator.LetterOf(String, string.getIndicesOf.c2));
+            string.getIndicesOf.c2 += 1;
+        }
+        If (string.getIndicesOf.s1 == Substring)
+        {
+            List.Add(string.getIndicesOf, string.getIndicesOf.c1);
+            string.getIndicesOf.c1 += (Variable.Length(Substring) - 1);
+        }
+        If ((Operator.LetterOf(String, string.getIndicesOf.c1) == """) And (Q == "true"))
+        {
+            string.getIndicesOf.c1 += 1;
+            Repeat Until ((Operator.LetterOf(String, string.getIndicesOf.c1) == """) Or (string.getIndicesOf.c1 > Variable.Length(String)))
+            {
+                string.getIndicesOf.c1 += 1;
+            }
+        }
+        If (List.ContainsItem(string.openBraces, Operator.LetterOf(String, string.getIndicesOf.c1)) And (B == "true"))
+        {
+            string.getIndicesOf.s4 += 1;
+            Repeat Until ((string.getIndicesOf.s4 == 0) Or (string.getIndicesOf.c1 > Variable.Length(String)))
+            {
+                string.getIndicesOf.c1 += 1;
+                If List.ContainsItem(string.openBraces, Operator.LetterOf(String, string.getIndicesOf.c1))
+                {
+                    string.getIndicesOf.s4 += 1;
+                }
+                If List.ContainsItem(string.closeBraces, Operator.LetterOf(String, string.getIndicesOf.c1))
+                {
+                    string.getIndicesOf.s4 += -1;
+                }
+            }
+        }
+    }
+}
+
+Define Get string from(string String) inside braces(string [)(string ]) (warp=true)
+{
+    string.getInBraces = "null";
+    Call Check if(String) has braces([)(]) ;
+    If (string.checkInBraces == "true")
+    {
+        string.getInBraces = "";
+        string.getInBraces.c1 = 1;
+        Repeat ((Variable.Length(String) - 2))
+        {
+            string.getInBraces.c1 += 1;
+            string.getInBraces = Operator.Join(string.getInBraces, Operator.LetterOf(String, string.getInBraces.c1));
+        }
+    }
+}
+
+Define Get value at(string Path) of JSON(string JSON) (warp=true)
+{
+    Call Split(Path) by(".") (ignoreInQuotes("false") , ignoreInBraces("false") );
+    List.DeleteAll(json.path);
+    json.get.c1 = 0;
+    Repeat (List.Length(string.split))
+    {
+        json.get.c1 += 1;
+        List.Add(json.path, string.split[json.get.c1]);
+    }
+    json.get = JSON;
+    List.DeleteAll(json.levels);
+    json.get.c1 = 0;
+    Repeat (List.Length(json.path))
+    {
+        List.Add(json.levels, json.get);
+        json.get.c1 += 1;
+        Call Read JSON(json.get);
+        json.get = json.values[List.IndexOf(json.keys, json.path[json.get.c1])];
+    }
+}
+
+Define handleRequest:(string Id) (warp=true)
+{
+    getRequest.s1 = List.IndexOf(RequestId, Id);
+    handleRequest.action = RequestAction[getRequest.s1];
+    handleRequest.addr = RequestAddr[getRequest.s1];
+    handleRequest = RequestValue[getRequest.s1];
+    If ((Not ((handleRequest.addr < deviceAddress))) And (handleRequest.addr < (deviceAddress + deviceSize)))
+    {
+        If (handleRequest.action == "get")
+        {
+            Call getDevice:((handleRequest.addr - deviceAddress));
+            handleRequest = getDevice;
+        }
+        Else
+        {
+            If (handleRequest.action == "set")
+            {
+                Call setDevice:((handleRequest.addr - deviceAddress))(handleRequest);
+                Call deleteRequest:(Id);
+            }
+            Else
+            {
+            }
+        }
+        getRequest.s1 = List.IndexOf(RequestId, Id);
+        List.ReplaceItem(RequestValue, getRequest.s1, handleRequest);
+    }
+}
+
+Define importMicrocode:(string Microcode) (warp=true)
+{
+    Call Read JSON(Microcode);
+    List.DeleteAll(import.keys);
+    List.DeleteAll(import.values);
+    import.c1 = 0;
+    Repeat (List.Length(json.values))
+    {
+        import.c1 += 1;
+        List.Add(import.values, json.values[import.c1]);
+    }
+    import.c1 = 0;
+    Repeat (List.Length(import.values))
+    {
+        import.c1 += 1;
+        Call Get value at("Name") of JSON(import.values[import.c1]);
+        Call Unescape(json.get) to data;
+        List.Add(CommandNames, string.toData);
+        Call Get value at("Signals") of JSON(import.values[import.c1]);
+        Call Unescape(json.get) to data;
+        List.Add(CommandSignals, string.toData);
+    }
+}
+
+Define Initialize Device (warp=true)
+{
+    Call Initialize Parser;
+    Call buildCommands:;
+    Call loadBootVolume:(BootVolume);
+    Call bootLog:("init")(Operator.Join("Loaded volume [", Operator.Join(List.Length(bootVolume), "]")));
+    CanBoot = "true";
+}
+
+Define Initialize Parser (warp=true)
+{
+    List.DeleteAll(string.openBraces);
+    List.DeleteAll(string.closeBraces);
+    List.Add(string.openBraces, "{");
+    List.Add(string.closeBraces, "}");
+    List.Add(string.openBraces, "[");
+    List.Add(string.closeBraces, "]");
+}
+
+Define Join [string.join.input] by(string Delimiter) (warp=true)
+{
+    string.join = "";
+    string.join.c1 = 0;
+    If (List.Length(string.join.input) > 0)
+    {
+        Repeat ((List.Length(string.join.input) - 1))
+        {
+            string.join.c1 += 1;
+            string.join = Operator.Join(string.join, Operator.Join(string.join.input[string.join.c1], Delimiter));
+        }
+        string.join.c1 += 1;
+        string.join = Operator.Join(string.join, string.join.input[string.join.c1]);
+    }
+}
+
+Define loadBootVolume:(string Memory) (warp=true)
+{
+    List.DeleteAll(bootVolume);
+    Call Read JSON(Memory);
+    import.c1 = 0;
+    Repeat (List.Length(json.values))
+    {
+        import.c1 += 1;
+        Call Unescape(json.values[import.c1]) to data;
+        List.Add(bootVolume, string.toData);
+    }
+}
+
+Define Read JSON(string JSON) (warp=true)
+{
+    Call Check if(JSON) has braces("[")("]") ;
+    If (string.checkInBraces == "true")
+    {
+        List.DeleteAll(json.keys);
+        List.DeleteAll(json.values);
+        Call Get string from(JSON) inside braces("[")("]");
+        Call Split(string.getInBraces) by(",") (ignoreInQuotes("true") , ignoreInBraces("true") );
+        json.read.c1 = 0;
+        Repeat (List.Length(string.split))
+        {
+            json.read.c1 += 1;
+            List.Add(json.keys, json.read.c1);
+            List.Add(json.values, string.split[json.read.c1]);
+        }
+    }
+    Else
+    {
+        Call Check if(JSON) has braces("{")("}") ;
+        If (string.checkInBraces == "true")
+        {
+            Call Get string from(JSON) inside braces("{")("}");
+            Call Read JSON(string.getInBraces);
+        }
+        Else
+        {
+            List.DeleteAll(json.keys);
+            List.DeleteAll(json.values);
+            Call Split(JSON) by(",") (ignoreInQuotes("true") , ignoreInBraces("true") );
+            List.DeleteAll(json.view.s1);
+            json.read.c1 = 0;
+            Repeat (List.Length(string.split))
+            {
+                json.read.c1 += 1;
+                List.Add(json.view.s1, string.split[json.read.c1]);
+            }
+            json.read.c1 = 0;
+            Repeat (List.Length(json.view.s1))
+            {
+                json.read.c1 += 1;
+                Call Split(json.view.s1[json.read.c1]) by(":") (ignoreInQuotes("true") , ignoreInBraces("true") );
+                Call Unescape(string.split[1]) to data;
+                List.Add(json.keys, string.toData);
+                List.Add(json.values, string.split[2]);
+            }
+        }
+    }
+}
+
+Define setDevice:(string Address)(string Value) (warp=true)
+{
+    List.ReplaceItem(bootVolume, (Address + 1), Value);
+}
+
+Define Set value at(string Path) of JSON(string JSON) to(string Value) (warp=false)
+{
+    Call Get value at(Path) of JSON(JSON);
+    List.ReplaceItem(json.values, List.IndexOf(json.keys, json.path[json.get.c1]), Value);
+    json.set.c1 = List.Length(json.levels);
+    Repeat ((List.Length(json.levels) - 1))
+    {
+        json.set.c1 += -1;
+        Call Write JSON;
+        Call Read JSON(json.levels[json.set.c1]);
+        List.ReplaceItem(json.values, List.IndexOf(json.keys, json.path[json.set.c1]), json.write);
+    }
+    Call Write JSON;
+}
+
+Define Split(string String) by(string Substring) (ignoreInQuotes(string Q) , ignoreInBraces(string B) ) (warp=true)
+{
+    Call Get Indices in(String) of substring(Substring) (ignoreInQuotes(Q) , ignoreInBraces(B) );
+    string.split.c1 = 0;
+    string.split.c2 = 1;
+    List.DeleteAll(string.split);
+    If (List.Length(string.getIndicesOf) > 0)
+    {
+        Repeat (List.Length(string.getIndicesOf))
+        {
+            string.split.c1 += 1;
+            string.split.s1 = "";
+            Repeat Until (Not ((string.split.c2 < string.getIndicesOf[string.split.c1])))
+            {
+                string.split.s1 = Operator.Join(string.split.s1, Operator.LetterOf(String, string.split.c2));
+                string.split.c2 += 1;
+            }
+            List.Add(string.split, string.split.s1);
+            string.split.c2 += Variable.Length(Substring);
+        }
+        If (string.split.c2 < (Variable.Length(String) + 1))
+        {
+            string.split.s1 = "";
+            Repeat Until (string.split.c2 > Variable.Length(String))
+            {
+                string.split.s1 = Operator.Join(string.split.s1, Operator.LetterOf(String, string.split.c2));
+                string.split.c2 += 1;
+            }
+            List.Add(string.split, string.split.s1);
+            string.split.doesLastHaveChar = "false";
+        }
+        Else
+        {
+            string.split.doesLastHaveChar = "true";
+        }
+    }
+    Else
+    {
+        List.Add(string.split, String);
+    }
+}
+
+Define Unescape(string String) to data (warp=true)
+{
+    If ((Operator.LetterOf(String, 1) == """) And (Operator.LetterOf(String, Variable.Length(String)) == """))
+    {
+        string.toData.c1 = 0;
+        string.toData = "";
+        Repeat Until (string.toData.c1 > Variable.Length(String))
+        {
+            string.toData.c1 += 1;
+            If ((Operator.LetterOf(String, string.toData.c1) == "\") And List.ContainsItem(string.escapableCharacters, Operator.LetterOf(String, (string.toData.c1 + 1))))
+            {
+                string.toData.c1 += 1;
+                string.toData = Operator.Join(string.toData, Operator.LetterOf(String, string.toData.c1));
+            }
+            Else
+            {
+                If (Operator.LetterOf(String, string.toData.c1) == """)
+                {
+                }
+                Else
+                {
+                    string.toData = Operator.Join(string.toData, Operator.LetterOf(String, string.toData.c1));
+                }
+            }
+        }
+    }
+    Else
+    {
+        string.toData = "";
+    }
+}
+
+Define Write JSON (warp=true)
+{
+    List.DeleteAll(string.join.input);
+    json.write.c1 = 0;
+    Repeat (List.Length(json.keys))
+    {
+        json.write.c1 += 1;
+        Call Escape(json.keys[json.write.c1]) to string;
+        List.Add(string.join.input, Operator.Join(string.toString, Operator.Join(":", json.values[json.write.c1])));
+    }
+    Call Join [string.join.input] by(",");
+    json.write = Operator.Join("{", Operator.Join(string.join, "}"));
+}
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+Icon.png
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+pop.wav

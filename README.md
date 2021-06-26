@@ -236,7 +236,7 @@ These are the compiler directives at this time:
 The `ScratchCompiler` project contains a .NET 5 CLI project that supports help and parameter descriptions. The most basic command, which would be to compile a folder of `.mcs` and `.ccs` files to some output directory, is as follows.
 
 ````
-dotnet ./ScratchCompiler/bin/{Debug/Release}/net5.0/ScratchCompiler.dll --input-dir ./Source --output-dir ./Source/build
+dotnet run --project ScratchCompiler/ScratchCompiler.csproj --input-dir ./Source --output-dir ./Source/build
 ````
 This will first compile all `.mcs` microcode files, and place the `*.mco` and `*.mcd` files in the `./Source/build` directory. Then, it will build any `.ccs` scripts using the definitions and documentation from the `*.mcd` files that are present in the input or output folder, and create a `*.cco` output file. The output should appear as follows for a folder with one `.mcs` and one `.ccs` file:
 

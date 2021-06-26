@@ -1,0 +1,573 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+ActiveCores = 4
+BootVolume = ["Sub$","562","Sub$","611","PushDevice#","Boot","Sub$","496","Pull#","270","Push$","635","Pull$","672","Push$","634","Pull#","278","Subtract#","270","Push$","633","Sub$","636","Pull$","672","PokeIn?","672","Pull$","4001","Pull$","4009","GotoGThan$","134","Pull$","4001","Pull$","4009","Multiply#","-1","GotoLThan$","140","Pull$","4002","Multiply$","4006","Add$","4001","Push$","4001","Pull$","4004","Pull$","4009","GotoGThan$","152","Pull$","4004","Pull$","4009","Multiply#","-1","GotoLThan$","146","Pull#","Down","PushRem?","669","PullRem?","669","Pull#","true","GotoEq$","152","Pull#","Up","PushRem?","669","PullRem?","669","Pull#","true","GotoEq$","146","Pull$","4005","Multiply$","4006","Add$","4004","Push$","4004","Pull$","4013","Pull$","4009","GotoGThan$","262","Pull$","4013","Pull$","4009","Multiply#","-1","GotoLThan$","262","Pull$","4012","Pull$","4008","GotoGThan$","210","Pull$","4012","Pull$","4008","Multiply#","-1","GotoLThan$","158","Pull$","4013","Add$","4015","Push$","4013","Pull$","4012","Add$","4014","Push$","4012","Goto$","28","Pull#","-1","Push$","4002","Goto$","42","Pull#","1","Push$","4002","Goto$","42","Pull#","1","Push$","4005","Goto$","84","Pull#","-1","Push$","4005","Goto$","84","Pull$","4001","Multiply#","-1","Add$","4013","Pull$","4007","GotoGThan$","188","Pull$","4001","Multiply#","-1","Add$","4013","Pull$","4007","Multiply#","-1","GotoLThan$","188","Pull$","4014","Multiply#","-1","Push$","4014","Goto$","120","Pull$","4011","Add#","1","Push$","4011","Pull#","0","Push$","4012","Pull#","0","Push$","4013","Pull$","4014","Multiply#","-1","Push$","4014","Goto$","120","Pull$","4004","Multiply#","-1","Add$","4013","Pull$","4007","GotoGThan$","240","Pull$","4004","Multiply#","-1","Add$","4013","Pull$","4007","Multiply#","-1","GotoLThan$","240","Pull$","4014","Multiply#","-1","Push$","4014","Goto$","120","Pull$","4010","Add#","1","Push$","4010","Pull#","0","Push$","4012","Pull#","0","Push$","4013","Pull$","4014","Multiply#","-1","Push$","4014","Goto$","120","Pull$","4015","Multiply#","-1","Push$","4015","Goto$","106","MountDevice#","Boot","MountDevice#","Display","PullDevice#","Boot","Goto$","278","Sub$","490","PullChunk$","4000","Pull#","0","Push?","663","Pull$","4000","Push?","664","Pull$","4001","Add$","4007","Push?","665","Pull#","8","Push?","667","Pull#","0","Push?","666","Pull#","0","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4001","Subtract$","4007","Push?","665","Pull#","5","Push?","666","Pull#","1","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4003","Push?","664","Pull$","4004","Add$","4007","Push?","665","Pull#","8","Push?","667","Pull#","0","Push?","666","Pull#","2","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4004","Subtract$","4007","Push?","665","Pull#","6","Push?","666","Pull#","3","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4009","Add#","48","Push?","665","Pull#","-8","Push?","664","Pull#","0","Push?","666","Pull#","4","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4010","Multiply#","-8","Subtract#","8","Push?","664","Pull#","5","Push?","666","Pull#","5","Push?","668","PushDevice#","Display","Poke?","663","Pull#","8","Push?","664","Pull#","0","Push?","666","Pull#","6","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4011","Multiply#","8","Add#","8","Push?","664","Pull#","6","Push?","666","Pull#","7","Push?","668","PushDevice#","Display","Poke?","663","Pull$","4012","Push?","664","Pull$","4013","Push?","665","Pull#","0","Push?","666","Pull#","8","Push?","668","PushDevice#","Display","Poke?","663","Pull#","1","Push?","666","Pull#","9","Push?","668","Pull#","1","Push?","663","PushDevice#","Display","Poke?","663","Goto$","280","MountChunk#$","16","4000","PullChunk$","4000","EndSub","MountSelfChunk#$","16","4000","Pull#","-216","Push$","4000","Pull#","0","Push$","4001","Pull#","1","Push$","4002","Pull#","216","Push$","4003","Pull#","0","Push$","4004","Pull#","1","Push$","4005","Pull#","2","Push$","4006","Pull#","24","Push$","4007","Pull#","200","Push$","4008","Pull#","120","Push$","4009","Pull#","0","Copy","Push$","4010","Push$","4011","Pull#","0","Copy","Push$","4012","Push$","4013","Pull#","1.25","Push$","4014","Pull#","2.5","Push$","4015","EndSub","Sub$","573","Sub$","567","EndSub","GetDevice#","Keyboard","Push$","669","Discard","EndSub","GetDevice#","Display","Push$","663","Discard","Pull$","663","Add#","1","Copy","Push$","664","Add#","1","Copy","Push$","665","Add#","1","Copy","Push$","666","Add#","1","Copy","Push$","667","Add#","1","Push$","668","Pull#","3","PushRem?","663","Poke?","663","EndSub","GetDevice#","Core0","Push$","670","Push$","671","GetDevice#","Core1","Push$","672","Discard","GetDevice#","Core2","Push$","673","Discard","GetDevice#","Core3","Push$","674","Discard","EndSub","","","","Pull?","635","PushRem?","634","Pull#","1","Copy","Add$","635","Push$","635","Add$","634","Push$","634","Pull$","633","Subtract#","1","Copy","Push$","633","Pull#","0","GotoGThan$","636","EndSub","","","","","","","","","","","",""]
+CanBoot = true
+displayScale = 1
+LogEnabled = true
+Microcode = [{"Name":"Fetch","Signals":"GetPointer|IncPointer|Get|Cmd"},{"Name":"Clear","Signals":"Clear"},{"Name":"Discard","Signals":"Push"},{"Name":"Copy","Signals":"Copy"},{"Name":"Return","Signals":"Return"},{"Name":"Wait#","Signals":"GetPointer|IncPointer|Get|Wait"},{"Name":"Goto$","Signals":"GetPointer|Get|Jump"},{"Name":"Sub$","Signals":"GetPointer|GetPointer|Get|Jump"},{"Name":"EndSub","Signals":"Jump|IncPointer"},{"Name":"Push$","Signals":"GetPointer|IncPointer|Get|Set"},{"Name":"Push?","Signals":"GetPointer|IncPointer|Get|Get|Set"},{"Name":"Pull$","Signals":"GetPointer|IncPointer|Get|Get"},{"Name":"Pull?","Signals":"GetPointer|IncPointer|Get|Get|Get"},{"Name":"Pull#","Signals":"GetPointer|IncPointer|Get"},{"Name":"PushRem$","Signals":"GetPointer|IncPointer|Get|RSet"},{"Name":"PushRem?","Signals":"GetPointer|IncPointer|Get|Get|RSet"},{"Name":"PullRem$","Signals":"GetPointer|IncPointer|Get|RGet"},{"Name":"PullRem?","Signals":"GetPointer|IncPointer|Get|Get|RGet"},{"Name":"Poke$","Signals":"Null|GetPointer|IncPointer|Get|Poke"},{"Name":"Poke?","Signals":"Null|GetPointer|IncPointer|Get|Get|Poke"},{"Name":"PokeIn$","Signals":"GetPointer|IncPointer|Get|Poke"},{"Name":"PokeIn?","Signals":"GetPointer|IncPointer|Get|Get|Poke"},{"Name":"Add#","Signals":"GetPointer|IncPointer|Get|Add"},{"Name":"Add$","Signals":"GetPointer|IncPointer|Get|Get|Add"},{"Name":"Subtract#","Signals":"GetPointer|IncPointer|Get|Neg|Add"},{"Name":"Subtract$","Signals":"GetPointer|IncPointer|Get|Get|Neg|Add"},{"Name":"Multiply#","Signals":"GetPointer|IncPointer|Get|Prod"},{"Name":"Multiply$","Signals":"GetPointer|IncPointer|Get|Get|Prod"},{"Name":"Divide#","Signals":"GetPointer|IncPointer|Get|Inv|Prod"},{"Name":"Divide$","Signals":"GetPointer|IncPointer|Get|Get|Inv|Prod"},{"Name":"GotoEq$","Signals":"Eq|GetPointer|IncPointer|Get|CJump"},{"Name":"GotoGThan$","Signals":"GThan|GetPointer|IncPointer|Get|CJump"},{"Name":"GotoLThan$","Signals":"LThan|GetPointer|IncPointer|Get|CJump"},{"Name":"GotoTrue$","Signals":"GetPointer|IncPointer|Get|CJump"},{"Name":"GetDevice#","Signals":"GetPointer|IncPointer|Get|Dev"},{"Name":"MountDevice#","Signals":"GetPointer|IncPointer|Get|Dev|Mnt"},{"Name":"MountChunk#$","Signals":"GetPointer|IncPointer|Get|GetPointer|IncPointer|Get|Mnt"},{"Name":"MountSelfChunk#$","Signals":"GetPointer|IncPointer|Get|GetPointer|IncPointer|Get|MntSelf"},{"Name":"DismountDevice#","Signals":"GetPointer|IncPointer|Get|Dev|DMnt|Push"},{"Name":"DismountChunk$","Signals":"GetPointer|IncPointer|Get|DMnt"},{"Name":"PullDevice#","Signals":"GetPointer|IncPointer|Get|Dev|GDev|Push"},{"Name":"PullChunk$","Signals":"GetPointer|IncPointer|Get|GDev"},{"Name":"PushDevice#","Signals":"GetPointer|IncPointer|Get|Dev|SDev|Push"},{"Name":"PushChunk$","Signals":"GetPointer|IncPointer|Get|SDev"}]
+NewRequest = 2007
+NullChar = %
+
+
+//----- Lists ---------------------------------------------------------------------------------------------------------
+
+CommandNames = { 
+    Fetch
+    Clear
+    Discard
+    Copy
+    Return
+    Wait#
+    Goto$
+    Sub$
+    EndSub
+    Push$
+    Push?
+    Pull$
+    Pull?
+    Pull#
+    PushRem$
+    PushRem?
+    PullRem$
+    PullRem?
+    Poke$
+    Poke?
+    PokeIn$
+    PokeIn?
+    Add#
+    Add$
+    Subtract#
+    Subtract$
+    Multiply#
+    Multiply$
+    Divide#
+    Divide$
+    GotoEq$
+    GotoGThan$
+    GotoLThan$
+    GotoTrue$
+    GetDevice#
+    MountDevice#
+    MountChunk#$
+    MountSelfChunk#$
+    DismountDevice#
+    DismountChunk$
+    PullDevice#
+    PullChunk$
+    PushDevice#
+    PushChunk$
+}
+CommandSignals = { 
+    GetPointer|IncPointer|Get|Cmd
+    Clear
+    Push
+    Copy
+    Return
+    GetPointer|IncPointer|Get|Wait
+    GetPointer|Get|Jump
+    GetPointer|GetPointer|Get|Jump
+    Jump|IncPointer
+    GetPointer|IncPointer|Get|Set
+    GetPointer|IncPointer|Get|Get|Set
+    GetPointer|IncPointer|Get|Get
+    GetPointer|IncPointer|Get|Get|Get
+    GetPointer|IncPointer|Get
+    GetPointer|IncPointer|Get|RSet
+    GetPointer|IncPointer|Get|Get|RSet
+    GetPointer|IncPointer|Get|RGet
+    GetPointer|IncPointer|Get|Get|RGet
+    Null|GetPointer|IncPointer|Get|Poke
+    Null|GetPointer|IncPointer|Get|Get|Poke
+    GetPointer|IncPointer|Get|Poke
+    GetPointer|IncPointer|Get|Get|Poke
+    GetPointer|IncPointer|Get|Add
+    GetPointer|IncPointer|Get|Get|Add
+    GetPointer|IncPointer|Get|Neg|Add
+    GetPointer|IncPointer|Get|Get|Neg|Add
+    GetPointer|IncPointer|Get|Prod
+    GetPointer|IncPointer|Get|Get|Prod
+    GetPointer|IncPointer|Get|Inv|Prod
+    GetPointer|IncPointer|Get|Get|Inv|Prod
+    Eq|GetPointer|IncPointer|Get|CJump
+    GThan|GetPointer|IncPointer|Get|CJump
+    LThan|GetPointer|IncPointer|Get|CJump
+    GetPointer|IncPointer|Get|CJump
+    GetPointer|IncPointer|Get|Dev
+    GetPointer|IncPointer|Get|Dev|Mnt
+    GetPointer|IncPointer|Get|GetPointer|IncPointer|Get|Mnt
+    GetPointer|IncPointer|Get|GetPointer|IncPointer|Get|MntSelf
+    GetPointer|IncPointer|Get|Dev|DMnt|Push
+    GetPointer|IncPointer|Get|DMnt
+    GetPointer|IncPointer|Get|Dev|GDev|Push
+    GetPointer|IncPointer|Get|GDev
+    GetPointer|IncPointer|Get|Dev|SDev|Push
+    GetPointer|IncPointer|Get|SDev
+}
+DeviceAdress = { 
+    0
+    8000
+    8003
+    8004
+    1000
+    1500
+    2000
+    2500
+}
+DeviceName = { 
+    Boot
+    Mouse
+    Keyboard
+    Display
+    Core0
+    Core1
+    Core2
+    Core3
+}
+DeviceSize = { 
+    1000
+    3
+    1
+    6
+    500
+    500
+    500
+    500
+}
+Log = { 
+    Boot [init]: "Loaded volume [675]"
+    Core0 [exe]: "Sub$@1"
+    Core0 [exe]: "Sub$@563"
+    Core0 [exe]: "GetDevice#@574"
+    Core0 [mnt]: "Found {Display} at 8004 [6]"
+    Core0 [exe]: "Push$@576"
+    Core0 [exe]: "Discard@578"
+    Core0 [exe]: "Pull$@579"
+    Core0 [exe]: "Add#@581"
+    Core0 [exe]: "Copy@583"
+    Core0 [exe]: "Push$@584"
+    Core0 [exe]: "Add#@586"
+    Core0 [exe]: "Copy@588"
+    Core0 [exe]: "Push$@589"
+    Core0 [exe]: "Add#@591"
+    Core0 [exe]: "Copy@593"
+    Core0 [exe]: "Push$@594"
+    Core0 [exe]: "Add#@596"
+    Core0 [exe]: "Copy@598"
+    Core0 [exe]: "Push$@599"
+    Core0 [exe]: "Add#@601"
+    Core0 [exe]: "Push$@603"
+    Core0 [exe]: "Pull#@605"
+    Core0 [exe]: "PushRem?@607"
+    Core0 [exe]: "Poke?@609"
+    Core0 [exe]: "EndSub@611"
+    Core0 [exe]: "Sub$@565"
+    Core0 [exe]: "GetDevice#@568"
+    Core0 [mnt]: "Found {Keyboard} at 8003 [1]"
+    Core0 [exe]: "Push$@570"
+    Core0 [exe]: "Discard@572"
+    Core0 [exe]: "EndSub@573"
+    Core0 [exe]: "EndSub@567"
+    Core0 [exe]: "Sub$@3"
+    Core0 [exe]: "GetDevice#@612"
+    Core0 [mnt]: "Found {Core0} at 1000 [500]"
+    Core0 [exe]: "Push$@614"
+    Core0 [exe]: "Push$@616"
+    Core0 [exe]: "GetDevice#@618"
+    Core0 [mnt]: "Found {Core1} at 1500 [500]"
+    Core0 [exe]: "Push$@620"
+    Core0 [exe]: "Discard@622"
+    Core0 [exe]: "GetDevice#@623"
+    Core0 [mnt]: "Found {Core2} at 2000 [500]"
+    Core0 [exe]: "Push$@625"
+    Core0 [exe]: "Discard@627"
+    Core0 [exe]: "GetDevice#@628"
+    Core0 [mnt]: "Found {Core3} at 2500 [500]"
+    Core0 [exe]: "Push$@630"
+    Core0 [exe]: "Discard@632"
+    Core0 [exe]: "EndSub@633"
+    Core0 [exe]: "PushDevice#@5"
+    Core0 [mnt]: "Found {Boot} at 0 [1000]"
+    Core0 [mnt]: "Pushed chunk #2"
+    Core0 [exe]: "Sub$@7"
+    Core0 [exe]: "MountSelfChunk#$@497"
+    Core0 [mnt]: "Mounted 4000 [16] as #3 (Owner)"
+    Core0 [exe]: "Pull#@500"
+    Core0 [exe]: "Push$@502"
+    Core0 [exe]: "Pull#@504"
+    Core0 [exe]: "Push$@506"
+    Core0 [exe]: "Pull#@508"
+    Core0 [exe]: "Push$@510"
+    Core0 [exe]: "Pull#@512"
+    Core0 [exe]: "Push$@514"
+    Core0 [exe]: "Pull#@516"
+    Core0 [exe]: "Push$@518"
+    Core0 [exe]: "Pull#@520"
+    Core0 [exe]: "Push$@522"
+    Core0 [exe]: "Pull#@524"
+    Core0 [exe]: "Push$@526"
+    Core0 [exe]: "Pull#@528"
+    Core0 [exe]: "Push$@530"
+    Core0 [exe]: "Pull#@532"
+    Core0 [exe]: "Push$@534"
+    Core0 [exe]: "Pull#@536"
+    Core0 [exe]: "Push$@538"
+    Core0 [exe]: "Pull#@540"
+    Core0 [exe]: "Copy@542"
+    Core0 [exe]: "Push$@543"
+    Core0 [exe]: "Push$@545"
+    Core0 [exe]: "Pull#@547"
+    Core0 [exe]: "Copy@549"
+    Core0 [exe]: "Push$@550"
+    Core0 [exe]: "Push$@552"
+    Core0 [exe]: "Pull#@554"
+    Core0 [exe]: "Push$@556"
+    Core0 [exe]: "Pull#@558"
+    Core0 [exe]: "Push$@560"
+    Core0 [exe]: "EndSub@562"
+    Core0 [exe]: "Pull#@9"
+    Core0 [exe]: "Push$@11"
+    Core0 [exe]: "Pull$@13"
+    Core0 [exe]: "Push$@15"
+    Core0 [exe]: "Pull#@17"
+    Core0 [exe]: "Subtract#@19"
+    Core0 [exe]: "Push$@21"
+    Core0 [exe]: "Sub$@23"
+    Core0 [exe]: "Pull?@637"
+    Core0 [exe]: "PushRem?@639"
+    Core0 [exe]: "Pull#@641"
+    Core0 [exe]: "Copy@643"
+    Core0 [exe]: "Add$@644"
+    Core0 [exe]: "Push$@646"
+    Core0 [exe]: "Add$@648"
+    Core0 [exe]: "Push$@650"
+    Core0 [exe]: "Pull$@652"
+    Core0 [exe]: "Subtract#@654"
+    Core0 [exe]: "Copy@656"
+    Core0 [exe]: "Push$@657"
+    Core0 [exe]: "Pull#@659"
+    Core0 [exe]: "GotoGThan$@661"
+    Core0 [exe]: "Pull?@637"
+    Core0 [exe]: "PushRem?@639"
+    Core0 [exe]: "Pull#@641"
+    Core0 [exe]: "Copy@643"
+    Core0 [exe]: "Add$@644"
+    Core0 [exe]: "Push$@646"
+    Core0 [exe]: "Add$@648"
+    Core0 [exe]: "Push$@650"
+    Core0 [exe]: "Pull$@652"
+    Core0 [exe]: "Subtract#@654"
+    Core0 [exe]: "Copy@656"
+    Core0 [exe]: "Push$@657"
+    Core0 [exe]: "Pull#@659"
+    Core0 [exe]: "GotoGThan$@661"
+    Core0 [exe]: "Pull?@637"
+    Core0 [exe]: "PushRem?@639"
+    Core0 [exe]: "Pull#@641"
+    Core0 [exe]: "Copy@643"
+    Core0 [exe]: "Add$@644"
+    Core0 [exe]: "Push$@646"
+    Core0 [exe]: "Add$@648"
+    Core0 [exe]: "Push$@650"
+    Core0 [exe]: "Pull$@652"
+    Core0 [exe]: "Subtract#@654"
+    Core0 [exe]: "Copy@656"
+    Core0 [exe]: "Push$@657"
+    Core0 [exe]: "Pull#@659"
+    Core0 [exe]: "GotoGThan$@661"
+    Core0 [exe]: "Pull?@637"
+    Core0 [exe]: "PushRem?@639"
+    Core0 [exe]: "Pull#@641"
+    Core0 [exe]: "Copy@643"
+    Core0 [exe]: "Add$@644"
+    Core0 [exe]: "Push$@646"
+    Core0 [exe]: "Add$@648"
+    Core0 [exe]: "Push$@650"
+    Core0 [exe]: "Pull$@652"
+    Core0 [exe]: "Subtract#@654"
+    Core0 [exe]: "Copy@656"
+    Core0 [exe]: "Push$@657"
+    Core0 [exe]: "Pull#@659"
+    Core0 [exe]: "GotoGThan$@661"
+    Core0 [exe]: "Pull?@637"
+    Core0 [exe]: "PushRem?@639"
+    Core0 [exe]: "Pull#@641"
+    Core0 [exe]: "Copy@643"
+    Core0 [exe]: "Add$@644"
+    Core0 [exe]: "Push$@646"
+    Core0 [exe]: "Add$@648"
+    Core0 [exe]: "Push$@650"
+    Core0 [exe]: "Pull$@652"
+}
+RequestAction = { 
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+    set
+}
+RequestAddr = { 
+    944
+    945
+    946
+    947
+    948
+    949
+    950
+    951
+    952
+    953
+    954
+    955
+    956
+    957
+    958
+    959
+    960
+    961
+    962
+    963
+    964
+    965
+    966
+    967
+    968
+    969
+    970
+    971
+    972
+    973
+    974
+    975
+    976
+    977
+    978
+    979
+    980
+    981
+    982
+    983
+    984
+    985
+    986
+    987
+    988
+    989
+    990
+    991
+    992
+    993
+    994
+    995
+    996
+    997
+    998
+    999
+    1500
+    1501
+    1502
+    1503
+    1504
+}
+RequestId = { 
+    1946
+    1947
+    1948
+    1949
+    1950
+    1951
+    1952
+    1953
+    1954
+    1955
+    1956
+    1957
+    1958
+    1959
+    1960
+    1961
+    1962
+    1963
+    1964
+    1965
+    1966
+    1967
+    1968
+    1969
+    1970
+    1971
+    1972
+    1973
+    1974
+    1975
+    1976
+    1977
+    1978
+    1979
+    1980
+    1981
+    1982
+    1983
+    1984
+    1985
+    1986
+    1987
+    1988
+    1989
+    1990
+    1991
+    1992
+    1993
+    1994
+    1995
+    1996
+    1997
+    1998
+    1999
+    2000
+    2001
+    2002
+    2003
+    2004
+    2005
+    2006
+}
+RequestValue = { 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    MountDevice#
+    Boot
+    MountDevice#
+    Display
+    PullDevice#
+}
+
+
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    Event.BroadcastAndWait("Initialize");
+    Wait Until (CanBoot == "true");
+    Event.Broadcast("Boot");
+}
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+Backdrop.png
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+pop.wav

@@ -1,0 +1,367 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+deviceAddress = 8004
+deviceId = 4
+deviceName = Display
+deviceSize = 6
+display.command = 0
+display.id = 0
+display.pen = 0
+display.size = 0
+display.x = 0
+display.y = 0
+draw.c1 = 10
+draw.c2 = 10
+draw.s1 = 1
+getDevice = 0
+getRequest.s1 = 0
+handleRequest = 
+handleRequest.action = 
+handleRequest.addr = 
+poke.s1 = 5
+start.s1 = 1946
+
+
+//----- Lists ---------------------------------------------------------------------------------------------------------
+
+drawId = { }
+drawPen = { }
+drawSize = { }
+drawX = { }
+drawY = { }
+penB = { 
+    255
+    0
+    0
+    255
+    0
+    255
+    255
+    0
+}
+penG = { 
+    255
+    0
+    255
+    0
+    255
+    255
+    0
+    0
+}
+penR = { 
+    255
+    255
+    0
+    0
+    255
+    0
+    255
+    0
+}
+
+
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    deviceName = "Display";
+    Motion.GoToXY(0, 0);
+    Looks.Hide();
+}
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(StartDevices)
+{
+    deviceId = List.IndexOf(DeviceName, deviceName);
+    If (deviceId > 0)
+    {
+        deviceAddress = DeviceAdress[deviceId];
+        deviceSize = DeviceSize[deviceId];
+        Call Initialize Device;
+        Call await StartDevice:;
+    }
+}
+
+
+//----- Custom blocks -------------------------------------------------------------------------------------------------
+
+Define AddPen(string R)(string G)(string B) (warp=true)
+{
+    List.Add(penR, R);
+    List.Add(penG, G);
+    List.Add(penB, B);
+}
+
+Define await StartDevice: (warp=false)
+{
+    start.s1 = 0;
+    Forever
+    {
+        Wait Until (Not ((start.s1 == NewRequest)));
+        Call handleRequest:(start.s1);
+        start.s1 += 1;
+    }
+}
+
+Define Clear Display (warp=true)
+{
+    List.DeleteAll(drawX);
+    List.DeleteAll(drawY);
+    List.DeleteAll(drawPen);
+    List.DeleteAll(drawSize);
+    List.DeleteAll(drawId);
+    displayScale = 1;
+    display.command = 0;
+    display.x = 0;
+    display.y = 0;
+    display.pen = 0;
+    display.size = 0;
+    display.id = 0;
+}
+
+Define deleteRequest:(string Id) (warp=true)
+{
+    getRequest.s1 = List.IndexOf(RequestId, Id);
+    List.DeleteItem(RequestId, getRequest.s1);
+    List.DeleteItem(RequestAction, getRequest.s1);
+    List.DeleteItem(RequestAddr, getRequest.s1);
+    List.DeleteItem(RequestValue, getRequest.s1);
+}
+
+Define Draw (warp=true)
+{
+    Pen.Clear();
+    Pen.Clear();
+    Pen.SetPenSizeTo(1);
+    Motion.GoToXY(0, 0);
+    draw.c2 = 0;
+    Repeat (List.Length(drawPen))
+    {
+        draw.c1 = List.IndexOf(drawId, draw.c2);
+        draw.s1 = drawPen[draw.c1];
+        If (draw.s1 == 0)
+        {
+            Pen.Clear();
+            Pen.SetPenSizeTo(1);
+        }
+        Else
+        {
+            Call Set Color(penR[draw.s1])(penG[draw.s1])(penB[draw.s1]);
+            Pen.SetPenSizeTo(drawSize[draw.c1]);
+            Pen.Down();
+        }
+        Motion.GoToXY(drawX[draw.c1], drawY[draw.c1]);
+        draw.c2 += 1;
+    }
+}
+
+Define getDevice:(string Address) (warp=true)
+{
+    getDevice = "";
+    If (Address == 0)
+    {
+        getDevice = display.command;
+    }
+    Else
+    {
+        If (Address == 1)
+        {
+            getDevice = display.x;
+        }
+        Else
+        {
+            If (Address == 2)
+            {
+                getDevice = display.y;
+            }
+            Else
+            {
+                If (Address == 3)
+                {
+                    getDevice = display.pen;
+                }
+                Else
+                {
+                    If (Address == 4)
+                    {
+                        getDevice = display.size;
+                    }
+                    Else
+                    {
+                        If (Address == 5)
+                        {
+                            getDevice = display.id;
+                        }
+                        Else
+                        {
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+Define handleRequest:(string Id) (warp=true)
+{
+    getRequest.s1 = List.IndexOf(RequestId, Id);
+    handleRequest.action = RequestAction[getRequest.s1];
+    handleRequest.addr = RequestAddr[getRequest.s1];
+    handleRequest = RequestValue[getRequest.s1];
+    If ((Not ((handleRequest.addr < deviceAddress))) And (handleRequest.addr < (deviceAddress + deviceSize)))
+    {
+        If (handleRequest.action == "get")
+        {
+            Call getDevice:((handleRequest.addr - deviceAddress));
+            handleRequest = getDevice;
+        }
+        Else
+        {
+            If (handleRequest.action == "set")
+            {
+                Call setDevice:((handleRequest.addr - deviceAddress))(handleRequest);
+                Call deleteRequest:(Id);
+            }
+            Else
+            {
+                If (handleRequest.action == "poke")
+                {
+                    Call pokeDevice:;
+                    Call deleteRequest:(Id);
+                }
+                Else
+                {
+                }
+            }
+        }
+        getRequest.s1 = List.IndexOf(RequestId, Id);
+        List.ReplaceItem(RequestValue, getRequest.s1, handleRequest);
+    }
+}
+
+Define Initialize Device (warp=true)
+{
+    Pen.Clear();
+    List.DeleteAll(penR);
+    List.DeleteAll(penG);
+    List.DeleteAll(penB);
+    Call AddPen(255)(255)(255);
+    Call AddPen(255)(0)(0);
+    Call AddPen(0)(255)(0);
+    Call AddPen(0)(0)(255);
+    Call AddPen(255)(255)(0);
+    Call AddPen(0)(255)(255);
+    Call AddPen(255)(0)(255);
+    Call AddPen(0)(0)(0);
+    Call Clear Display;
+}
+
+Define pokeDevice: (warp=true)
+{
+    If (display.command == 3)
+    {
+        Call Clear Display;
+    }
+    Else
+    {
+        If (display.command == 2)
+        {
+            Call remDisplay:(List.IndexOf(drawId, display.id));
+        }
+        Else
+        {
+            poke.s1 = List.IndexOf(drawId, display.id);
+            If (poke.s1 == 0)
+            {
+                List.Add(drawX, display.x);
+                List.Add(drawY, display.y);
+                List.Add(drawPen, display.pen);
+                List.Add(drawSize, display.size);
+                List.Add(drawId, display.id);
+            }
+            Else
+            {
+                List.ReplaceItem(drawX, poke.s1, display.x);
+                List.ReplaceItem(drawY, poke.s1, display.y);
+                List.ReplaceItem(drawPen, poke.s1, display.pen);
+                List.ReplaceItem(drawSize, poke.s1, display.size);
+            }
+            If (display.command == 1)
+            {
+                Call Draw;
+            }
+        }
+    }
+}
+
+Define remDisplay:(string #) (warp=true)
+{
+    List.DeleteItem(drawX, #);
+    List.DeleteItem(drawY, #);
+    List.DeleteItem(drawPen, #);
+    List.DeleteItem(drawSize, #);
+}
+
+Define Set Color(string R)(string G)(string B) (warp=true)
+{
+    Pen.SetPenColorToColor(((((R * 256) + G) * 256) + B));
+}
+
+Define setDevice:(string Address)(string Value) (warp=true)
+{
+    If (Address == 0)
+    {
+        display.command = Value;
+    }
+    Else
+    {
+        If (Address == 1)
+        {
+            display.x = Value;
+        }
+        Else
+        {
+            If (Address == 2)
+            {
+                display.y = Value;
+            }
+            Else
+            {
+                If (Address == 3)
+                {
+                    display.pen = Value;
+                }
+                Else
+                {
+                    If (Address == 4)
+                    {
+                        display.size = Value;
+                    }
+                    Else
+                    {
+                        If (Address == 5)
+                        {
+                            display.id = Value;
+                        }
+                        Else
+                        {
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+Pen.png
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+pop.wav

@@ -1,0 +1,171 @@
+//----- Variables -----------------------------------------------------------------------------------------------------
+
+deviceAddress = 8003
+deviceId = 3
+deviceName = Keyboard
+deviceSize = 1
+getDevice = 
+getRequest.s1 = 0
+handleRequest = 
+handleRequest.action = 
+handleRequest.addr = 
+keyboard.key = 
+start.s1 = 1946
+
+
+//----- Lists ---------------------------------------------------------------------------------------------------------
+
+keyboardEnum = { 
+    Left
+    Right
+    Up
+    Down
+    Space
+}
+keyboardName = { 
+    left arrow
+    right arrow
+    up arrow
+    down arrow
+    space
+}
+
+
+//----- Green flag events ---------------------------------------------------------------------------------------------
+
+WhenGreenFlagClicked()
+{
+    deviceName = "Keyboard";
+    Motion.GoToXY(0, 0);
+    Looks.Hide();
+}
+
+
+//----- Broadcast received events -------------------------------------------------------------------------------------
+
+WhenBroadcastReceived(StartDevices)
+{
+    deviceId = List.IndexOf(DeviceName, deviceName);
+    If (deviceId > 0)
+    {
+        deviceAddress = DeviceAdress[deviceId];
+        deviceSize = DeviceSize[deviceId];
+        Call Initialize Device;
+        Call await StartDevice:;
+    }
+}
+
+
+//----- Custom blocks -------------------------------------------------------------------------------------------------
+
+Define addKey:(string Key) as(string Enum) (warp=true)
+{
+    List.Add(keyboardName, Key);
+    List.Add(keyboardEnum, Enum);
+}
+
+Define await StartDevice: (warp=false)
+{
+    start.s1 = 0;
+    Forever
+    {
+        Wait Until (Not ((start.s1 == NewRequest)));
+        Call handleRequest:(start.s1);
+        start.s1 += 1;
+    }
+}
+
+Define deleteRequest:(string Id) (warp=true)
+{
+    getRequest.s1 = List.IndexOf(RequestId, Id);
+    List.DeleteItem(RequestId, getRequest.s1);
+    List.DeleteItem(RequestAction, getRequest.s1);
+    List.DeleteItem(RequestAddr, getRequest.s1);
+    List.DeleteItem(RequestValue, getRequest.s1);
+}
+
+Define getDevice:(string Address) (warp=true)
+{
+    getDevice = "";
+    If (Address == 0)
+    {
+        getDevice = Sensing.KeyPressed(keyboard.key);
+    }
+    Else
+    {
+    }
+}
+
+Define handleRequest:(string Id) (warp=true)
+{
+    getRequest.s1 = List.IndexOf(RequestId, Id);
+    handleRequest.action = RequestAction[getRequest.s1];
+    handleRequest.addr = RequestAddr[getRequest.s1];
+    handleRequest = RequestValue[getRequest.s1];
+    If ((Not ((handleRequest.addr < deviceAddress))) And (handleRequest.addr < (deviceAddress + deviceSize)))
+    {
+        If (handleRequest.action == "get")
+        {
+            Call getDevice:((handleRequest.addr - deviceAddress));
+            handleRequest = getDevice;
+        }
+        Else
+        {
+            If (handleRequest.action == "set")
+            {
+                Call setDevice:((handleRequest.addr - deviceAddress))(handleRequest);
+                Call deleteRequest:(Id);
+            }
+            Else
+            {
+            }
+        }
+        getRequest.s1 = List.IndexOf(RequestId, Id);
+        List.ReplaceItem(RequestValue, getRequest.s1, handleRequest);
+    }
+}
+
+Define Initialize Device (warp=true)
+{
+    List.DeleteAll(keyboardName);
+    List.DeleteAll(keyboardEnum);
+    keyboard.key = "";
+    Call addKey:("left arrow") as("Left");
+    Call addKey:("right arrow") as("Right");
+    Call addKey:("up arrow") as("Up");
+    Call addKey:("down arrow") as("Down");
+    Call addKey:("space") as("Space");
+}
+
+Define setDevice:(string Address)(string Value) (warp=true)
+{
+    If (Address == 0)
+    {
+        If (List.IndexOf(keyboardEnum, Value) == 0)
+        {
+            keyboard.key = Value;
+        }
+        Else
+        {
+            keyboard.key = keyboardName[List.IndexOf(keyboardEnum, Value)];
+        }
+    }
+    Else
+    {
+    }
+}
+
+
+//----- Orphaned blocks -----------------------------------------------------------------------------------------------
+
+space
+
+
+//----- Costumes ------------------------------------------------------------------------------------------------------
+
+Icon.png
+
+
+//----- Sounds --------------------------------------------------------------------------------------------------------
+
+pop.wav

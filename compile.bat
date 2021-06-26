@@ -1,1 +1,0 @@
-dotnet .\ScratchCompiler\bin\Debug\net5.0\ScratchCompiler.dll --input-dir .\Source --output-dir .\Source\build
