@@ -1,0 +1,21 @@
+Define .Start
+    Sub .SetupConsole
+Define .Loop
+    Pull .Num
+    Copy
+    PushRem ?Console
+    Poke ?Console
+    Add #1
+    Push .Num
+Goto .Loop
+
+Define .Num
+Constant #0
+Var .Console
+
+Define .SetupConsole
+    //Set the console memory address variable.
+    GetDevice {Console}
+    Push .Console
+    Discard
+EndSub

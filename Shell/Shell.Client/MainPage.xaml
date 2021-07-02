@@ -1,0 +1,72 @@
+﻿<Page
+    x:Class="BassClefStudio.Shell.Client.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BassClefStudio.Shell.Client"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:xaml="using:Microsoft.Graphics.Canvas.UI.Xaml"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <CommandBar
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            DefaultLabelPosition="Right"
+            VerticalContentAlignment="Center"
+            Padding="8,0">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Label="Open" Icon="Folder" Click="openClicked"/>
+                <AppBarSeparator/>
+                <AppBarButton Label="Start" Icon="Play" Click="startClicked"/>
+            </CommandBar.PrimaryCommands>
+            <CommandBar.Content>
+                <ComboBox
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    ItemsSource="{x:Bind ViewModel.FileList, Mode=OneWay}"
+                    SelectionChanged="selectionChanged">
+                </ComboBox>
+            </CommandBar.Content>
+        </CommandBar>
+        <Grid
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="8"
+            CornerRadius="4"
+            Padding="8"
+            Background="{ThemeResource SystemChromeMediumHighColor}">
+            <ScrollViewer>
+                <ItemsControl
+                    x:Name="consoleList"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    ItemsSource="{x:Bind ViewModel.ConsoleList, Mode=OneWay}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <TextBlock Text="{x:Bind}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsStackPanel
+                               VerticalAlignment="Stretch"
+                               ItemsUpdatingScrollMode="KeepLastItemInView"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+        <xaml:CanvasAnimatedControl
+            Grid.Row="1"
+            Grid.Column="1"
+            x:Name="graphicsView"/>
+    </Grid>
+</Page>

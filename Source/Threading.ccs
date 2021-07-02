@@ -22,6 +22,8 @@
         Pull .Core1
         PokeIn ?Core1
     Define .Physics.loop
+        Wait #0.05
+
         //'Bounce' the first paddle up and down the height of the screen
             Pull .YPos1
             Pull .MaxY
@@ -398,12 +400,20 @@
     Define .SetupDevices
         Sub .SetupDisplay
         Sub .SetupKeyboard
+        Sub .SetupConsole
     EndSub
 
     Define .SetupKeyboard
         //Set the keyboard memory address variable.
         GetDevice {Keyboard}
         Push .Keyboard
+        Discard
+    EndSub
+
+    Define .SetupConsole
+        //Set the console memory address variable.
+        GetDevice {Console}
+        Push .Console
         Discard
     EndSub
 
@@ -497,6 +507,7 @@
     Var .DispSize
     Var .DispId
     Var .Keyboard
+    Var .Console
 
 // Core memory references
     Var .Core0

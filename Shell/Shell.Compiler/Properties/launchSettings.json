@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "BassClefStudio.Shell": {
+      "commandName": "Project",
+      "commandLineArgs": "--input-dir ..\\..\\..\\..\\Source --output-dir ..\\..\\..\\..\\Source\\build"
+    }
+  }
+}
