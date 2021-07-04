@@ -2,6 +2,7 @@
 using BassClefStudio.NET.Core.Streams;
 using BassClefStudio.Shell.Runtime.Devices;
 using BassClefStudio.Shell.Runtime.Memory;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -236,12 +237,42 @@ namespace BassClefStudio.Shell.Runtime.Processor
 
         private void Execute(uint startAddress)
         {
+            string ExMessage(Exception ex)
+            {
+                return $"{ex.GetType().FullName}\r\n{ex.Message}\r\n{ex.StackTrace}";
+            }
+
             Pointer = startAddress;
             var flags = ControlFlags.None;
             while(!flags.HasFlag(ControlFlags.Return))
             {
-                flags &= RunCommand("Fetch");
-                flags &= RunCommand(CommandName);
+                try
+                {
+                    flags &= RunCommand("Fetch");
+                }
+                catch(Exception ex)
+                {
+                    Configuration.ConsoleWriter.EmitValue($"An error occurred during FETCH:\r\n{ExMessage(ex)}");
+                    return;
+                }
+
+                try
+                {
+                    flags &= RunCommand(CommandName);
+                }
+                catch(Exception ex)
+                {
+                    if (Configuration.DebugInfo.ContainsKey(Pointer.ToString()))
+                    {
+                        JToken position = Configuration.DebugInfo[Pointer.ToString()];
+                        Configuration.ConsoleWriter.EmitValue($"An error occurred at ({position[0]},{position[1]}):\r\n{ExMessage(ex)}");
+                    }
+                    else
+                    {
+                        Configuration.ConsoleWriter.EmitValue($"An error occurred at an unknown location:\r\n{ExMessage(ex)}");
+                    }
+                    return;
+                }
             }
         }
 

@@ -7,6 +7,7 @@ using BassClefStudio.Graphics.Input;
 using BassClefStudio.NET.Core;
 using BassClefStudio.NET.Core.Streams;
 using BassClefStudio.Shell.Runtime.Processor;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -28,11 +29,12 @@ namespace BassClefStudio.Shell.Runtime.ViewModels
             Description = "Choose a folder to find microcode and bootloader output files."
         };
 
-        public static readonly CommandInfo SelectCommand = new CommandInfo()
+        public static readonly CommandInfo<string> SelectCommand = new CommandInfo<string>()
         {
             Id = "Main/Select",
             FriendlyName = "Select code file",
-            Description = "Choose a file to run in the processor."
+            Description = "Choose a file to run in the processor.",
+            InputDescription = "The name of the file, without an extension."
         };
 
         public static readonly CommandInfo StartCommand = new CommandInfo()
@@ -84,8 +86,8 @@ namespace BassClefStudio.Shell.Runtime.ViewModels
             var open = new StreamCommand(OpenCommand);
             open.BindResult(o => Dispatchers.RunOnUIThreadAsync(() => OpenFolder()));
 
-            var select = new StreamCommand(SelectCommand);
-            select.OfType<object, string>().BindResult(o => Dispatchers.RunOnUIThreadAsync(() => LoadFile(o)));
+            var select = new StreamCommand<string>(SelectCommand);
+            select.BindResult(o => Dispatchers.RunOnUIThreadAsync(() => LoadFile(o)));
 
             var start = new StreamCommand(StartCommand);
             start.BindResult(b => Task.Run(StartProcess));
@@ -141,8 +143,10 @@ namespace BassClefStudio.Shell.Runtime.ViewModels
         {
             if (folder != null)
             {
-                var file = await folder.GetFileAsync($"{name}.cco");
-                Configuration.BootFile = await file.ReadTextAsync();
+                var codeFile = await folder.GetFileAsync($"{name}.cco");
+                var debugFile = await folder.GetFileAsync($"{name}.ccd");
+                Configuration.BootFile = await codeFile.ReadTextAsync();
+                Configuration.DebugInfo = JObject.Parse(await debugFile.ReadTextAsync());
                 return true;
             }
             else

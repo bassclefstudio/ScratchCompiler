@@ -54,7 +54,7 @@ namespace BassClefStudio.Shell.Client
 
         private void selectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CommandRouter.Execute(MainViewModel.SelectCommand, e.AddedItems.FirstOrDefault());
+            CommandRouter.Execute(MainViewModel.SelectCommand, (string)e.AddedItems.FirstOrDefault());
         }
     }
 }

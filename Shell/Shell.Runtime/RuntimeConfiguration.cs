@@ -1,12 +1,8 @@
-﻿using BassClefStudio.AppModel.Storage;
-using BassClefStudio.Graphics.Core;
+﻿using BassClefStudio.Graphics.Core;
 using BassClefStudio.Graphics.Input;
 using BassClefStudio.NET.Core.Streams;
 using BassClefStudio.Shell.Runtime.Processor;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace BassClefStudio.Shell.Runtime
 {
@@ -39,6 +35,11 @@ namespace BassClefStudio.Shell.Runtime
         /// The <see cref="string"/> contents of the compiled boot volume.
         /// </summary>
         public string BootFile { get; set; }
+
+        /// <summary>
+        /// The <see cref="JObject"/> parsed debug information for the bootloader code.
+        /// </summary>
+        public JObject DebugInfo { get; set; }
 
         /// <summary>
         /// The <see cref="IGraphicsView"/> for drawing content on the screen.
